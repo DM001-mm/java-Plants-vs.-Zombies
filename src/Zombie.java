@@ -1,25 +1,30 @@
-package demo_1;
+package src;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-public class Zombie extends Thread{
+import javax.swing.*;
+public class Zombie{
     private BufferedImage[] frames;
     private int frameIndex =0; // 目前的帧图的编号
     private int x; // 僵尸的横坐标位移
     private int y;
+    private MP3Player player;
     public Zombie(int x,int y){
         this.x=x;
         this.y=y;
         loadImages();
-        this.start();
-        // Timer timer=new Timer(100,e->{
-        //     action(); 
-        //     // repaint();
-        // });
-        // timer.start();
-        // 这样容易做成瞬移的显示，为什么不建议 这样在Zombie的构造函数更新他的动作，是因为Zombie 不是 绘制图像的类，Zombie 就只是一个描述行为和属性的类
+        Thread t=new Thread(new Runnable(){
+            @Override
+            public void run(){
+                Timer timer =new Timer(3,e->{
+                    player.start();
+                });
+                timer.start();
+                // player.play();
+            }
+        });
     }
     private void loadImages(){
         frames =new BufferedImage[18];
@@ -41,14 +46,12 @@ public class Zombie extends Thread{
             frames[14]=ImageIO.read(new File("E:\\植物大战僵尸\\pvz\\src\\resources\\ZombiePng\\NormalZombie\\move\\move15.png"));
             frames[15]=ImageIO.read(new File("E:\\植物大战僵尸\\pvz\\src\\resources\\ZombiePng\\NormalZombie\\move\\move16.png"));
             frames[16]=ImageIO.read(new File("E:\\植物大战僵尸\\pvz\\src\\resources\\ZombiePng\\NormalZombie\\move\\move17.png"));
-            frames[17]=ImageIO.read(new File("E:\\植物大战僵尸\\pvz\\src\\resources\\ZombiePng\\NormalZombie\\move\\move18.png"));
-            
-            
+            frames[17]=ImageIO.read(new File("E:\\植物大战僵尸\\pvz\\src\\resources\\ZombiePng\\NormalZombie\\move\\move18.png")); 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    public void action(){
+    public void update(){
         frameIndex++;
         x--;
         if(x<=0) x=1000;
@@ -56,10 +59,6 @@ public class Zombie extends Thread{
             frameIndex=0;
         }
     }
-    @Override
-    public void run(){
-        
-    }// 画面 我们统一通过GamePanel 更新绘制，
     public void draw(Graphics g){
         g.drawImage(frames[frameIndex],x,y,null);
     }
