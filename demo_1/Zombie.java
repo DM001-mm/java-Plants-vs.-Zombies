@@ -1,19 +1,27 @@
-package demo;
+package demo_1;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-
-public class Zombie{
+import javax.swing.*;
+import javazoom.
+public class Zombie extends Thread{
     private BufferedImage[] frames;
-    private int frameIndex =0;
-    private int x;
+    private int frameIndex =0; // 目前的帧图的编号
+    private int x; // 僵尸的横坐标位移
     private int y;
     public Zombie(int x,int y){
         this.x=x;
         this.y=y;
         loadImages();
+        this.start();
+        // Timer timer=new Timer(100,e->{
+        //     action(); 
+        //     // repaint();
+        // });
+        // timer.start();
+        // 这样容易做成瞬移的显示，为什么不建议 这样在Zombie的构造函数更新他的动作，是因为Zombie 不是 绘制图像的类，Zombie 就只是一个描述行为和属性的类
     }
     private void loadImages(){
         frames =new BufferedImage[18];
@@ -42,7 +50,7 @@ public class Zombie{
             e.printStackTrace();
         }
     }
-    public void update(){
+    public void action(){
         frameIndex++;
         x--;
         if(x<=0) x=1000;
@@ -50,6 +58,10 @@ public class Zombie{
             frameIndex=0;
         }
     }
+    @Override
+    public void run(){
+        
+    }// 画面 我们统一通过GamePanel 更新绘制，
     public void draw(Graphics g){
         g.drawImage(frames[frameIndex],x,y,null);
     }
