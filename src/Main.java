@@ -8,5 +8,6 @@ public class Main {
         frame.add(panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
+        panel.update();
     }    
 }

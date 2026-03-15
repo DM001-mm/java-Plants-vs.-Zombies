@@ -1,24 +1,24 @@
 package src;
 import java.awt.*;
 import javax.swing.*;
+import src.Zombie.Zombie;
 public class GamePanel extends JPanel{
     Zombie zombie_1;
     Zombie zombie_2;
     Timer timer;
     public GamePanel(){
-        zombie_1 = new Zombie(300,300);
-        zombie_2 = new Zombie(300,600);
-        timer =new Timer(1,actionEvent->{
-            update();
-            repaint();
-        });
-        timer.start();
+        zombie_1 = new Zombie();
+        zombie_2 = new Zombie();
+        
     }
     void update(){
-        zombie_1.update();
-        zombie_2.update();
+        timer =new Timer(1,actionEvent->{
+            zombie_1.walkAction();
+            zombie_2.walkAction();
+            repaint();
+        });
+        timer.start(); // 把这个游戏画面的更新放在了update()里面 为了能主动调用，进而实现和声音的多线程 
     }
-
     @Override
     protected void paintComponent(Graphics g){
         super.paintComponent(g);

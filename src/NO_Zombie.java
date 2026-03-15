@@ -5,7 +5,8 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
-public class Zombie{
+
+// public class Zombie{
     private BufferedImage[] frames;
     private int frameIndex =0; // 目前的帧图的编号
     private int x; // 僵尸的横坐标位移

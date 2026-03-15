@@ -9,11 +9,20 @@ public class Zombie extends Thread{
     private int frameIndex =0; // 目前的帧图的编号
     private int x; // 僵尸的横坐标位移
     private int y;
+    private Thread t;
+    private MP3Player player;
     public Zombie(int x,int y){
         this.x=x;
         this.y=y;
         loadImages();
-        this.start();
+        loadMusic();
+        t=new Thread(new Runnable(){
+            @Override
+            public void run(){
+                
+            }
+        });
+        // this.start();
         // Timer timer=new Timer(100,e->{
         //     action(); 
         //     // repaint();
@@ -47,6 +56,10 @@ public class Zombie extends Thread{
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    public void loadMusic(){
+        player =new MP3Player();
+
     }
     public void action(){
         frameIndex++;
