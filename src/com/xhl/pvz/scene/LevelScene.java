@@ -6,6 +6,7 @@ import com.xhl.pvz.entity.plant.Peashooter;
 import com.xhl.pvz.manager.EntityManager;
 import com.xhl.pvz.manager.ImageManager;
 import com.xhl.pvz.model.SunResource;
+import com.xhl.pvz.ui.SunBankUI;
 
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
@@ -19,6 +20,7 @@ public class LevelScene extends BaseScene {
     private BufferedImage background ;
     private EntityManager entityManager;
     private SunResource sunResource;
+    private SunBankUI sunBankUI;
     private final int rowCount =5;
     private final int colCount =9;
 
@@ -38,6 +40,7 @@ public class LevelScene extends BaseScene {
         background = ImageManager.getImage("background.lawn_day");
         entityManager= new EntityManager(); // 对象 
         sunResource = new SunResource(150);
+        sunBankUI = new SunBankUI(20,15,120,60,sunResource);
         // 后面 加音乐 就+在这里
 
     }
@@ -51,8 +54,10 @@ public class LevelScene extends BaseScene {
     @Override
     public void render(Graphics2D g){
         drawBackground(g);
+        sunBankUI.render(g); 
         // 调试格子
         drawDebugGrid(g);
+
         entityManager.renderAll(g);
     }
 
