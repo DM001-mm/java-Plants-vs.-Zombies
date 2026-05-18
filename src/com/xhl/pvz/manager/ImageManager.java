@@ -17,7 +17,7 @@ public class ImageManager {
         loadImage("ui.pause_button","");
         loadImage("card.peashooter","");
         loadImage("card.sunflower","");
-        
+        loadImage("plant.peashooter.idle.0", "resources\\images\\plants\\peashooter\\idle\\0.png");
     }
 
     private static void loadImage(String key,String path){

@@ -1,9 +1,9 @@
 package com.xhl.pvz.manager;
 
-import javax.sound.sampled.*;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import javax.sound.sampled.*;
 public class AudioManager {
     private static final Map<String,String> bgmPaths = new HashMap<>();
     private static final Map<String,String> effectPaths = new HashMap<>();
@@ -56,7 +56,46 @@ public class AudioManager {
             currentBgm.open(audioStream);
             
         } catch (Exception e) {
+            System.out.println("Failed to play BGM:"+path);
+            e.printStackTrace();
         }
+    }
 
+    public static void stopBGM(){
+        if(currentBgm!=null){
+            currentBgm.stop();
+            currentBgm.close();
+            currentBgm =null;
+        }
+        currentBgmKey = null;
+    }
+    
+    public static void playEffect(String key){
+        if(key ==null) return ;
+        String path = effectPaths.get(key);
+        if(path == null){
+            System.out.println("Effect key not found: "+key);
+            return ;
+        }
+        File file = new File(path);
+        if(!file.exists()){
+            System.out.println("Effect file not found:"+path);
+            return ;
+        }
+        try {
+            AudioInputStream audioStream = AudioSystem.getAudioInputStream(file);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioStream);
+            clip.addLineListener(event->{
+                if(event.getType()==LineEvent.Type.STOP){
+                    clip.close();
+                }
+            });
+            clip.start();
+        } catch (Exception e) {
+            System.out.println("Failed to play effect: "+ path);
+            e.printStackTrace();
+            
+        }
     }
 }

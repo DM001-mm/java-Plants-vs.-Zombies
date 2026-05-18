@@ -4,7 +4,7 @@ import com.xhl.pvz.core.GameLoop;
 import com.xhl.pvz.core.SceneManager;
 import com.xhl.pvz.scene.MainMenuScene;
 import com.xhl.pvz.manager.ImageManager;
-
+import com.xhl.pvz.manager.AudioManager;
 public class GameApp {
 
     private GameWindow window;
@@ -20,6 +20,7 @@ public class GameApp {
     
     private void loadResources(){
         ImageManager.loadAll();
+        AudioManager.loadAll();
     }
     private void initScene(){
         sceneManager  = new SceneManager();
@@ -33,4 +34,9 @@ public class GameApp {
         gameLoop = new GameLoop(sceneManager,window.getGamePanel());
         gameLoop.start();
     }
+    // private void loadResources(){
+        // ImageManager.loadAll();
+        
+
+    // }
 }

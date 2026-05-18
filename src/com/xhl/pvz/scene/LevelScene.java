@@ -2,17 +2,23 @@ package com.xhl.pvz.scene;
 
 import com.xhl.pvz.core.GameConfig;
 import com.xhl.pvz.core.SceneManager;
+import com.xhl.pvz.entity.plant.Peashooter;
+import com.xhl.pvz.manager.EntityManager;
 import com.xhl.pvz.manager.ImageManager;
+import com.xhl.pvz.model.SunResource;
+
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+
 // import java.awt.event.keyEvent;
 
 public class LevelScene extends BaseScene {
 
     private final SceneManager sceneManager;
     private BufferedImage background ;
-
+    private EntityManager entityManager;
+    private SunResource sunResource;
     private final int rowCount =5;
     private final int colCount =9;
 
@@ -30,14 +36,15 @@ public class LevelScene extends BaseScene {
     @Override
     public void onEnter(){
         background = ImageManager.getImage("background.lawn_day");
-
+        entityManager= new EntityManager(); // 对象 
+        sunResource = new SunResource(150);
         // 后面 加音乐 就+在这里
 
     }
     @Override
     public void update(){
         // 后面更新：
-        //entityManager.updateAll();
+        entityManager.updateAll();
         //collisionManager.checkAll();
         //LevelManager.update();
     }
@@ -46,6 +53,7 @@ public class LevelScene extends BaseScene {
         drawBackground(g);
         // 调试格子
         drawDebugGrid(g);
+        entityManager.renderAll(g);
     }
 
     @Override
@@ -53,9 +61,22 @@ public class LevelScene extends BaseScene {
         int row = getRowByY(y);
         int col=getColByX(x);
 
-        if(row!=-1&&col!=-1){
-            System.out.println("点击草坪格子:row="+row+",col="+col);
+        if(row ==-1||col ==-1){
+            return ;
         }
+        if(entityManager.hasPlantAt(row,col)){
+            System.out.println("这个格子已经有植物了！");
+            return ;
+        }
+
+        int plantX = gridStartX+col*cellWidth;
+        int plantY = gridStartY+row*cellHeight+5;
+        // 但是1 这个 为什么 需要 获取 植物的 实际位置呢
+        Peashooter peashooter =new Peashooter(row,col,plantX,plantY);//这显然是 在通过点击 种 射手
+        entityManager.addPlant(peashooter);
+
+        System.out.println("放置豌豆射手: row= "+row+", col = "+col);
+        
     }
 
     @Override
