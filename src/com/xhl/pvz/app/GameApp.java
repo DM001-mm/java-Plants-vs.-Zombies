@@ -3,21 +3,23 @@ package com.xhl.pvz.app;
 import com.xhl.pvz.core.GameLoop;
 import com.xhl.pvz.core.SceneManager;
 import com.xhl.pvz.scene.MainMenuScene;
+import com.xhl.pvz.manager.ImageManager;
 
 public class GameApp {
+
     private GameWindow window;
     private SceneManager sceneManager;
-
     private GameLoop gameLoop;
+
     public void start(){
-        // loadResources();
+        loadResources();
         initScene();   
         createWindow();
         startGameLoop();
-        
-        // window =new GameWindow(sceneManager);
-        // window.showWindow();
-        // window.startGameLoop();
+    }
+    
+    private void loadResources(){
+        ImageManager.loadAll();
     }
     private void initScene(){
         sceneManager  = new SceneManager();

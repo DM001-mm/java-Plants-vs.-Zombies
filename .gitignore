@@ -1,0 +1,24 @@
+# Temporary old repo backup
+clear_privious/
+
+# Java build output
+*.class
+out/
+build/
+target/
+bin/
+
+# IDE
+.idea/
+*.iml
+
+# VSCode
+# 如果你想提交 .vscode/tasks.json 和 launch.json，就删掉下面这一行
+# .vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
