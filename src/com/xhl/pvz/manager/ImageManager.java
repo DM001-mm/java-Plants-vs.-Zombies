@@ -42,7 +42,7 @@ public class ImageManager {
         return image;
     }
     
-    public static boolean hasIamge(String key){
+    public static boolean hasImage(String key){
         return images.containsKey(key);
     }
 
