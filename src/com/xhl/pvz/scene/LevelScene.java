@@ -69,14 +69,14 @@ public class LevelScene extends BaseScene {
         collisionManager = new CollisionManager(entityManager);
     }
     @Override
-    public void update(){
+    public void update(){ // 现在的update中的函数调用，僵尸吃植物的检测是放在了僵尸的update里面，植物好像也是这样的，至于子弹其实也可以这样，然后 在后面直接 check，剔除所有的死了的，或者失效的对象
         // 后面更新：
         // entityManager.updateAll();
         peashooterCard.update();
         sunflowerCard.update();
         entityManager.updateAll(levelContext);
-        collisionManager.checkAll();
-        entityManager.removeDeadEntities();
+        collisionManager.checkAll(); // 这是碰撞检测，
+        entityManager.removeDeadEntities(); // 这是剔除
         //LevelManager.update();
     }
     @Override
