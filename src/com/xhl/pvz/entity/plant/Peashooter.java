@@ -16,6 +16,7 @@ public class Peashooter extends Plant {
     public void update(LevelContext context){
 
     }
+    
     @Override
     public void render(Graphics2D g){
         g.drawImage(image,(int)x,(int)y,width,height,null);

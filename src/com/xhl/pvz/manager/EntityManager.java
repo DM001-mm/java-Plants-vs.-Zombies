@@ -1,6 +1,7 @@
 package com.xhl.pvz.manager;
 
 import com.xhl.pvz.core.LevelContext;
+import com.xhl.pvz.entity.bullet.Bullet;
 import com.xhl.pvz.entity.item.Sun;
 import com.xhl.pvz.entity.plant.Plant;
 import com.xhl.pvz.entity.zombie.Zombie;
@@ -16,6 +17,7 @@ public class EntityManager {
     private final List<Plant> plants=new ArrayList<>();
     private final List<Sun> suns = new ArrayList<>();
     private final List<Zombie> zombies = new ArrayList<>();
+    private final List<Bullet> bullets = new ArrayList<>();
 
     public void addPlant(Plant plant){
         if(plant !=null){
@@ -37,6 +39,9 @@ public class EntityManager {
         for (Zombie zombie : zombies) {
             zombie.update(context);
         }
+        for (Bullet bullet : bullets) {
+            bullet.update(context);
+        }
         removeDeadEntities();
     }
 
@@ -50,11 +55,19 @@ public class EntityManager {
         for (Zombie zombie : zombies) {
             zombie.render(g);
         }
+        for (Bullet bullet : bullets) {
+            bullet.render(g);
+        }
     }
 
     public void addSun(Sun sun) {
         if (sun != null) {
             suns.add(sun);
+        }
+    }
+    public void addBullet(Bullet bullet) {
+       if (bullet != null) {
+            bullets.add(bullet);
         }
     }
     private void removeDeadEntities(){
@@ -73,6 +86,15 @@ public class EntityManager {
 
             if (!zombie.isAlive()) {
                 zombieIterator.remove();
+            }
+        }
+        Iterator<Bullet> bulletIterator = bullets.iterator();
+
+        while (bulletIterator.hasNext()) {
+            Bullet bullet = bulletIterator.next();
+
+            if (!bullet.isAlive()) {
+                bulletIterator.remove();
             }
         }
     }
@@ -105,10 +127,22 @@ public class EntityManager {
 
         return null;
     }
+    public boolean hasZombieInRow(int row, double plantX) {
+        for (Zombie zombie : zombies) {
+            if (zombie.isAlive()&& zombie.getRow() == row&& zombie.getX() > plantX) {
+                return true;
+            }
+        }
+
+        return false;
+    }
     public List<Plant> getPlants(int row,int col){
         return plants;
     }
     public List<Zombie> getZombies() {
         return zombies;
+    }
+    public List<Bullet> getBullets() {
+        return bullets;
     }
 }
