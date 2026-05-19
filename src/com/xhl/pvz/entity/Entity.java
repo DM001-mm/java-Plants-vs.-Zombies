@@ -27,9 +27,9 @@ public abstract class Entity {
         return new Rectangle((int)x,(int)y,width,height);
     }
 
-    public boolean isAlive(){
-        return alive;
-    }
+    // public boolean isAlive(){
+    //     return alive;
+    // }
 
     public void setAlive(boolean alive){
         this.alive = alive;

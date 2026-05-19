@@ -7,10 +7,13 @@ import com.xhl.pvz.manager.EntityManager;
 import com.xhl.pvz.manager.ImageManager;
 import com.xhl.pvz.model.SunResource;
 import com.xhl.pvz.ui.SunBankUI;
+import com.xhl.pvz.ui.PlantCard;
+import com.xhl.pvz.manager.AudioManager;
 
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.awt.Color;
 
 // import java.awt.event.keyEvent;
 
@@ -21,6 +24,9 @@ public class LevelScene extends BaseScene {
     private EntityManager entityManager;
     private SunResource sunResource;
     private SunBankUI sunBankUI;
+    private PlantCard peashooterCard;
+    private String selectedPlantType =null;
+    private PlantCard selectedCard = null;
     private final int rowCount =5;
     private final int colCount =9;
 
@@ -41,13 +47,14 @@ public class LevelScene extends BaseScene {
         entityManager= new EntityManager(); // 对象 
         sunResource = new SunResource(150);
         sunBankUI = new SunBankUI(20,15,120,60,sunResource);
-        // 后面 加音乐 就+在这里
-
+        peashooterCard =new PlantCard("Peashooter",160,15,70,90,100,150,ImageManager.hasImage("card.peashooter")?ImageManager.getImage("card.peashooter"):null,ImageManager.hasImage("ui.cooldown_mask")?ImageManager.getImage("ui.cooldown_mask"):null);
+        AudioManager.playBGM("level_day");
     }
     @Override
     public void update(){
         // 后面更新：
         entityManager.updateAll();
+        peashooterCard.update();
         //collisionManager.checkAll();
         //LevelManager.update();
     }
@@ -55,33 +62,40 @@ public class LevelScene extends BaseScene {
     public void render(Graphics2D g){
         drawBackground(g);
         sunBankUI.render(g); 
+        peashooterCard.render(g);
+        entityManager.renderAll(g);
+
         // 调试格子
         drawDebugGrid(g);
 
-        entityManager.renderAll(g);
     }
 
     @Override
     public void onMousePressed(int x,int y){
+        if(peashooterCard.contains(x,y)){
+            handleCardClick(peashooterCard);
+        }
         int row = getRowByY(y);
         int col=getColByX(x);
 
-        if(row ==-1||col ==-1){
-            return ;
+        if(row!=-1&&col!=-1){
+            handleLawnClick(row,col); // 两个函数 通过中间变量联系起来
         }
-        if(entityManager.hasPlantAt(row,col)){
-            System.out.println("这个格子已经有植物了！");
-            return ;
-        }
+        // if(row ==-1||col ==-1){
+        //     return ;
+        // }
+        // if(entityManager.hasPlantAt(row,col)){
+        //     System.out.println("这个格子已经有植物了！");
+        //     return ;
+        // }
 
-        int plantX = gridStartX+col*cellWidth;
-        int plantY = gridStartY+row*cellHeight+5;
-        // 但是1 这个 为什么 需要 获取 植物的 实际位置呢
-        Peashooter peashooter =new Peashooter(row,col,plantX,plantY);//这显然是 在通过点击 种 射手
-        entityManager.addPlant(peashooter);
+        // int plantX = gridStartX+col*cellWidth;
+        // int plantY = gridStartY+row*cellHeight+5;
+        // // 但是1 这个 为什么 需要 获取 植物的 实际位置呢
+        // Peashooter peashooter =new Peashooter(row,col,plantX,plantY);//这显然是 在通过点击 种 射手
+        // entityManager.addPlant(peashooter);
 
-        System.out.println("放置豌豆射手: row= "+row+", col = "+col);
-        
+        // System.out.println("放置豌豆射手: row= "+row+", col = "+col);
     }
 
     @Override
@@ -91,11 +105,64 @@ public class LevelScene extends BaseScene {
             sceneManager.changeScene(new MainMenuScene(sceneManager));
         }
     }
+
+    private void handleCardClick(PlantCard card){
+        if(!card.canUse(sunResource.getAmount())){
+            System.out.println("阳光不足 或卡片正在冷却！");
+            AudioManager.playEffect("card_error");
+            return ;
+        }
+        if(selectedCard!=null)
+            selectedCard.setSelected(false);
+        selectedPlantType = card.getPlantType();
+        selectedCard =card;
+        selectedCard.setSelected(true);
+
+        System.out.println("选中植物: "+selectedPlantType);
+        AudioManager.playEffect("card_select");
+    }
+    private void handleLawnClick(int row,int col){
+        if(selectedPlantType ==null||selectedCard==null) return ;
+        if(entityManager.hasPlantAt(row,col)){
+            System.out.println("这个格子已经有植物了");
+            AudioManager.playEffect("card_error");
+            return ;
+        }
+
+        if(!sunResource.canAfford(selectedCard.getCost())){
+            System.out.println("阳光不足!");
+            AudioManager.playEffect("card_error");
+            return ;
+        }
+
+        if("Peashooter".equals(selectedPlantType)){
+            int plantX = gridStartX+ col*cellWidth;
+            int plantY = gridStartY+row*cellHeight+5;
+
+            Peashooter peashooter = new Peashooter(row,col,plantX,plantY);
+            entityManager.addPlant(peashooter);
+
+            sunResource.spend(selectedCard.getCost());
+            selectedCard.startCooldown();
+
+            AudioManager.playEffect("plant_place");
+            System.out.println("放置豌豆射手： row="+row+", col="+col);
+        }
+
+        selectedCard.setSelected(false);
+        selectedPlantType=null;
+        selectedCard=null;
+    }
     private void drawBackground(Graphics2D g){
-        g.drawImage(background,0,0,GameConfig.WINDOW_WIDTH,GameConfig.WINDOW_HEIGHT,null);
+        if(background!=null) g.drawImage(background,0,0,GameConfig.WINDOW_WIDTH,GameConfig.WINDOW_HEIGHT,null);
+        else{
+            g.setColor(new Color(80,160,80));
+            g.fillRect(0,0,GameConfig.WINDOW_WIDTH,GameConfig.WINDOW_HEIGHT);
+        }
     }
 
     private void drawDebugGrid(Graphics2D g){
+        g.setColor(Color.BLACK); // 这里为什么会新添加这样的东西？
         for(int row = 0;row<rowCount;row++){
             for(int col =0;col<colCount;col++){
                 int x = gridStartX+col*cellWidth;
