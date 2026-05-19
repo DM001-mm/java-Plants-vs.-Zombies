@@ -4,9 +4,9 @@ import com.xhl.pvz.core.LevelContext;
 import com.xhl.pvz.entity.bullet.PeaBullet;
 import com.xhl.pvz.manager.AudioManager;
 import com.xhl.pvz.manager.ImageManager;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-
 public class Peashooter extends Plant {
     private BufferedImage image;
     private final int shootInterval =60;
@@ -40,7 +40,26 @@ public class Peashooter extends Plant {
         
     }
     @Override
-    public void render(Graphics2D g){
-        g.drawImage(image,(int)x,(int)y,width,height,null);
+    public void render(Graphics2D g) {
+        if (image != null) {
+            g.drawImage(
+                    image,
+                    (int) x,
+                    (int) y,
+                    width,
+                    height,
+                    null
+            );
+        } else {
+            Color oldColor = g.getColor();
+
+            g.setColor(Color.GREEN);
+            g.fillOval((int) x, (int) y, width, height);
+
+            g.setColor(Color.BLACK);
+            g.drawOval((int) x, (int) y, width, height);
+
+            g.setColor(oldColor);
+        }
     }
 }
