@@ -22,6 +22,8 @@ public class ImageManager {
         loadImage("plant.sunflower.idle.0", "resources/images/plants/sunflower/idle/0.png");
         loadImage("card.sunflower", "resources/images/cards/sunflower_card.png");
         loadImage("zombie.normal.walk.0", "resources/images/zombies/normal_zombie/walk/0.png");
+        loadImage("bullet.pea", "resources/images/bullets/pea.png");
+        loadImage("bullet.pea_hit", "resources/images/bullets/pea_hit.png");
     }
 
     private static void loadImage(String key,String path){
