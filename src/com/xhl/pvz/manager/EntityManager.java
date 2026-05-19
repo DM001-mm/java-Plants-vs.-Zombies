@@ -45,6 +45,29 @@ public class EntityManager {
         // removeDeadEntities();
     }
 
+    public Plant getCollidingPlant(Zombie zombie) {
+        //他这些交互的函数基本上是交给这个类写的
+        if (zombie == null || !zombie.isAlive()) {
+            return null;
+        }
+
+        for (Plant plant : plants) {
+            if (!plant.isAlive()) {
+                continue;
+            }
+
+            if (plant.getRow() != zombie.getRow()) {
+                continue;
+            }
+
+            if (zombie.getBounds().intersects(plant.getBounds())) { // Entity 中方法中的Rectangle 中的函数成员
+                // 这个方法 是为了判断两个Rectangle类会不会重叠
+                return plant;
+            }
+        }
+
+        return null;
+    }
     public void renderAll(Graphics2D g){
         for(Plant plant:plants){
             plant.render(g);
