@@ -18,9 +18,10 @@ public class ImageManager {
         loadImage("card.peashooter","");
         loadImage("card.sunflower","");
         loadImage("plant.peashooter.idle.0", "resources\\images\\plants\\peashooter\\idle\\0.png");
-        loadImage("ui.sun_bank", "resources/images/ui/sun_bank.png");
+        loadImage("ui.sun_bank", "resources\\images\\ui\\sun_bank.png");
         loadImage("plant.sunflower.idle.0", "resources/images/plants/sunflower/idle/0.png");
         loadImage("card.sunflower", "resources/images/cards/sunflower_card.png");
+        loadImage("zombie.normal.walk.0", "resources/images/zombies/normal_zombie/walk/0.png");
     }
 
     private static void loadImage(String key,String path){
