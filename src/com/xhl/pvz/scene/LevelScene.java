@@ -6,6 +6,7 @@ import com.xhl.pvz.core.SceneManager;
 import com.xhl.pvz.entity.plant.Peashooter;
 import com.xhl.pvz.entity.plant.Sunflower;
 import com.xhl.pvz.manager.AudioManager;
+import com.xhl.pvz.manager.CollisionManager;
 import com.xhl.pvz.manager.EntityManager;
 import com.xhl.pvz.manager.ImageManager;
 import com.xhl.pvz.model.SunResource;
@@ -28,6 +29,7 @@ public class LevelScene extends BaseScene {
     private PlantCard sunflowerCard;
     private LevelContext levelContext;
     private PlantCard peashooterCard;
+    private CollisionManager collisionManager;
     private String selectedPlantType =null;
     private PlantCard selectedCard = null;
     private final int rowCount =5;
@@ -64,6 +66,7 @@ public class LevelScene extends BaseScene {
             ImageManager.hasImage("card.sunflower") ? ImageManager.getImage("card.sunflower") : null,
             ImageManager.hasImage("ui.cooldown_mask") ? ImageManager.getImage("ui.cooldown_mask") : null
         );
+        collisionManager = new CollisionManager(entityManager);
     }
     @Override
     public void update(){
@@ -72,7 +75,8 @@ public class LevelScene extends BaseScene {
         peashooterCard.update();
         sunflowerCard.update();
         entityManager.updateAll(levelContext);
-        //collisionManager.checkAll();
+        collisionManager.checkAll();
+        entityManager.removeDeadEntities();
         //LevelManager.update();
     }
     @Override

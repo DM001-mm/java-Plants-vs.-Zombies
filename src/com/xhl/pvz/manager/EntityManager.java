@@ -42,7 +42,7 @@ public class EntityManager {
         for (Bullet bullet : bullets) {
             bullet.update(context);
         }
-        removeDeadEntities();
+        // removeDeadEntities();
     }
 
     public void renderAll(Graphics2D g){
@@ -70,7 +70,7 @@ public class EntityManager {
             bullets.add(bullet);
         }
     }
-    private void removeDeadEntities(){
+    public void removeDeadEntities(){
         Iterator<Plant> iterator = plants.iterator();
         while(iterator.hasNext()){ // 说明 什么 ？ iterator 最开始指的 是 begin() 的 前一个位置
             Plant plant = iterator.next();
@@ -95,6 +95,15 @@ public class EntityManager {
 
             if (!bullet.isAlive()) {
                 bulletIterator.remove();
+            }
+        }
+        Iterator<Sun> sunIterator = suns.iterator();
+
+        while (sunIterator.hasNext()) {
+            Sun sun = sunIterator.next();
+
+            if (!sun.isAlive()) {
+                sunIterator.remove();
             }
         }
     }
