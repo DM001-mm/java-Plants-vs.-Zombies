@@ -115,4 +115,7 @@ public class PlantCard {
     public boolean isSelected(){
         return selected;
     }
+    public boolean canUse(int currentSun) {
+        return currentSun >= cost && !isCoolingDown();
+    }
 }

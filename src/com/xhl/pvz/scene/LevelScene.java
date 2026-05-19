@@ -1,19 +1,20 @@
 package com.xhl.pvz.scene;
 
 import com.xhl.pvz.core.GameConfig;
+import com.xhl.pvz.core.LevelContext;
 import com.xhl.pvz.core.SceneManager;
 import com.xhl.pvz.entity.plant.Peashooter;
+import com.xhl.pvz.entity.plant.Sunflower;
+import com.xhl.pvz.manager.AudioManager;
 import com.xhl.pvz.manager.EntityManager;
 import com.xhl.pvz.manager.ImageManager;
 import com.xhl.pvz.model.SunResource;
-import com.xhl.pvz.ui.SunBankUI;
 import com.xhl.pvz.ui.PlantCard;
-import com.xhl.pvz.manager.AudioManager;
-
+import com.xhl.pvz.ui.SunBankUI;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.awt.Color;
 
 // import java.awt.event.keyEvent;
 
@@ -24,6 +25,8 @@ public class LevelScene extends BaseScene {
     private EntityManager entityManager;
     private SunResource sunResource;
     private SunBankUI sunBankUI;
+    private PlantCard sunflowerCard;
+    private LevelContext levelContext;
     private PlantCard peashooterCard;
     private String selectedPlantType =null;
     private PlantCard selectedCard = null;
@@ -46,15 +49,29 @@ public class LevelScene extends BaseScene {
         background = ImageManager.getImage("background.lawn_day");
         entityManager= new EntityManager(); // 对象 
         sunResource = new SunResource(150);
+        levelContext = new LevelContext(entityManager, sunResource);
         sunBankUI = new SunBankUI(20,15,120,60,sunResource);
         peashooterCard =new PlantCard("Peashooter",160,15,70,90,100,150,ImageManager.hasImage("card.peashooter")?ImageManager.getImage("card.peashooter"):null,ImageManager.hasImage("ui.cooldown_mask")?ImageManager.getImage("ui.cooldown_mask"):null);
         AudioManager.playBGM("level_day");
+        sunflowerCard = new PlantCard(
+            "Sunflower",
+            240,
+            15,
+            70,
+            90,
+            50,
+            150,
+            ImageManager.hasImage("card.sunflower") ? ImageManager.getImage("card.sunflower") : null,
+            ImageManager.hasImage("ui.cooldown_mask") ? ImageManager.getImage("ui.cooldown_mask") : null
+        );
     }
     @Override
     public void update(){
         // 后面更新：
-        entityManager.updateAll();
+        // entityManager.updateAll();
         peashooterCard.update();
+        sunflowerCard.update();
+        entityManager.updateAll(levelContext);
         //collisionManager.checkAll();
         //LevelManager.update();
     }
@@ -135,23 +152,29 @@ public class LevelScene extends BaseScene {
             return ;
         }
 
-        if("Peashooter".equals(selectedPlantType)){
-            int plantX = gridStartX+ col*cellWidth;
-            int plantY = gridStartY+row*cellHeight+5;
+        int plantX = gridStartX + col * cellWidth;
+        int plantY = gridStartY + row * cellHeight + 5;
 
-            Peashooter peashooter = new Peashooter(row,col,plantX,plantY);
+        if ("Peashooter".equals(selectedPlantType)) {
+            Peashooter peashooter = new Peashooter(row, col, plantX, plantY);
             entityManager.addPlant(peashooter);
 
-            sunResource.spend(selectedCard.getCost());
-            selectedCard.startCooldown();
+            System.out.println("放置豌豆射手: row = " + row + ", col = " + col);
+        } else if ("Sunflower".equals(selectedPlantType)) {
+            Sunflower sunflower = new Sunflower(row, col, plantX, plantY);
+            entityManager.addPlant(sunflower);
 
-            AudioManager.playEffect("plant_place");
-            System.out.println("放置豌豆射手： row="+row+", col="+col);
+            System.out.println("放置向日葵: row = " + row + ", col = " + col);
         }
 
+        sunResource.spend(selectedCard.getCost());
+        selectedCard.startCooldown();
+
+        AudioManager.playEffect("plant_place");
+
         selectedCard.setSelected(false);
-        selectedPlantType=null;
-        selectedCard=null;
+        selectedPlantType = null;
+        selectedCard = null;
     }
     private void drawBackground(Graphics2D g){
         if(background!=null) g.drawImage(background,0,0,GameConfig.WINDOW_WIDTH,GameConfig.WINDOW_HEIGHT,null);

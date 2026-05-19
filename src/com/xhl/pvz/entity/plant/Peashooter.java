@@ -1,5 +1,6 @@
 package com.xhl.pvz.entity.plant;
 
+import com.xhl.pvz.core.LevelContext;
 import com.xhl.pvz.manager.ImageManager;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -12,7 +13,7 @@ public class Peashooter extends Plant {
         image = ImageManager.getImage("plant.peashooter.idle.0");
     }
     @Override
-    public void update(){
+    public void update(LevelContext context){
 
     }
     @Override

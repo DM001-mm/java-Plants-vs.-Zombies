@@ -1,6 +1,7 @@
 package com.xhl.pvz.entity;
 // import java.awt.*;
 // import javax.swing.*;
+import com.xhl.pvz.core.LevelContext;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 public abstract class Entity {
@@ -16,7 +17,7 @@ public abstract class Entity {
         this.width = width;
         this.height=height;
     }
-    public abstract void update();
+    public abstract void update(LevelContext context);
     public abstract void render(Graphics2D g);
 
     public boolean isAlive(){

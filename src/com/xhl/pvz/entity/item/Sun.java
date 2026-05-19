@@ -1,5 +1,6 @@
 package com.xhl.pvz.entity.item;
 
+import com.xhl.pvz.core.LevelContext;
 import com.xhl.pvz.manager.ImageManager;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -16,7 +17,7 @@ public class Sun extends CollectableItem {
     }
 
     @Override
-    public void update(){
+    public void update(LevelContext context){
         lifeTicks--;
         if(lifeTicks<=0){
             alive=false;

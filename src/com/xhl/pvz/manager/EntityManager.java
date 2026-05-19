@@ -1,5 +1,6 @@
 package com.xhl.pvz.manager;
 
+import com.xhl.pvz.core.LevelContext;
 import com.xhl.pvz.entity.plant.Plant;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
@@ -10,16 +11,19 @@ import java.util.List;
 // 这个类 是用在了 LevelScene 里面 也就是 主游戏场景的 逻辑类里面，所以 只能说 这个类的 功能 在 主游戏 场景 中 实现的
 public class EntityManager {
     private final List<Plant> plants=new ArrayList<>();
-
+    
     public void addPlant(Plant plant){
         if(plant !=null){
             plants.add(plant);
         }
     }
     
-    public void updateAll(){
+    public void updateAll(LevelContext context){
         for(Plant plant: plants){
-            plant.update();
+            plant.update(context);
+        }
+        for(Sun sun:suns){
+            sun.update(context);
         }
         removeDeadEntities();
     }
