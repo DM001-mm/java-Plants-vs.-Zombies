@@ -10,7 +10,8 @@ import java.awt.image.BufferedImage;
 public class NormalZombie extends Zombie {
 
     private BufferedImage image;
-
+    private final int attackInterval = 30; //加了攻击计时器 是为了逻辑伤害的计算
+    private int attackTimer = 0; 
     public NormalZombie(int row, double x, double y) {
         super(
                 row,
@@ -28,14 +29,29 @@ public class NormalZombie extends Zombie {
         }
     }
 
+    // @Override
+    // public void update(LevelContext context) {
+    //     // 目前先只实现向左移动
+    //     // 后面有 CollisionManager 后，再实现碰到植物停止并攻击
+    //     x -= speed;
+
+    //     // 走到最左边，暂时先标记为死亡
+    //     // 后面这里会改成触发游戏失败
+    //     if (x + width < 0) {
+    //         alive = false;
+    //         System.out.println("僵尸进入房子，后面这里要触发游戏失败");
+    //     }
+    // }
     @Override
     public void update(LevelContext context) {
-        // 目前先只实现向左移动
-        // 后面有 CollisionManager 后，再实现碰到植物停止并攻击
-        x -= speed;
+        Plant collidingPlant = context.getEntityManager().getCollidingPlant(this);
 
-        // 走到最左边，暂时先标记为死亡
-        // 后面这里会改成触发游戏失败
+        if (collidingPlant != null) {
+            attack(collidingPlant);
+        } else {
+            move();
+        }
+
         if (x + width < 0) {
             alive = false;
             System.out.println("僵尸进入房子，后面这里要触发游戏失败");
@@ -47,8 +63,14 @@ public class NormalZombie extends Zombie {
         if (plant == null || !plant.isAlive()) {
             return;
         }
-
-        plant.takeDamage(damage);
+        attackTimer ++;
+        if(attackTimer>=attackInterval){
+            attackTimer =0;
+            plant.takeDamage(damage);
+            
+            AudioManager.playEffect("zombie_eat");
+            System.out.println("僵尸攻击植物，植物剩余 HP："+plant.getHp());
+        }
     }
 
     @Override
@@ -79,5 +101,9 @@ public class NormalZombie extends Zombie {
         alive = false;
         AudioManager.playEffect("zombie_die");
         System.out.println("普通僵尸死亡");
+    }
+    private void move(){
+        x-=speed;
+        attackTimer = 0;
     }
 }
