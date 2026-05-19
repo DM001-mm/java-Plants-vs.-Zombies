@@ -54,6 +54,7 @@ public class NormalZombie extends Zombie {
 
         if (x + width < 0) {
             alive = false;
+            context.requestGameOver();
             System.out.println("僵尸进入房子，后面这里要触发游戏失败");
         }
     }

@@ -5,10 +5,11 @@ import com.xhl.pvz.core.SceneManager;
 import com.xhl.pvz.manager.AudioManager;
 import com.xhl.pvz.manager.ImageManager;
 import com.xhl.pvz.ui.UIButton;
+
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-public class GameOverScene extends BaseScene {
+public class WinScene extends BaseScene {
 
     private final SceneManager sceneManager;
 
@@ -16,14 +17,14 @@ public class GameOverScene extends BaseScene {
     private UIButton restartButton;
     private UIButton menuButton;
 
-    public GameOverScene(SceneManager sceneManager) {
+    public WinScene(SceneManager sceneManager) {
         this.sceneManager = sceneManager;
     }
 
     @Override
     public void onEnter() {
-        if (ImageManager.hasImage("background.game_over")) {
-            background = ImageManager.getImage("background.game_over");
+        if (ImageManager.hasImage("background.win")) {
+            background = ImageManager.getImage("background.win");
         }
 
         restartButton = new UIButton(
@@ -31,17 +32,20 @@ public class GameOverScene extends BaseScene {
                 380,
                 220,
                 70,
-                ImageManager.hasImage("ui.restart_button") ? ImageManager.getImage("ui.restart_button") : null);
+                ImageManager.hasImage("ui.restart_button") ? ImageManager.getImage("ui.restart_button") : null
+        );
 
         menuButton = new UIButton(
                 330,
                 470,
                 220,
                 70,
-                ImageManager.hasImage("ui.menu_button") ? ImageManager.getImage("ui.menu_button") : null);
+                ImageManager.hasImage("ui.menu_button") ? ImageManager.getImage("ui.menu_button") : null
+        );
 
-        AudioManager.playBGM("game_over");
+        AudioManager.playBGM("win");
     }
+
     @Override
     public void render(Graphics2D g) {
         if (background != null) {
@@ -58,7 +62,8 @@ public class GameOverScene extends BaseScene {
         restartButton.render(g);
         menuButton.render(g);
     }
-     @Override
+
+    @Override
     public void onMousePressed(int x, int y) {
         if (restartButton.contains(x, y)) {
             AudioManager.playEffect("click");

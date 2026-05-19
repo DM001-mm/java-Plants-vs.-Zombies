@@ -9,6 +9,7 @@ import com.xhl.pvz.manager.AudioManager;
 import com.xhl.pvz.manager.CollisionManager;
 import com.xhl.pvz.manager.EntityManager;
 import com.xhl.pvz.manager.ImageManager;
+import com.xhl.pvz.manager.LevelManager;
 import com.xhl.pvz.model.SunResource;
 import com.xhl.pvz.ui.PlantCard;
 import com.xhl.pvz.ui.SunBankUI;
@@ -23,6 +24,7 @@ public class LevelScene extends BaseScene {
 
     private final SceneManager sceneManager;
     private BufferedImage background ;
+    private LevelManager levelManager;
     private EntityManager entityManager;
     private SunResource sunResource;
     private SunBankUI sunBankUI;
@@ -49,6 +51,7 @@ public class LevelScene extends BaseScene {
     @Override
     public void onEnter(){
         background = ImageManager.getImage("background.lawn_day");
+        levelManager = new LevelManager(gridStartY, cellHeight);
         entityManager= new EntityManager(); // 对象 
         sunResource = new SunResource(150);
         levelContext = new LevelContext(entityManager, sunResource);
@@ -74,10 +77,12 @@ public class LevelScene extends BaseScene {
         // entityManager.updateAll();
         peashooterCard.update();
         sunflowerCard.update();
+        levelManager.update(levelContext);
         entityManager.updateAll(levelContext);
         collisionManager.checkAll(); // 这是碰撞检测，
         entityManager.removeDeadEntities(); // 这是剔除
         //LevelManager.update();
+        checkLevelResult();
     }
     @Override
     public void render(Graphics2D g){
@@ -212,6 +217,16 @@ public class LevelScene extends BaseScene {
         }
         return (x-gridStartX)/cellWidth;
     }
+    private void checkLevelResult() {
+        if (levelContext.isGameOverRequested()) {
+            sceneManager.changeScene(new GameOverScene(sceneManager));
+            return;
+        }
 
+        if (levelManager.isAllZombiesSpawned()
+                && entityManager.getZombies().isEmpty()) {
+            sceneManager.changeScene(new WinScene(sceneManager));
+        }
+    }
     
 }

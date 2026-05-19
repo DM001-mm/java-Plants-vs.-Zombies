@@ -11,11 +11,11 @@ public class LevelManager {
 
     private final int gridStartY;
     private final int cellHeight;
-
+    private boolean allZombiesSpawned = false;
     private final List<SpawnEvent> spawnEvents=new ArrayList<>(); // 内部类
 
     private int nextEventIndex =0;
-    private boolean levelFinished = false;
+    // private boolean levelFinished = false;
 
     public LevelManager(int gridStartY,int cellHeight){
         this.gridStartY=gridStartY;
@@ -45,7 +45,7 @@ public class LevelManager {
     }
 
     public void update(LevelContext context){
-        if(levelFinished){
+        if(allZombiesSpawned){
             return ; // 直接没有update了
         }
         tick++;
@@ -55,7 +55,8 @@ public class LevelManager {
             nextEventIndex++;
         }
         if(nextEventIndex>=spawnEvents.size()){
-            levelFinished =true;
+            // levelFinished =true;
+            allZombiesSpawned=true;
         }
     }
     private void spawnZombie(LevelContext context, int row) {
@@ -69,8 +70,8 @@ public class LevelManager {
         System.out.println("刷出普通僵尸: row = " + row);
     } // 这个so easy，知道逻辑就行了，至于 为什么要这样分，只是为了清晰一些
 
-     public boolean isLevelFinished() {
-        return levelFinished;
+    public boolean isAllZombiesSpawned() {
+        return allZombiesSpawned;
     }
 
     public int getTick() {

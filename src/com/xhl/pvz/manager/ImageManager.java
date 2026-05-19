@@ -24,6 +24,11 @@ public class ImageManager {
         loadImage("zombie.normal.walk.0", "resources/images/zombies/normal_zombie/walk/0.png");
         loadImage("bullet.pea", "resources/images/bullets/pea.png");
         loadImage("bullet.pea_hit", "resources/images/bullets/pea_hit.png");
+        loadImage("background.game_over", "resources/images/background/game_over.png");
+        loadImage("background.win", "resources/images/background/win.png");
+
+        loadImage("ui.restart_button", "resources/images/ui/restart_button.png");
+        loadImage("ui.menu_button", "resources/images/ui/menu_button.png");
     }
 
     private static void loadImage(String key,String path){

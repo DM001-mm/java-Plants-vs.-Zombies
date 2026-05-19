@@ -31,7 +31,10 @@ public class AudioManager {
         effectPaths.put("sun_collect", "resources/sounds/effect/sun_collect.wav");
         effectPaths.put("zombie_eat", "resources/sounds/effect/zombie_eat.wav");
         effectPaths.put("zombie_die", "resources/sounds/effect/zombie_die.wav");
+        bgmPaths.put("game_over", "resources/sounds/bgm/game_over.wav");
+        bgmPaths.put("win", "resources/sounds/bgm/win.wav");
 
+        effectPaths.put("click", "resources/sounds/effect/click.wav");
         System.out.println("AudioManager initialized.");
     }
 

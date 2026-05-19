@@ -8,7 +8,10 @@ import com.xhl.pvz.model.SunResource; // 这个是用来统计阳光数量的类
 public class LevelContext {
     private final EntityManager entityManager;
     private final SunResource sunResource;
+    private boolean gameOverRequested =false; // 这个量在这里完全是因为 这个量是通过update来更新的，
 
+    // private final EntityManager entityManager;
+    // private final SunResource sunResource;
     public LevelContext(EntityManager entityManager,SunResource sunResource){
         this.entityManager=entityManager;
         this.sunResource=sunResource;
@@ -20,5 +23,11 @@ public class LevelContext {
 
     public SunResource getSunResource(){
         return sunResource;
+    }
+    public void requestGameOver(){
+        gameOverRequested =true;
+    }
+    public boolean isGameOverRequested(){
+        return gameOverRequested;
     }
 }
