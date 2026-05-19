@@ -2,11 +2,11 @@ package com.xhl.pvz.entity.zombie;
 
 import com.xhl.pvz.core.LevelContext;
 import com.xhl.pvz.entity.plant.Plant;
+import com.xhl.pvz.manager.AudioManager;
 import com.xhl.pvz.manager.ImageManager;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-
 public class NormalZombie extends Zombie {
 
     private BufferedImage image;
@@ -73,5 +73,11 @@ public class NormalZombie extends Zombie {
 
             g.setColor(oldColor);
         }
+    }
+    @Override
+    protected void onDeath() {
+        alive = false;
+        AudioManager.playEffect("zombie_die");
+        System.out.println("普通僵尸死亡");
     }
 }
