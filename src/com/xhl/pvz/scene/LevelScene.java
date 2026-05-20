@@ -3,6 +3,7 @@ package com.xhl.pvz.scene;
 import com.xhl.pvz.core.GameConfig;
 import com.xhl.pvz.core.LevelContext;
 import com.xhl.pvz.core.SceneManager;
+import com.xhl.pvz.entity.item.Sun;
 import com.xhl.pvz.entity.plant.Peashooter;
 import com.xhl.pvz.entity.plant.Sunflower;
 import com.xhl.pvz.manager.AudioManager;
@@ -11,6 +12,7 @@ import com.xhl.pvz.manager.EntityManager;
 import com.xhl.pvz.manager.ImageManager;
 import com.xhl.pvz.manager.LevelManager;
 import com.xhl.pvz.model.SunResource;
+import com.xhl.pvz.ui.PauseMenuUI;
 import com.xhl.pvz.ui.PlantCard;
 import com.xhl.pvz.ui.SunBankUI;
 import java.awt.Color;
@@ -42,6 +44,8 @@ public class LevelScene extends BaseScene {
     private final int cellWidth = 80;
     private final int cellHeight =90;
     
+    private boolean paused = false;
+    private PauseMenuUI pauseMenuUI;
     // 测试阳光数
     // private int sunCount = 50;
 
@@ -50,6 +54,7 @@ public class LevelScene extends BaseScene {
     }
     @Override
     public void onEnter(){
+        
         background = ImageManager.getImage("background.lawn_day");
         levelManager = new LevelManager(gridStartY, cellHeight);
         entityManager= new EntityManager(); // 对象 
@@ -75,11 +80,16 @@ public class LevelScene extends BaseScene {
     public void update(){ // 现在的update中的函数调用，僵尸吃植物的检测是放在了僵尸的update里面，植物好像也是这样的，至于子弹其实也可以这样，然后 在后面直接 check，剔除所有的死了的，或者失效的对象
         // 后面更新：
         // entityManager.updateAll();
+        if(paused){
+            return ;
+        }//和结束判定 差不多，都是停止update()
         peashooterCard.update();
         sunflowerCard.update();
         levelManager.update(levelContext);
         entityManager.updateAll(levelContext);
         collisionManager.checkAll(); // 这是碰撞检测，
+        pauseMenuUI = new PauseMenuUI();
+        paused = false;
         entityManager.removeDeadEntities(); // 这是剔除
         //LevelManager.update();
         checkLevelResult();
@@ -88,18 +98,34 @@ public class LevelScene extends BaseScene {
     public void render(Graphics2D g){
         drawBackground(g);
         sunBankUI.render(g); 
+        sunflowerCard.render(g);
         peashooterCard.render(g);
         entityManager.renderAll(g);
 
         // 调试格子
         drawDebugGrid(g);
 
-    }
+        if(paused){
+            pauseMenuUI.render(g);
+        }
+    }   
 
     @Override
     public void onMousePressed(int x,int y){
+        if(paused){
+            handlePauseMenuClick(x,y);
+            return ;
+        }
+        if(handleSunClick(x,y)){
+            return ;
+        }
         if(peashooterCard.contains(x,y)){
             handleCardClick(peashooterCard);
+            return ;
+        }
+        if (sunflowerCard.contains(x, y)) {
+            handleCardClick(sunflowerCard);
+            return;
         }
         int row = getRowByY(y);
         int col=getColByX(x);
@@ -123,12 +149,24 @@ public class LevelScene extends BaseScene {
 
         // System.out.println("放置豌豆射手: row= "+row+", col = "+col);
     }
+    private void handlePauseMenuClick(int x, int y) {
+        if (pauseMenuUI.isContinueButtonClicked(x, y)) {
+            paused = false;
+            AudioManager.playEffect("click");
+            return;
+        }
 
+        if (pauseMenuUI.isMenuButtonClicked(x, y)) {
+            AudioManager.playEffect("click");
+            sceneManager.changeScene(new MainMenuScene(sceneManager));
+        }
+    }
     @Override
     public void onKeyPressed(int keyCode){
         if(keyCode == KeyEvent.VK_ESCAPE){
             // System.out.println("按下ESC,返回主菜单");
-            sceneManager.changeScene(new MainMenuScene(sceneManager));
+            paused =!paused;
+            // sceneManager.changeScene(new MainMenuScene(sceneManager));
         }
     }
 
@@ -229,4 +267,21 @@ public class LevelScene extends BaseScene {
         }
     }
     
+    private boolean handleSunClick(int x, int y) {
+        Sun sun = entityManager.getSunAt(x, y);
+
+        if (sun == null) {
+            return false;
+        }
+
+        sunResource.add(sun.getValue());
+        sun.collect();
+
+        AudioManager.playEffect("sun_collect");
+
+        System.out.println("收集阳光 +" + sun.getValue());
+
+        return true;
+    }
+
 }
