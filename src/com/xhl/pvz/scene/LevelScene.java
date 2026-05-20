@@ -16,6 +16,17 @@ import com.xhl.pvz.manager.SaveManager;
 import com.xhl.pvz.model.SunResource;
 import com.xhl.pvz.save.PlantSaveData;
 import com.xhl.pvz.save.SaveData;
+import com.xhl.pvz.entity.bullet.Bullet;
+import com.xhl.pvz.entity.bullet.PeaBullet;
+import com.xhl.pvz.entity.item.Sun;
+import com.xhl.pvz.entity.plant.Plant;
+import com.xhl.pvz.entity.zombie.NormalZombie;
+import com.xhl.pvz.entity.zombie.Zombie;
+import com.xhl.pvz.save.BulletSaveData;
+import com.xhl.pvz.save.PlantSaveData;
+import com.xhl.pvz.save.SaveData;
+import com.xhl.pvz.save.SunSaveData;
+import com.xhl.pvz.save.ZombieSaveData;
 import com.xhl.pvz.ui.PauseMenuUI;
 import com.xhl.pvz.ui.PlantCard;
 import com.xhl.pvz.ui.SunBankUI;
@@ -313,12 +324,11 @@ public class LevelScene extends BaseScene {
         SaveData saveData = new SaveData();
 
         saveData.setSunAmount(sunResource.getAmount());
+        saveData.setLevelTick(levelManager.getTick());
 
         for (Plant plant : entityManager.getPlants()) {
-            String plantType = getPlantType(plant);
-
             PlantSaveData plantSaveData = new PlantSaveData(
-                    plantType,
+                    getPlantType(plant),
                     plant.getRow(),
                     plant.getCol(),
                     plant.getHp()
@@ -327,7 +337,53 @@ public class LevelScene extends BaseScene {
             saveData.addPlant(plantSaveData);
         }
 
+        for (Zombie zombie : entityManager.getZombies()) {
+            ZombieSaveData zombieSaveData = new ZombieSaveData(
+                    getZombieType(zombie),
+                    zombie.getRow(),
+                    zombie.getX(),
+                    zombie.getY(),
+                    zombie.getHp()
+            );
+
+            saveData.addZombie(zombieSaveData);
+        }
+
+        for (Bullet bullet : entityManager.getBullets()) {
+            BulletSaveData bulletSaveData = new BulletSaveData(
+                    getBulletType(bullet),
+                    bullet.getRow(),
+                    bullet.getX(),
+                    bullet.getY()
+            );
+
+            saveData.addBullet(bulletSaveData);
+        }
+
+        for (Sun sun : entityManager.getSuns()) {
+            SunSaveData sunSaveData = new SunSaveData(
+                    sun.getX(),
+                    sun.getY()
+            );
+
+            saveData.addSun(sunSaveData);
+        }
+
         SaveManager.save(saveData, "save1.dat");
+    }
+    private String getZombieType(Zombie zombie) {
+        if (zombie instanceof NormalZombie) {
+            return "NormalZombie";
+        }
+
+        return zombie.getClass().getSimpleName();
+    }
+    private String getBulletType(Bullet bullet) {
+        if (bullet instanceof PeaBullet) {
+            return "PeaBullet";
+        }
+
+        return bullet.getClass().getSimpleName();
     }
     private String getPlantType(Plant plant) {
         if (plant instanceof Peashooter) {
@@ -376,6 +432,7 @@ public class LevelScene extends BaseScene {
         entityManager.clearAll();
 
         sunResource.setAmount(saveData.getSunAmount());
+        levelManager.setTick(saveData.getLevelTick());
 
         for (PlantSaveData plantData : saveData.getPlants()) {
             int row = plantData.getRow();
@@ -391,6 +448,55 @@ public class LevelScene extends BaseScene {
             }
         }
 
-        System.out.println("关卡状态恢复完成");
+        for (ZombieSaveData zombieData : saveData.getZombies()) {
+            Zombie zombie = createZombieFromSaveData(zombieData);
+
+            if (zombie != null) {
+                entityManager.addZombie(zombie);
+            }
+        }
+
+        for (BulletSaveData bulletData : saveData.getBullets()) {
+            Bullet bullet = createBulletFromSaveData(bulletData);
+
+            if (bullet != null) {
+                entityManager.addBullet(bullet);
+            }
+        }
+
+        for (SunSaveData sunData : saveData.getSuns()) {
+            Sun sun = new Sun(sunData.getX(), sunData.getY());
+            entityManager.addSun(sun);
+        }
+
+        System.out.println("读档完成");
     }
+    private Zombie createZombieFromSaveData(ZombieSaveData data) {
+        Zombie zombie = null;
+
+        if ("NormalZombie".equals(data.getZombieType())) {
+            zombie = new NormalZombie(
+                    data.getRow(),
+                    data.getX(),
+                    data.getY()
+            );
+        }
+
+        if (zombie != null) {
+            zombie.setHp(data.getHp());
+        }
+
+        return zombie;
+    }
+    private Bullet createBulletFromSaveData(BulletSaveData data) {
+        if ("PeaBullet".equals(data.getBulletType())) {
+            return new PeaBullet(
+                    data.getRow(),
+                    data.getX(),
+                    data.getY()
+            );
+        }
+
+        return null;
+    }   
 }

@@ -75,7 +75,19 @@ public class LevelManager {
     }
 
     public int getTick() {
-        return tick;
-    }
+            return tick;
+        }
 
+    public void setTick(int tick) {
+        this.tick = tick;
+
+        nextEventIndex = 0;
+
+        while (nextEventIndex < spawnEvents.size()
+                && spawnEvents.get(nextEventIndex).timeTick <= tick) {
+            nextEventIndex++;
+        }
+
+        allZombiesSpawned = nextEventIndex >= spawnEvents.size();
+    }
 }
