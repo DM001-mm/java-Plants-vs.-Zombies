@@ -8,24 +8,46 @@ import java.awt.Graphics2D;
 public class PauseMenuUI {
 
     private UIButton continueButton;
+    private UIButton saveButton;
+    private UIButton loadButton;
     private UIButton menuButton;
 
     public PauseMenuUI() {
         continueButton = new UIButton(
                 340,
-                230,
+                180,
                 220,
-                70,
+                60,
                 ImageManager.hasImage("ui.continue_button")
                         ? ImageManager.getImage("ui.continue_button")
                         : null
         );
 
+        saveButton = new UIButton(
+                340,
+                260,
+                220,
+                60,
+                ImageManager.hasImage("ui.save_button")
+                        ? ImageManager.getImage("ui.save_button")
+                        : null
+        );
+
+        loadButton = new UIButton(
+                340,
+                340,
+                220,
+                60,
+                ImageManager.hasImage("ui.load_button")
+                        ? ImageManager.getImage("ui.load_button")
+                        : null
+        );
+
         menuButton = new UIButton(
                 340,
-                320,
+                420,
                 220,
-                70,
+                60,
                 ImageManager.hasImage("ui.menu_button")
                         ? ImageManager.getImage("ui.menu_button")
                         : null
@@ -37,6 +59,8 @@ public class PauseMenuUI {
         drawTitle(g);
 
         continueButton.render(g);
+        saveButton.render(g);
+        loadButton.render(g);
         menuButton.render(g);
 
         drawFallbackText(g);
@@ -57,16 +81,12 @@ public class PauseMenuUI {
 
         g.setColor(Color.WHITE);
         g.setFont(new Font("微软雅黑", Font.BOLD, 40));
-        g.drawString("游戏暂停", 365, 170);
+        g.drawString("游戏暂停", 365, 130);
 
         g.setColor(oldColor);
         g.setFont(oldFont);
     }
 
-    /**
-     * 没有按钮图片时，先用文字提示。
-     * 等资源到位后，这部分可以删掉。
-     */
     private void drawFallbackText(Graphics2D g) {
         Color oldColor = g.getColor();
         Font oldFont = g.getFont();
@@ -75,11 +95,19 @@ public class PauseMenuUI {
         g.setFont(new Font("微软雅黑", Font.BOLD, 24));
 
         if (!ImageManager.hasImage("ui.continue_button")) {
-            g.drawString("继续游戏", 400, 275);
+            g.drawString("继续游戏", 400, 220);
+        }
+
+        if (!ImageManager.hasImage("ui.save_button")) {
+            g.drawString("保存游戏", 400, 300);
+        }
+
+        if (!ImageManager.hasImage("ui.load_button")) {
+            g.drawString("读取存档", 400, 380);
         }
 
         if (!ImageManager.hasImage("ui.menu_button")) {
-            g.drawString("返回主菜单", 390, 365);
+            g.drawString("返回主菜单", 390, 460);
         }
 
         g.setColor(oldColor);
@@ -88,6 +116,14 @@ public class PauseMenuUI {
 
     public boolean isContinueButtonClicked(int x, int y) {
         return continueButton.contains(x, y);
+    }
+
+    public boolean isSaveButtonClicked(int x, int y) {
+        return saveButton.contains(x, y);
+    }
+
+    public boolean isLoadButtonClicked(int x, int y) {
+        return loadButton.contains(x, y);
     }
 
     public boolean isMenuButtonClicked(int x, int y) {

@@ -5,13 +5,17 @@ import com.xhl.pvz.core.LevelContext;
 import com.xhl.pvz.core.SceneManager;
 import com.xhl.pvz.entity.item.Sun;
 import com.xhl.pvz.entity.plant.Peashooter;
+import com.xhl.pvz.entity.plant.Plant;
 import com.xhl.pvz.entity.plant.Sunflower;
 import com.xhl.pvz.manager.AudioManager;
 import com.xhl.pvz.manager.CollisionManager;
 import com.xhl.pvz.manager.EntityManager;
 import com.xhl.pvz.manager.ImageManager;
 import com.xhl.pvz.manager.LevelManager;
+import com.xhl.pvz.manager.SaveManager;
 import com.xhl.pvz.model.SunResource;
+import com.xhl.pvz.save.PlantSaveData;
+import com.xhl.pvz.save.SaveData;
 import com.xhl.pvz.ui.PauseMenuUI;
 import com.xhl.pvz.ui.PlantCard;
 import com.xhl.pvz.ui.SunBankUI;
@@ -156,17 +160,38 @@ public class LevelScene extends BaseScene {
             return;
         }
 
+        if (pauseMenuUI.isSaveButtonClicked(x, y)) {
+            saveGame();
+            AudioManager.playEffect("click");
+            return;
+        }
+
+        if (pauseMenuUI.isLoadButtonClicked(x, y)) {
+            loadGame();
+            AudioManager.playEffect("click");
+            paused = false;
+            return;
+        }
+
         if (pauseMenuUI.isMenuButtonClicked(x, y)) {
             AudioManager.playEffect("click");
             sceneManager.changeScene(new MainMenuScene(sceneManager));
         }
     }
     @Override
-    public void onKeyPressed(int keyCode){
-        if(keyCode == KeyEvent.VK_ESCAPE){
-            // System.out.println("按下ESC,返回主菜单");
-            paused =!paused;
-            // sceneManager.changeScene(new MainMenuScene(sceneManager));
+    public void onKeyPressed(int keyCode) {
+        if (keyCode == KeyEvent.VK_ESCAPE) {
+            paused = !paused;
+            return;
+        }
+
+        if (keyCode == KeyEvent.VK_S) {
+            saveGame();
+            return;
+        }
+
+        if (keyCode == KeyEvent.VK_L) {
+            loadGame();
         }
     }
 
@@ -284,4 +309,88 @@ public class LevelScene extends BaseScene {
         return true;
     }
 
+    private void saveGame() {
+        SaveData saveData = new SaveData();
+
+        saveData.setSunAmount(sunResource.getAmount());
+
+        for (Plant plant : entityManager.getPlants()) {
+            String plantType = getPlantType(plant);
+
+            PlantSaveData plantSaveData = new PlantSaveData(
+                    plantType,
+                    plant.getRow(),
+                    plant.getCol(),
+                    plant.getHp()
+            );
+
+            saveData.addPlant(plantSaveData);
+        }
+
+        SaveManager.save(saveData, "save1.dat");
+    }
+    private String getPlantType(Plant plant) {
+        if (plant instanceof Peashooter) {
+            return "Peashooter";
+        } // 编译时期 运行时期，编译时期错了 会直接报错，运行时期 就是true和false了
+
+        if (plant instanceof Sunflower) {
+            return "Sunflower";
+        }
+
+        return plant.getClass().getSimpleName();
+    }
+    private Plant createPlantFromSaveData(PlantSaveData plantData, int x, int y) {
+        Plant plant = null;
+
+        if ("Peashooter".equals(plantData.getPlantType())) {
+            plant = new Peashooter(
+                    plantData.getRow(),
+                    plantData.getCol(),
+                    x,
+                    y
+            );
+        } else if ("Sunflower".equals(plantData.getPlantType())) {
+            plant = new Sunflower(
+                    plantData.getRow(),
+                    plantData.getCol(),
+                    x,
+                    y
+            );
+        }
+
+        if (plant != null) {
+            plant.setHp(plantData.getHp());
+        }
+
+        return plant;
+    }
+    
+    private void loadGame() {
+        SaveData saveData = SaveManager.load("save1.dat");
+
+        if (saveData == null) {
+            return;
+        }
+
+        entityManager.clearAll();
+
+        sunResource.setAmount(saveData.getSunAmount());
+
+        for (PlantSaveData plantData : saveData.getPlants()) {
+            int row = plantData.getRow();
+            int col = plantData.getCol();
+
+            int plantX = gridStartX + col * cellWidth;
+            int plantY = gridStartY + row * cellHeight + 5;
+
+            Plant plant = createPlantFromSaveData(plantData, plantX, plantY);
+
+            if (plant != null) {
+                entityManager.addPlant(plant);
+            }
+        }
+
+        System.out.println("关卡状态恢复完成");
+    }
 }

@@ -1,5 +1,7 @@
 package com.xhl.pvz.entity;
 
+// import javax.swing.text.html.parser.Entity;
+
 public abstract class LivingEntity extends Entity {
     protected int hp;
     protected int maxHp;
@@ -33,4 +35,19 @@ public abstract class LivingEntity extends Entity {
         return maxHp;
     }
 
+    public void setHp(int hp) {
+        if (hp < 0) {
+            hp = 0;
+        }
+
+        if (hp > maxHp) {
+            hp = maxHp;
+        }
+
+        this.hp = hp;
+
+        if (this.hp <= 0) {
+            alive = false;
+        }
+    } // 读档保存功能实现 需要恢复血量 对吗
 }

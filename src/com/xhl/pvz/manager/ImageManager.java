@@ -29,6 +29,10 @@ public class ImageManager {
 
         loadImage("ui.restart_button", "resources/images/ui/restart_button.png");
         loadImage("ui.menu_button", "resources/images/ui/menu_button.png");
+        loadImage("ui.continue_button", "resources/images/ui/continue_button.png");
+        loadImage("ui.save_button", "resources/images/ui/save_button.png");
+        loadImage("ui.load_button", "resources/images/ui/load_button.png");
+        loadImage("ui.menu_button", "resources/images/ui/menu_button.png");
     }
 
     private static void loadImage(String key,String path){

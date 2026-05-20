@@ -168,7 +168,7 @@ public class EntityManager {
 
         return false;
     }
-    public List<Plant> getPlants(int row,int col){
+    public List<Plant> getPlants(){
         return plants;
     }
     public List<Zombie> getZombies() {
@@ -177,4 +177,12 @@ public class EntityManager {
     public List<Bullet> getBullets() {
         return bullets;
     }
+
+    public void clearAll() {
+        plants.clear();
+        zombies.clear();
+        bullets.clear();
+        suns.clear();
+    }
+
 }
