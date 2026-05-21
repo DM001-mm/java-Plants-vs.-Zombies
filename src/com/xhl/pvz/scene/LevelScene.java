@@ -6,11 +6,10 @@ import com.xhl.pvz.core.SceneManager;
 import com.xhl.pvz.entity.bullet.Bullet;
 import com.xhl.pvz.entity.bullet.PeaBullet;
 import com.xhl.pvz.entity.item.Sun;
-import com.xhl.pvz.entity.plant.Peashooter;
 import com.xhl.pvz.entity.plant.Plant;
-import com.xhl.pvz.entity.plant.Sunflower;
 import com.xhl.pvz.entity.zombie.NormalZombie;
 import com.xhl.pvz.entity.zombie.Zombie;
+import com.xhl.pvz.factory.PlantFactory;
 import com.xhl.pvz.manager.AudioManager;
 import com.xhl.pvz.manager.CollisionManager;
 import com.xhl.pvz.manager.EntityManager;
@@ -281,17 +280,21 @@ public class LevelScene extends BaseScene {
         int plantX = gridStartX + col * cellWidth;
         int plantY = gridStartY + row * cellHeight + 5;
 
-        if ("Peashooter".equals(selectedPlantType)) {
-            Peashooter peashooter = new Peashooter(row, col, plantX, plantY);
-            entityManager.addPlant(peashooter);
+        Plant plant = PlantFactory.createPlant(
+                selectedPlantType,
+                row,
+                col,
+                plantX,
+                plantY
+        );
 
-            System.out.println("放置豌豆射手: row = " + row + ", col = " + col);
-        } else if ("Sunflower".equals(selectedPlantType)) {
-            Sunflower sunflower = new Sunflower(row, col, plantX, plantY);
-            entityManager.addPlant(sunflower);
-
-            System.out.println("放置向日葵: row = " + row + ", col = " + col);
+        if (plant == null) {
+            return;
         }
+
+        entityManager.addPlant(plant);
+
+        System.out.println("放置植物: " + selectedPlantType + ", row = " + row + ", col = " + col);
 
         sunResource.spend(selectedCard.getCost());
         selectedCard.startCooldown();
@@ -375,7 +378,7 @@ public class LevelScene extends BaseScene {
 
         for (Plant plant : entityManager.getPlants()) {
             PlantSaveData plantSaveData = new PlantSaveData(
-                    getPlantType(plant),
+                    PlantFactory.getPlantType(plant),
                     plant.getRow(),
                     plant.getCol(),
                     plant.getHp()
@@ -476,18 +479,6 @@ public class LevelScene extends BaseScene {
         System.out.println("读档完成");
     }
 
-    private String getPlantType(Plant plant) {
-        if (plant instanceof Peashooter) {
-            return "Peashooter";
-        }
-
-        if (plant instanceof Sunflower) {
-            return "Sunflower";
-        }
-
-        return plant.getClass().getSimpleName();
-    }
-
     private String getZombieType(Zombie zombie) {
         if (zombie instanceof NormalZombie) {
             return "NormalZombie";
@@ -505,23 +496,13 @@ public class LevelScene extends BaseScene {
     }
 
     private Plant createPlantFromSaveData(PlantSaveData plantData, int x, int y) {
-        Plant plant = null;
-
-        if ("Peashooter".equals(plantData.getPlantType())) {
-            plant = new Peashooter(
-                    plantData.getRow(),
-                    plantData.getCol(),
-                    x,
-                    y
-            );
-        } else if ("Sunflower".equals(plantData.getPlantType())) {
-            plant = new Sunflower(
-                    plantData.getRow(),
-                    plantData.getCol(),
-                    x,
-                    y
-            );
-        }
+        Plant plant = PlantFactory.createPlant(
+                plantData.getPlantType(),
+                plantData.getRow(),
+                plantData.getCol(),
+                x,
+                y
+        );
 
         if (plant != null) {
             plant.setHp(plantData.getHp());
