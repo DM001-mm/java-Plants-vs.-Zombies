@@ -24,6 +24,7 @@ import com.xhl.pvz.save.PlantSaveData;
 import com.xhl.pvz.save.SaveData;
 import com.xhl.pvz.save.SunSaveData;
 import com.xhl.pvz.save.ZombieSaveData;
+import com.xhl.pvz.ui.CardBarUI;
 import com.xhl.pvz.ui.PauseMenuUI;
 import com.xhl.pvz.ui.PlantCard;
 import com.xhl.pvz.ui.SunBankUI;
@@ -46,8 +47,7 @@ public class LevelScene extends BaseScene {
     private SunResource sunResource;
     private SunBankUI sunBankUI;
 
-    private PlantCard peashooterCard;
-    private PlantCard sunflowerCard;
+    private CardBarUI cardBarUI; // 为兼容更多的卡片类 做准备
 
     private String selectedPlantType = null;
     private PlantCard selectedCard = null;
@@ -81,9 +81,9 @@ public class LevelScene extends BaseScene {
 
         sunBankUI = new SunBankUI(20, 15, 120, 60, sunResource);
 
-        peashooterCard = PlantCardFactory.createPeashooterCard(160, 15);
-        sunflowerCard = PlantCardFactory.createSunflowerCard(240, 15);
-
+        cardBarUI = new CardBarUI();
+        cardBarUI.addCard(PlantCardFactory.createPeashooterCard(160, 15));
+        cardBarUI.addCard(PlantCardFactory.createSunflowerCard(240, 15));
         levelManager = new LevelManager(gridStartY, cellHeight);
 
         pauseMenuUI = new PauseMenuUI();
@@ -101,8 +101,7 @@ public class LevelScene extends BaseScene {
             return;
         }
 
-        peashooterCard.update();
-        sunflowerCard.update();
+        cardBarUI.update();
 
         levelManager.update(levelContext);
 
@@ -121,8 +120,7 @@ public class LevelScene extends BaseScene {
 
         sunBankUI.render(g);
 
-        peashooterCard.render(g);
-        sunflowerCard.render(g);
+        cardBarUI.render(g);
 
         entityManager.renderAll(g);
 
@@ -144,13 +142,10 @@ public class LevelScene extends BaseScene {
             return;
         }
 
-        if (peashooterCard.contains(x, y)) {
-            handleCardClick(peashooterCard);
-            return;
-        }
+        PlantCard clickedCard = cardBarUI.getClickedCard(x, y);
 
-        if (sunflowerCard.contains(x, y)) {
-            handleCardClick(sunflowerCard);
+        if (clickedCard != null) {
+            handleCardClick(clickedCard);
             return;
         }
 
@@ -229,9 +224,7 @@ public class LevelScene extends BaseScene {
             return;
         }
 
-        if (selectedCard != null) {
-            selectedCard.setSelected(false);
-        }
+        cardBarUI.clearSelection();
 
         selectedPlantType = card.getPlantType();
         selectedCard = card;
@@ -450,10 +443,7 @@ public class LevelScene extends BaseScene {
             entityManager.addSun(sun);
         }
 
-        if (selectedCard != null) {
-            selectedCard.setSelected(false);
-        }
-
+        cardBarUI.clearSelection();
         selectedCard = null;
         selectedPlantType = null;
 
