@@ -18,6 +18,7 @@ import com.xhl.pvz.manager.EntityManager;
 import com.xhl.pvz.manager.ImageManager;
 import com.xhl.pvz.manager.LevelManager;
 import com.xhl.pvz.manager.SaveManager;
+import com.xhl.pvz.manager.SkySunSpawner;
 import com.xhl.pvz.model.SunResource;
 import com.xhl.pvz.save.BulletSaveData;
 import com.xhl.pvz.save.PlantSaveData;
@@ -40,13 +41,14 @@ public class LevelScene extends BaseScene {
 
     private BufferedImage background;
 
-    private LevelManager levelManager;
+    private LevelManager levelManager; // 类似 僵尸工厂
     private EntityManager entityManager;
     private CollisionManager collisionManager;
     private LevelContext levelContext;
 
     private SunResource sunResource;
     private SunBankUI sunBankUI;
+    private SkySunSpawner skySunSpawner;
 
     private CardBarUI cardBarUI; // 为兼容更多的卡片类 做准备
 
@@ -78,7 +80,13 @@ public class LevelScene extends BaseScene {
 
         entityManager = new EntityManager();
         collisionManager = new CollisionManager(entityManager);
-
+        skySunSpawner = new SkySunSpawner(
+                300,
+                gridStartX,
+                gridStartX + colCount * cellWidth - 50,
+                gridStartY,
+                gridStartY + rowCount * cellHeight - 80
+        );
         sunResource = new SunResource(150);
         levelContext = new LevelContext(entityManager, sunResource);
 
@@ -104,10 +112,11 @@ public class LevelScene extends BaseScene {
         if (paused) {
             return;
         }
-
+        
         cardBarUI.update();
 
         levelManager.update(levelContext);
+        skySunSpawner.update(levelContext);
 
         entityManager.updateAll(levelContext);
 
