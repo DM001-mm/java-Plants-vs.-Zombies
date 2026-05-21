@@ -228,14 +228,15 @@ public class ImageManager {
         return images.containsKey(key);
     }
 
-    public static List<BufferedImage> getFrames(String key) {
-        List<BufferedImage> frames = animations.get(key);
+    // 这个地方 这么写 我认为代码组织上有些混乱 // 这里留一个悬念
+    public static List<BufferedImage> getFrames(String key) { // 这个函数是用来干什么的?
+        List<BufferedImage> frames = animations.get(key);   // 这里 搞错了 ,animations 实际上是 map类型,那么 ImageManager还是总的Image加载类
 
         if (frames == null) {
             throw new RuntimeException("动画没有加载或不存在: " + key);
         }
 
-        return Collections.unmodifiableList(frames);
+        return Collections.unmodifiableList(frames); //
     }
 
     public static List<BufferedImage> getFramesOrEmpty(String key) {
