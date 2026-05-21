@@ -4,7 +4,6 @@ import com.xhl.pvz.core.GameConfig;
 import com.xhl.pvz.core.LevelContext;
 import com.xhl.pvz.core.SceneManager;
 import com.xhl.pvz.entity.bullet.Bullet;
-import com.xhl.pvz.entity.bullet.PeaBullet;
 import com.xhl.pvz.entity.item.Sun;
 import com.xhl.pvz.entity.plant.Plant;
 import com.xhl.pvz.entity.zombie.Zombie;
@@ -12,6 +11,7 @@ import com.xhl.pvz.factory.BulletFactory;
 import com.xhl.pvz.factory.PlantCardFactory;
 import com.xhl.pvz.factory.PlantFactory;
 import com.xhl.pvz.factory.ZombieFactory;
+import com.xhl.pvz.lawn.Grid;
 import com.xhl.pvz.manager.AudioManager;
 import com.xhl.pvz.manager.CollisionManager;
 import com.xhl.pvz.manager.EntityManager;
@@ -20,6 +20,7 @@ import com.xhl.pvz.manager.LevelManager;
 import com.xhl.pvz.manager.SaveManager;
 import com.xhl.pvz.manager.SkySunSpawner;
 import com.xhl.pvz.model.SunResource;
+import com.xhl.pvz.resource.ImageKeys;
 import com.xhl.pvz.save.BulletSaveData;
 import com.xhl.pvz.save.PlantSaveData;
 import com.xhl.pvz.save.SaveData;
@@ -41,7 +42,9 @@ public class LevelScene extends BaseScene {
 
     private BufferedImage background;
 
-    private LevelManager levelManager; // 类似 僵尸工厂
+    private Grid grid;
+
+    private LevelManager levelManager;
     private EntityManager entityManager;
     private CollisionManager collisionManager;
     private LevelContext levelContext;
@@ -50,21 +53,13 @@ public class LevelScene extends BaseScene {
     private SunBankUI sunBankUI;
     private SkySunSpawner skySunSpawner;
 
-    private CardBarUI cardBarUI; // 为兼容更多的卡片类 做准备
+    private CardBarUI cardBarUI;
 
     private String selectedPlantType = null;
     private PlantCard selectedCard = null;
 
     private boolean paused = false;
     private PauseMenuUI pauseMenuUI;
-
-    private final int rowCount = 5;
-    private final int colCount = 9;
-
-    private final int gridStartX = 170;
-    private final int gridStartY = 120;
-    private final int cellWidth = 80;
-    private final int cellHeight = 90;
 
     private StatusMessageUI statusMessageUI;
 
@@ -74,19 +69,22 @@ public class LevelScene extends BaseScene {
 
     @Override
     public void onEnter() {
-        if (ImageManager.hasImage("background.lawn_day")) {
-            background = ImageManager.getImage("background.lawn_day");
+        grid = new Grid(
+                5,
+                9,
+                170,
+                120,
+                80,
+                90
+        );
+
+        if (ImageManager.hasImage(ImageKeys.BACKGROUND_LAWN_DAY)) {
+            background = ImageManager.getImage(ImageKeys.BACKGROUND_LAWN_DAY);
         }
 
         entityManager = new EntityManager();
         collisionManager = new CollisionManager(entityManager);
-        skySunSpawner = new SkySunSpawner(
-                300,
-                gridStartX,
-                gridStartX + colCount * cellWidth - 50,
-                gridStartY,
-                gridStartY + rowCount * cellHeight - 80
-        );
+
         sunResource = new SunResource(150);
         levelContext = new LevelContext(entityManager, sunResource);
 
@@ -95,11 +93,24 @@ public class LevelScene extends BaseScene {
         cardBarUI = new CardBarUI();
         cardBarUI.addCard(PlantCardFactory.createPeashooterCard(160, 15));
         cardBarUI.addCard(PlantCardFactory.createSunflowerCard(240, 15));
-        levelManager = new LevelManager(gridStartY, cellHeight);
+
+        levelManager = new LevelManager(
+                grid.getStartY(),
+                grid.getCellHeight()
+        );
+
+        skySunSpawner = new SkySunSpawner(
+                300,
+                grid.getStartX(),
+                grid.getRightX() - 50,
+                grid.getStartY(),
+                grid.getBottomY() - 80
+        );
 
         pauseMenuUI = new PauseMenuUI();
-        paused = false;
+        statusMessageUI = new StatusMessageUI(330, 560);
 
+        paused = false;
         selectedPlantType = null;
         selectedCard = null;
 
@@ -109,10 +120,11 @@ public class LevelScene extends BaseScene {
     @Override
     public void update() {
         statusMessageUI.update();
+
         if (paused) {
             return;
         }
-        
+
         cardBarUI.update();
 
         levelManager.update(levelContext);
@@ -142,6 +154,7 @@ public class LevelScene extends BaseScene {
         if (paused && pauseMenuUI != null) {
             pauseMenuUI.render(g);
         }
+
         statusMessageUI.render(g);
     }
 
@@ -163,8 +176,8 @@ public class LevelScene extends BaseScene {
             return;
         }
 
-        int row = getRowByY(y);
-        int col = getColByX(x);
+        int row = grid.getRowByY(y);
+        int col = grid.getColByX(x);
 
         if (row != -1 && col != -1) {
             handleLawnClick(row, col);
@@ -225,7 +238,6 @@ public class LevelScene extends BaseScene {
         sun.collect();
 
         AudioManager.playEffect("sun_collect");
-
         statusMessageUI.showMessage("收集阳光 +" + sun.getValue());
 
         return true;
@@ -233,7 +245,7 @@ public class LevelScene extends BaseScene {
 
     private void handleCardClick(PlantCard card) {
         if (!card.canUse(sunResource.getAmount())) {
-            statusMessageUI.showMessage("这个格子已经有植物了");
+            statusMessageUI.showMessage("阳光不足或正在冷却");
             AudioManager.playEffect("card_error");
             return;
         }
@@ -244,7 +256,7 @@ public class LevelScene extends BaseScene {
         selectedCard = card;
         selectedCard.setSelected(true);
 
-        System.out.println("选中植物: " + selectedPlantType);
+        statusMessageUI.showMessage("选中植物: " + selectedPlantType);
         AudioManager.playEffect("card_select");
     }
 
@@ -254,7 +266,7 @@ public class LevelScene extends BaseScene {
         }
 
         if (entityManager.hasPlantAt(row, col)) {
-            statusMessageUI.showMessage("阳光不足或正在冷却");
+            statusMessageUI.showMessage("这个格子已经有植物了");
             AudioManager.playEffect("card_error");
             return;
         }
@@ -265,8 +277,8 @@ public class LevelScene extends BaseScene {
             return;
         }
 
-        int plantX = gridStartX + col * cellWidth;
-        int plantY = gridStartY + row * cellHeight + 5;
+        int plantX = grid.getPlantX(col);
+        int plantY = grid.getPlantY(row);
 
         Plant plant = PlantFactory.createPlant(
                 selectedPlantType,
@@ -277,17 +289,18 @@ public class LevelScene extends BaseScene {
         );
 
         if (plant == null) {
+            statusMessageUI.showMessage("未知植物类型");
+            AudioManager.playEffect("card_error");
             return;
         }
 
         entityManager.addPlant(plant);
-        statusMessageUI.showMessage("放置植物成功");
-        // System.out.println("放置植物: " + selectedPlantType + ", row = " + row + ", col = " + col);
 
         sunResource.spend(selectedCard.getCost());
         selectedCard.startCooldown();
 
         AudioManager.playEffect("plant_place");
+        statusMessageUI.showMessage("放置植物成功");
 
         selectedCard.setSelected(false);
         selectedPlantType = null;
@@ -315,35 +328,7 @@ public class LevelScene extends BaseScene {
     }
 
     private void drawDebugGrid(Graphics2D g) {
-        Color oldColor = g.getColor();
-
-        g.setColor(Color.BLACK);
-
-        for (int row = 0; row < rowCount; row++) {
-            for (int col = 0; col < colCount; col++) {
-                int x = gridStartX + col * cellWidth;
-                int y = gridStartY + row * cellHeight;
-                g.drawRect(x, y, cellWidth, cellHeight);
-            }
-        }
-
-        g.setColor(oldColor);
-    }
-
-    private int getRowByY(int y) {
-        if (y < gridStartY || y >= gridStartY + rowCount * cellHeight) {
-            return -1;
-        }
-
-        return (y - gridStartY) / cellHeight;
-    }
-
-    private int getColByX(int x) {
-        if (x < gridStartX || x >= gridStartX + colCount * cellWidth) {
-            return -1;
-        }
-
-        return (x - gridStartX) / cellWidth;
+        grid.renderDebugGrid(g);
     }
 
     private void checkLevelResult() {
@@ -409,7 +394,6 @@ public class LevelScene extends BaseScene {
 
         SaveManager.save(saveData, "save1.dat");
         statusMessageUI.showMessage("保存成功");
-
     }
 
     private void loadGame() {
@@ -429,8 +413,8 @@ public class LevelScene extends BaseScene {
             int row = plantData.getRow();
             int col = plantData.getCol();
 
-            int plantX = gridStartX + col * cellWidth;
-            int plantY = gridStartY + row * cellHeight + 5;
+            int plantX = grid.getPlantX(col);
+            int plantY = grid.getPlantY(row);
 
             Plant plant = createPlantFromSaveData(plantData, plantX, plantY);
 
@@ -466,6 +450,7 @@ public class LevelScene extends BaseScene {
 
         statusMessageUI.showMessage("读档完成");
     }
+
     private Plant createPlantFromSaveData(PlantSaveData plantData, int x, int y) {
         Plant plant = PlantFactory.createPlant(
                 plantData.getPlantType(),
@@ -498,14 +483,11 @@ public class LevelScene extends BaseScene {
     }
 
     private Bullet createBulletFromSaveData(BulletSaveData data) {
-        if ("PeaBullet".equals(data.getBulletType())) {
-            return new PeaBullet(
-                    data.getRow(),
-                    data.getX(),
-                    data.getY()
-            );
-        }
-
-        return null;
+        return BulletFactory.createBullet(
+                data.getBulletType(),
+                data.getRow(),
+                data.getX(),
+                data.getY()
+        );
     }
 }
