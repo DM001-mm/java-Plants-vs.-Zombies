@@ -1,5 +1,5 @@
 package com.xhl.pvz.animation;
 
 public enum AnimationState {
-    IDLE, WALK, ATTACK, HIT, DEATH
+    STATE_IDLE, STATE_WALK, STATE_ATTACK, STATE_HIT, STATE_DEATH
 }
