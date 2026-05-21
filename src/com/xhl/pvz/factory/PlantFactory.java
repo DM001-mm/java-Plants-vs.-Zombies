@@ -1,6 +1,6 @@
 package com.xhl.pvz.factory;
 
-import com.xhl.pvz.entity.Peashooter;
+import com.xhl.pvz.entity.plant.Peashooter;
 import com.xhl.pvz.entity.plant.Plant;
 import com.xhl.pvz.entity.plant.Sunflower;
 

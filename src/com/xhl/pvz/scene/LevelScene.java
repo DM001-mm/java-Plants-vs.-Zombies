@@ -7,9 +7,10 @@ import com.xhl.pvz.entity.bullet.Bullet;
 import com.xhl.pvz.entity.bullet.PeaBullet;
 import com.xhl.pvz.entity.item.Sun;
 import com.xhl.pvz.entity.plant.Plant;
-import com.xhl.pvz.entity.zombie.NormalZombie;
 import com.xhl.pvz.entity.zombie.Zombie;
+import com.xhl.pvz.factory.BulletFactory;
 import com.xhl.pvz.factory.PlantFactory;
+import com.xhl.pvz.factory.ZombieFactory;
 import com.xhl.pvz.manager.AudioManager;
 import com.xhl.pvz.manager.CollisionManager;
 import com.xhl.pvz.manager.EntityManager;
@@ -389,7 +390,7 @@ public class LevelScene extends BaseScene {
 
         for (Zombie zombie : entityManager.getZombies()) {
             ZombieSaveData zombieSaveData = new ZombieSaveData(
-                    getZombieType(zombie),
+                    ZombieFactory.getZombieType(zombie),
                     zombie.getRow(),
                     zombie.getX(),
                     zombie.getY(),
@@ -401,7 +402,7 @@ public class LevelScene extends BaseScene {
 
         for (Bullet bullet : entityManager.getBullets()) {
             BulletSaveData bulletSaveData = new BulletSaveData(
-                    getBulletType(bullet),
+                    BulletFactory.getBulletType(bullet),
                     bullet.getRow(),
                     bullet.getX(),
                     bullet.getY()
@@ -478,23 +479,6 @@ public class LevelScene extends BaseScene {
 
         System.out.println("读档完成");
     }
-
-    private String getZombieType(Zombie zombie) {
-        if (zombie instanceof NormalZombie) {
-            return "NormalZombie";
-        }
-
-        return zombie.getClass().getSimpleName();
-    }
-
-    private String getBulletType(Bullet bullet) {
-        if (bullet instanceof PeaBullet) {
-            return "PeaBullet";
-        }
-
-        return bullet.getClass().getSimpleName();
-    }
-
     private Plant createPlantFromSaveData(PlantSaveData plantData, int x, int y) {
         Plant plant = PlantFactory.createPlant(
                 plantData.getPlantType(),
@@ -512,15 +496,12 @@ public class LevelScene extends BaseScene {
     }
 
     private Zombie createZombieFromSaveData(ZombieSaveData data) {
-        Zombie zombie = null;
-
-        if ("NormalZombie".equals(data.getZombieType())) {
-            zombie = new NormalZombie(
-                    data.getRow(),
-                    data.getX(),
-                    data.getY()
-            );
-        }
+        Zombie zombie = ZombieFactory.createZombie(
+                data.getZombieType(),
+                data.getRow(),
+                data.getX(),
+                data.getY()
+        );
 
         if (zombie != null) {
             zombie.setHp(data.getHp());
