@@ -9,6 +9,7 @@ import com.xhl.pvz.entity.item.Sun;
 import com.xhl.pvz.entity.plant.Plant;
 import com.xhl.pvz.entity.zombie.Zombie;
 import com.xhl.pvz.factory.BulletFactory;
+import com.xhl.pvz.factory.PlantCardFactory;
 import com.xhl.pvz.factory.PlantFactory;
 import com.xhl.pvz.factory.ZombieFactory;
 import com.xhl.pvz.manager.AudioManager;
@@ -80,29 +81,8 @@ public class LevelScene extends BaseScene {
 
         sunBankUI = new SunBankUI(20, 15, 120, 60, sunResource);
 
-        peashooterCard = new PlantCard(
-                "Peashooter",
-                160,
-                15,
-                70,
-                90,
-                100,
-                150,
-                ImageManager.hasImage("card.peashooter") ? ImageManager.getImage("card.peashooter") : null,
-                ImageManager.hasImage("ui.cooldown_mask") ? ImageManager.getImage("ui.cooldown_mask") : null
-        );
-
-        sunflowerCard = new PlantCard(
-                "Sunflower",
-                240,
-                15,
-                70,
-                90,
-                50,
-                150,
-                ImageManager.hasImage("card.sunflower") ? ImageManager.getImage("card.sunflower") : null,
-                ImageManager.hasImage("ui.cooldown_mask") ? ImageManager.getImage("ui.cooldown_mask") : null
-        );
+        peashooterCard = PlantCardFactory.createPeashooterCard(160, 15);
+        sunflowerCard = PlantCardFactory.createSunflowerCard(240, 15);
 
         levelManager = new LevelManager(gridStartY, cellHeight);
 
