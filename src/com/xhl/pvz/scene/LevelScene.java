@@ -27,6 +27,7 @@ import com.xhl.pvz.save.ZombieSaveData;
 import com.xhl.pvz.ui.CardBarUI;
 import com.xhl.pvz.ui.PauseMenuUI;
 import com.xhl.pvz.ui.PlantCard;
+import com.xhl.pvz.ui.StatusMessageUI;
 import com.xhl.pvz.ui.SunBankUI;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -63,6 +64,8 @@ public class LevelScene extends BaseScene {
     private final int cellWidth = 80;
     private final int cellHeight = 90;
 
+    private StatusMessageUI statusMessageUI;
+
     public LevelScene(SceneManager sceneManager) {
         this.sceneManager = sceneManager;
     }
@@ -97,6 +100,7 @@ public class LevelScene extends BaseScene {
 
     @Override
     public void update() {
+        statusMessageUI.update();
         if (paused) {
             return;
         }
@@ -129,6 +133,7 @@ public class LevelScene extends BaseScene {
         if (paused && pauseMenuUI != null) {
             pauseMenuUI.render(g);
         }
+        statusMessageUI.render(g);
     }
 
     @Override
@@ -212,14 +217,14 @@ public class LevelScene extends BaseScene {
 
         AudioManager.playEffect("sun_collect");
 
-        System.out.println("收集阳光 +" + sun.getValue());
+        statusMessageUI.showMessage("收集阳光 +" + sun.getValue());
 
         return true;
     }
 
     private void handleCardClick(PlantCard card) {
         if (!card.canUse(sunResource.getAmount())) {
-            System.out.println("阳光不足或卡片正在冷却！");
+            statusMessageUI.showMessage("这个格子已经有植物了");
             AudioManager.playEffect("card_error");
             return;
         }
@@ -240,13 +245,13 @@ public class LevelScene extends BaseScene {
         }
 
         if (entityManager.hasPlantAt(row, col)) {
-            System.out.println("这个格子已经有植物了");
+            statusMessageUI.showMessage("阳光不足或正在冷却");
             AudioManager.playEffect("card_error");
             return;
         }
 
         if (!sunResource.canAfford(selectedCard.getCost())) {
-            System.out.println("阳光不足!");
+            statusMessageUI.showMessage("阳光不足");
             AudioManager.playEffect("card_error");
             return;
         }
@@ -267,8 +272,8 @@ public class LevelScene extends BaseScene {
         }
 
         entityManager.addPlant(plant);
-
-        System.out.println("放置植物: " + selectedPlantType + ", row = " + row + ", col = " + col);
+        statusMessageUI.showMessage("放置植物成功");
+        // System.out.println("放置植物: " + selectedPlantType + ", row = " + row + ", col = " + col);
 
         sunResource.spend(selectedCard.getCost());
         selectedCard.startCooldown();
@@ -394,12 +399,15 @@ public class LevelScene extends BaseScene {
         }
 
         SaveManager.save(saveData, "save1.dat");
+        statusMessageUI.showMessage("保存成功");
+
     }
 
     private void loadGame() {
         SaveData saveData = SaveManager.load("save1.dat");
 
         if (saveData == null) {
+            statusMessageUI.showMessage("没有找到存档");
             return;
         }
 
@@ -447,7 +455,7 @@ public class LevelScene extends BaseScene {
         selectedCard = null;
         selectedPlantType = null;
 
-        System.out.println("读档完成");
+        statusMessageUI.showMessage("读档完成");
     }
     private Plant createPlantFromSaveData(PlantSaveData plantData, int x, int y) {
         Plant plant = PlantFactory.createPlant(
