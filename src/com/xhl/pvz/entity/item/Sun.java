@@ -99,3 +99,5 @@ public class Sun extends CollectableItem {
         g.setColor(oldColor);
     }
 }
+
+// 这个阳光没有下落效果!
