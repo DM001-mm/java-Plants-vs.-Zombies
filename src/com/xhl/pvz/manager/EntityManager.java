@@ -177,7 +177,9 @@ public class EntityManager {
     public List<Bullet> getBullets() {
         return bullets;
     }
-
+    public List<Sun> getSuns() {
+        return suns;
+    }
     public void clearAll() {
         plants.clear();
         zombies.clear();
