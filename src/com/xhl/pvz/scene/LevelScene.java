@@ -29,6 +29,7 @@ import com.xhl.pvz.save.ZombieSaveData;
 import com.xhl.pvz.ui.CardBarUI;
 import com.xhl.pvz.ui.PauseMenuUI;
 import com.xhl.pvz.ui.PlantCard;
+import com.xhl.pvz.ui.ShovelUI;
 import com.xhl.pvz.ui.StatusMessageUI;
 import com.xhl.pvz.ui.SunBankUI;
 import java.awt.Color;
@@ -63,6 +64,9 @@ public class LevelScene extends BaseScene {
 
     private StatusMessageUI statusMessageUI;
 
+    private ShovelUI shovelUI;
+    private boolean shovelMode = false;
+    
     public LevelScene(SceneManager sceneManager) {
         this.sceneManager = sceneManager;
     }
@@ -77,7 +81,8 @@ public class LevelScene extends BaseScene {
                 80,
                 90
         );
-
+        shovelUI = new ShovelUI(760, 15, 70, 70);
+        shovelMode = false;
         if (ImageManager.hasImage(ImageKeys.BACKGROUND_LAWN_DAY)) {
             background = ImageManager.getImage(ImageKeys.BACKGROUND_LAWN_DAY);
         }
@@ -127,6 +132,7 @@ public class LevelScene extends BaseScene {
 
         cardBarUI.update();
 
+
         levelManager.update(levelContext);
         skySunSpawner.update(levelContext);
 
@@ -146,6 +152,7 @@ public class LevelScene extends BaseScene {
         sunBankUI.render(g);
 
         cardBarUI.render(g);
+        shovelUI.render(g);
 
         entityManager.renderAll(g);
 
@@ -168,7 +175,10 @@ public class LevelScene extends BaseScene {
         if (handleSunClick(x, y)) {
             return;
         }
-
+        if (shovelUI.contains(x, y)) {
+            toggleShovelMode();
+            return;
+        }
         PlantCard clickedCard = cardBarUI.getClickedCard(x, y);
 
         if (clickedCard != null) {
@@ -200,7 +210,24 @@ public class LevelScene extends BaseScene {
             loadGame();
         }
     }
+    private void toggleShovelMode() {
+        shovelMode = !shovelMode;
+        shovelUI.setSelected(shovelMode);
 
+        if (shovelMode) {
+            cardBarUI.clearSelection();
+
+            selectedCard = null;
+            selectedPlantType = null;
+
+            statusMessageUI.showMessage("进入铲子模式");
+        } else {
+            statusMessageUI.showMessage("退出铲子模式");
+        }
+
+        AudioManager.playEffect("click");
+    }
+    
     private void handlePauseMenuClick(int x, int y) {
         if (pauseMenuUI.isContinueButtonClicked(x, y)) {
             paused = false;
@@ -261,6 +288,10 @@ public class LevelScene extends BaseScene {
     }
 
     private void handleLawnClick(int row, int col) {
+        if (shovelMode) {
+            handleShovelClick(row, col);
+            return;
+        }
         if (selectedPlantType == null || selectedCard == null) {
             return;
         }
@@ -306,7 +337,23 @@ public class LevelScene extends BaseScene {
         selectedPlantType = null;
         selectedCard = null;
     }
+    private void handleShovelClick(int row, int col) {
+        Plant plant = entityManager.getPlantAt(row, col);
 
+        if (plant == null) {
+            statusMessageUI.showMessage("这个格子没有植物");
+            AudioManager.playEffect("card_error");
+            return;
+        }
+
+        entityManager.removePlantAt(row, col);
+
+        shovelMode = false;
+        shovelUI.setSelected(false);
+
+        AudioManager.playEffect("plant_remove");
+        statusMessageUI.showMessage("铲除植物成功");
+    }
     private void drawBackground(Graphics2D g) {
         if (background != null) {
             g.drawImage(

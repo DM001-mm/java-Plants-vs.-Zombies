@@ -186,5 +186,11 @@ public class EntityManager {
         bullets.clear();
         suns.clear();
     }
+    public void removePlantAt(int row, int col) {
+        Plant plant = getPlantAt(row, col);
 
+        if (plant != null) {
+            plant.setAlive(false);
+        }
+    }
 }
