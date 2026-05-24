@@ -2,6 +2,7 @@ package com.xhl.pvz.ui;
 
 import com.xhl.pvz.manager.ImageManager;
 import com.xhl.pvz.model.SunResource;
+import com.xhl.pvz.resource.ImageKeys;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -22,9 +23,9 @@ public class SunBankUI {
         this.width = width;
         this.height = height;
         this.sunResource= sunResource;
-        this.image = ImageManager.getImage("ui.sun_bank");
-        //if (ImageManager.hasImage("ui.sun_bank")) {
-    // this.image = ImageManager.getImage("ui.sun_bank");
+        this.image = ImageManager.getImage(ImageKeys.UI_SUN_BANK);
+        //if (ImageManager.hasImage(ImageKeys.UI_SUN_BANK)) {
+    // this.image = ImageManager.getImage(ImageKeys.UI_SUN_BANK);
         // }  这里没有必要这么改
     }
 

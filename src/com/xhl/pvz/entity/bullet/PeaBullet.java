@@ -3,6 +3,7 @@ package com.xhl.pvz.entity.bullet;
 import com.xhl.pvz.core.GameConfig;
 import com.xhl.pvz.core.LevelContext;
 import com.xhl.pvz.manager.ImageManager;
+import com.xhl.pvz.resource.ImageKeys;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -22,8 +23,8 @@ public class PeaBullet extends Bullet {
                 20
         );
 
-        if (ImageManager.hasImage("bullet.pea")) {
-            image = ImageManager.getImage("bullet.pea");
+        if (ImageManager.hasImage(ImageKeys.BULLET_PEA)) {
+            image = ImageManager.getImage(ImageKeys.BULLET_PEA);
         }
     }
 

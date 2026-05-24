@@ -229,9 +229,25 @@ resources
 │
 └── saves
 
+## 现阶段游戏效果
+
+### 大厅界面
+
+![alt text](image.png)
+
+### 主游戏场景
+
+![alt text](image-1.png)
+![alt text](image-2.png)
+
+### 死亡界面
+
+![alt text](image-3.png)
+
+~~ 目前 僵尸还是太强了，赢不了 ~~
+
 ## 下一阶段的目标
 
 + 登录系统
 + 账号管理
 + 采用jdbc,以接入pgsql
-

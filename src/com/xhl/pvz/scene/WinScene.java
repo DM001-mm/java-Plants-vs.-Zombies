@@ -4,6 +4,7 @@ import com.xhl.pvz.core.GameConfig;
 import com.xhl.pvz.core.SceneManager;
 import com.xhl.pvz.manager.AudioManager;
 import com.xhl.pvz.manager.ImageManager;
+import com.xhl.pvz.resource.ImageKeys;
 import com.xhl.pvz.ui.UIButton;
 
 import java.awt.Graphics2D;
@@ -23,8 +24,8 @@ public class WinScene extends BaseScene {
 
     @Override
     public void onEnter() {
-        if (ImageManager.hasImage("background.win")) {
-            background = ImageManager.getImage("background.win");
+        if (ImageManager.hasImage(ImageKeys.BACKGROUND_WIN)) {
+            background = ImageManager.getImage(ImageKeys.BACKGROUND_WIN);
         }
 
         restartButton = new UIButton(
@@ -32,7 +33,9 @@ public class WinScene extends BaseScene {
                 380,
                 220,
                 70,
-                ImageManager.hasImage("ui.restart_button") ? ImageManager.getImage("ui.restart_button") : null
+                ImageManager.hasImage(ImageKeys.UI_RESTART_BUTTON)
+                        ? ImageManager.getImage(ImageKeys.UI_RESTART_BUTTON)
+                        : null
         );
 
         menuButton = new UIButton(
@@ -40,7 +43,9 @@ public class WinScene extends BaseScene {
                 470,
                 220,
                 70,
-                ImageManager.hasImage("ui.menu_button") ? ImageManager.getImage("ui.menu_button") : null
+                ImageManager.hasImage(ImageKeys.UI_MENU_BUTTON)
+                        ? ImageManager.getImage(ImageKeys.UI_MENU_BUTTON)
+                        : null
         );
 
         AudioManager.playBGM("win");

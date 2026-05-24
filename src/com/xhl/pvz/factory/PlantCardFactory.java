@@ -1,6 +1,7 @@
 package com.xhl.pvz.factory;
 
 import com.xhl.pvz.manager.ImageManager;
+import com.xhl.pvz.resource.ImageKeys;
 import com.xhl.pvz.ui.PlantCard;
 
 public class PlantCardFactory {
@@ -17,11 +18,11 @@ public class PlantCardFactory {
                 90,
                 100,
                 150,
-                ImageManager.hasImage("card.peashooter")
-                        ? ImageManager.getImage("card.peashooter")
+                ImageManager.hasImage(ImageKeys.CARD_PEASHOOTER)
+                        ? ImageManager.getImage(ImageKeys.CARD_PEASHOOTER)
                         : null,
-                ImageManager.hasImage("ui.cooldown_mask")
-                        ? ImageManager.getImage("ui.cooldown_mask")
+                ImageManager.hasImage(ImageKeys.UI_COOLDOWN_MASK)
+                        ? ImageManager.getImage(ImageKeys.UI_COOLDOWN_MASK)
                         : null
         );
     }
@@ -35,11 +36,11 @@ public class PlantCardFactory {
                 90,
                 50,
                 150,
-                ImageManager.hasImage("card.sunflower")
-                        ? ImageManager.getImage("card.sunflower")
+                ImageManager.hasImage(ImageKeys.CARD_SUNFLOWER)
+                        ? ImageManager.getImage(ImageKeys.CARD_SUNFLOWER)
                         : null,
-                ImageManager.hasImage("ui.cooldown_mask")
-                        ? ImageManager.getImage("ui.cooldown_mask")
+                ImageManager.hasImage(ImageKeys.UI_COOLDOWN_MASK)
+                        ? ImageManager.getImage(ImageKeys.UI_COOLDOWN_MASK)
                         : null
         );
     }

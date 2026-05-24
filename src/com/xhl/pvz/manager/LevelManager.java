@@ -78,6 +78,21 @@ public class LevelManager {
             return tick;
         }
 
+    public double getProgressRatio() {
+        if (spawnEvents.isEmpty()) {
+            return 1.0;
+        }
+
+        int lastSpawnTick = spawnEvents.get(spawnEvents.size() - 1).timeTick;
+
+        if (lastSpawnTick <= 0) {
+            return 1.0;
+        }
+
+        double ratio = (double) tick / lastSpawnTick;
+        return Math.max(0.0, Math.min(1.0, ratio));
+    }
+
     public void setTick(int tick) {
         this.tick = tick;
 
