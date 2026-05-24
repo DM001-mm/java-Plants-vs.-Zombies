@@ -27,6 +27,7 @@ import com.xhl.pvz.save.SaveData;
 import com.xhl.pvz.save.SunSaveData;
 import com.xhl.pvz.save.ZombieSaveData;
 import com.xhl.pvz.ui.CardBarUI;
+import com.xhl.pvz.ui.LevelProgressUI;
 import com.xhl.pvz.ui.PauseMenuUI;
 import com.xhl.pvz.ui.PlantCard;
 import com.xhl.pvz.ui.ShovelUI;
@@ -66,7 +67,7 @@ public class LevelScene extends BaseScene {
 
     private ShovelUI shovelUI;
     private boolean shovelMode = false;
-    
+    private LevelProgressUI levelProgressUI;
     public LevelScene(SceneManager sceneManager) {
         this.sceneManager = sceneManager;
     }
@@ -103,7 +104,13 @@ public class LevelScene extends BaseScene {
                 grid.getStartY(),
                 grid.getCellHeight()
         );
-
+        levelProgressUI = new LevelProgressUI(
+                650,
+                540,
+                200,
+                20,
+                levelManager
+        );
         skySunSpawner = new SkySunSpawner(
                 300,
                 grid.getStartX(),
@@ -157,7 +164,8 @@ public class LevelScene extends BaseScene {
         entityManager.renderAll(g);
 
         drawDebugGrid(g);
-
+        levelProgressUI.render(g);
+        
         if (paused && pauseMenuUI != null) {
             pauseMenuUI.render(g);
         }
