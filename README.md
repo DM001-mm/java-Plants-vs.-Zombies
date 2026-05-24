@@ -1,4 +1,5 @@
-# Plants vs Zombies - Java
+# Plants vs Zombies - Java 
+
 
 一个基于 **Java Swing** 实现的植物大战僵尸 Demo 项目。
 
@@ -227,3 +228,10 @@ resources
 │   └── effect
 │
 └── saves
+
+## 下一阶段的目标
+
++ 登录系统
++ 账号管理
++ 采用jdbc,以接入pgsql
+
