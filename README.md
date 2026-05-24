@@ -231,6 +231,9 @@ resources
 
 ## 现阶段游戏效果
 
+### Overall
+![点](https://deepwiki.com/DM001-mm/java-Plants-vs.-Zombies/1-project-overview)
+
 ### 大厅界面
 
 ![alt text](image.png)
