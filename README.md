@@ -233,7 +233,7 @@ resources
 ## 现阶段游戏效果
 
 ### Overall
-![点](https://deepwiki.com/DM001-mm/java-Plants-vs.-Zombies/1-project-overview)
+[点](https://deepwiki.com/DM001-mm/java-Plants-vs.-Zombies/1-project-overview)
 
 ### 大厅界面
 
@@ -248,7 +248,8 @@ resources
 
 ![alt text](image-3.png)
 
-~~ 目前 僵尸还是太强了，赢不了 ~~
+### 胜利界面
+![alt text](6b0077ccb4443d162870eb2ec242b099.png)
 
 ## 下一阶段的目标
 
