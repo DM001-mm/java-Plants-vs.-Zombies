@@ -16,7 +16,7 @@ public class PlantFactory {
             return new Peashooter(row,col,x,y);
         }
         if(SUNFLOWER.equals(plantType)){
-            return new Peashooter(row,col,x,y);
+            return new Sunflower(row,col,x,y);
         }
 
         System.out.println("未知植物类型："+plantType);
