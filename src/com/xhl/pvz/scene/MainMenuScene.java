@@ -5,9 +5,7 @@ import com.xhl.pvz.core.SceneManager;
 import com.xhl.pvz.manager.ImageManager;
 import com.xhl.pvz.resource.ImageKeys;
 import com.xhl.pvz.ui.UIButton;
-
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 public class MainMenuScene extends BaseScene {
@@ -27,7 +25,7 @@ public class MainMenuScene extends BaseScene {
     } // 进入只是 为了加载一些功能，画面渲染 分给了 render函数
     @Override
     public void onExit(){
-        // 目前可以先不写
+            
     }
     @Override
     public void update(){

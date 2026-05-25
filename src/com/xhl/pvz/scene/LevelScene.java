@@ -162,8 +162,9 @@ public class LevelScene extends BaseScene {
         shovelUI.render(g);
 
         entityManager.renderAll(g);
-
-        drawDebugGrid(g);
+        if(GameConfig.DEBUG_GRID){
+            drawDebugGrid(g);
+        }
         levelProgressUI.render(g);
         
         if (paused && pauseMenuUI != null) {
