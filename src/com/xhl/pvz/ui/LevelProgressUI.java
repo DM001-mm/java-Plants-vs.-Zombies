@@ -3,7 +3,6 @@ package com.xhl.pvz.ui;
 import com.xhl.pvz.manager.ImageManager;
 import com.xhl.pvz.manager.LevelManager;
 import com.xhl.pvz.resource.ImageKeys;
-
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -62,7 +61,7 @@ public class LevelProgressUI {
         double ratio = levelManager.getProgressRatio();
 
         int headSize = height + 10;
-        int headX = x + (int) (ratio * (width - headSize));
+        int headX = x + (int) ((1.0-ratio) * (width - headSize));
         int headY = y - 5;
 
         if (headImage != null) {
