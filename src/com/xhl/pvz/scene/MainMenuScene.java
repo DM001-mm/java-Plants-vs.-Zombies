@@ -20,7 +20,7 @@ public class MainMenuScene extends BaseScene {
     public void onEnter(){ // 这个是 给 Manager 中的 change 操作使用的 ，就是不是 主动调用的，至于在哪里调用，当然是通过事件响应机制调用了
         System.out.println("进入主菜单场景");
         background = ImageManager.getImage(ImageKeys.BACKGROUND_MAIN_MENU);//
-        startButton = new UIButton(350,410,200,80,ImageManager.getImage(ImageKeys.UI_START_BUTTON));
+        startButton = new UIButton(425,80,390,120,ImageManager.getImage(ImageKeys.UI_START_BUTTON));
         // 如果 需要 ，这里可以加上 声音
     } // 进入只是 为了加载一些功能，画面渲染 分给了 render函数
     @Override
