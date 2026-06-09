@@ -32,7 +32,7 @@ public class PeaBullet extends Bullet {
     public void update(LevelContext context) {
         x += speed;
 
-        if (x > GameConfig.WINDOW_WIDTH) {
+        if (x > GameConfig.LEVEL_WORLD_WIDTH) {
             alive = false;
         }
     }

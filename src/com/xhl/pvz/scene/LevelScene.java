@@ -82,7 +82,7 @@ public class LevelScene extends BaseScene {
             GameConfig.LAWN_CELL_WIDTH,
             GameConfig.LAWN_CELL_HEIGHT
         );
-        shovelUI = new ShovelUI(1220, 15, 70, 70);
+        shovelUI = new ShovelUI(GameConfig.WINDOW_WIDTH - 90, 15, 70, 70);
         shovelMode = false;
         if (ImageManager.hasImage(ImageKeys.BACKGROUND_LAWN_DAY)) {
             background = ImageManager.getImage(ImageKeys.BACKGROUND_LAWN_DAY);
@@ -105,7 +105,7 @@ public class LevelScene extends BaseScene {
                 grid.getCellHeight()
         );
         levelProgressUI = new LevelProgressUI(
-                1080,
+                GameConfig.WINDOW_WIDTH - 240,
                 540,
                 200,
                 20,
@@ -113,10 +113,10 @@ public class LevelScene extends BaseScene {
         );
         skySunSpawner = new SkySunSpawner(
                 300,
-                grid.getStartX(),
-                grid.getRightX() - 50,
-                grid.getStartY(),
-                grid.getBottomY() - 80
+                grid.getStartX() + grid.getCellWidth(),
+                grid.getRightX() - grid.getCellWidth(),
+                grid.getStartY() + 30,
+                grid.getBottomY() - 100
         );
 
         pauseMenuUI = new PauseMenuUI();
@@ -156,17 +156,28 @@ public class LevelScene extends BaseScene {
     public void render(Graphics2D g) {
         drawBackground(g);
 
-        sunBankUI.render(g);
+        Graphics2D worldG = (Graphics2D) g.create();
+        worldG.translate(-GameConfig.LEVEL_CAMERA_X, 0);
 
-        cardBarUI.render(g);
-        shovelUI.render(g);
+        entityManager.renderAll(worldG);
 
-        entityManager.renderAll(g);
-        if(GameConfig.DEBUG_GRID){
-            drawDebugGrid(g);
+        if (GameConfig.DEBUG_GRID) {
+            grid.renderDebugGrid(worldG);
         }
-        levelProgressUI.render(g);
-        
+
+        worldG.dispose();
+
+        sunBankUI.render(g);
+        cardBarUI.render(g);
+
+        if (shovelUI != null) {
+            shovelUI.render(g);
+        }
+
+        if (levelProgressUI != null) {
+            levelProgressUI.render(g);
+        }
+
         if (paused && pauseMenuUI != null) {
             pauseMenuUI.render(g);
         }
@@ -181,13 +192,17 @@ public class LevelScene extends BaseScene {
             return;
         }
 
-        if (handleSunClick(x, y)) {
+        int worldX = GameConfig.screenToWorldX(x);
+
+        if (handleSunClick(worldX, y)) {
             return;
         }
-        if (shovelUI.contains(x, y)) {
+
+        if (shovelUI != null && shovelUI.contains(x, y)) {
             toggleShovelMode();
             return;
         }
+
         PlantCard clickedCard = cardBarUI.getClickedCard(x, y);
 
         if (clickedCard != null) {
@@ -196,7 +211,7 @@ public class LevelScene extends BaseScene {
         }
 
         int row = grid.getRowByY(y);
-        int col = grid.getColByX(x);
+        int col = grid.getColByX(worldX);
 
         if (row != -1 && col != -1) {
             handleLawnClick(row, col);
@@ -367,10 +382,8 @@ public class LevelScene extends BaseScene {
         if (background != null) {
             g.drawImage(
                     background,
+                    -GameConfig.LEVEL_CAMERA_X,
                     0,
-                    0,
-                    GameConfig.WINDOW_WIDTH,
-                    GameConfig.WINDOW_HEIGHT,
                     null
             );
         } else {
@@ -381,10 +394,6 @@ public class LevelScene extends BaseScene {
 
             g.setColor(oldColor);
         }
-    }
-
-    private void drawDebugGrid(Graphics2D g) {
-        grid.renderDebugGrid(g);
     }
 
     private void checkLevelResult() {

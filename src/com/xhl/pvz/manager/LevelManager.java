@@ -60,7 +60,7 @@ public class LevelManager {
         }
     }
     private void spawnZombie(LevelContext context, int row) {
-        double zombieX = GameConfig.WINDOW_WIDTH + 20;
+        double zombieX = GameConfig.ZOMBIE_SPAWN_X;
         double zombieY = gridStartY + row * cellHeight;
 
         NormalZombie zombie = new NormalZombie(row, zombieX, zombieY);
