@@ -1,5 +1,6 @@
 package com.xhl.pvz.lawn;
 
+import com.xhl.pvz.core.GameConfig;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
@@ -64,11 +65,11 @@ public class Grid {
     }
 
     public int getPlantX(int col) {
-        return getCellX(col);
+        return getCellX(col)+(cellWidth-GameConfig.PLANT_WIDTH)/2;
     }
 
     public int getPlantY(int row) {
-        return getCellY(row) + 5;
+        return getCellY(row) + (cellHeight-GameConfig.PLANT_HEIGHT)/2;
     }
 
     public int getZombieY(int row) {

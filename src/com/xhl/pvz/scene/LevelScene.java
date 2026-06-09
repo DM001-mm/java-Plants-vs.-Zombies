@@ -75,14 +75,14 @@ public class LevelScene extends BaseScene {
     @Override
     public void onEnter() {
         grid = new Grid(
-                5,
-                9,
-                170,
-                120,
-                80,
-                90
+            GameConfig.LAWN_ROW_COUNT,
+            GameConfig.LAWN_COL_COUNT,
+            GameConfig.LAWN_START_X,
+            GameConfig.LAWN_START_Y,
+            GameConfig.LAWN_CELL_WIDTH,
+            GameConfig.LAWN_CELL_HEIGHT
         );
-        shovelUI = new ShovelUI(760, 15, 70, 70);
+        shovelUI = new ShovelUI(1220, 15, 70, 70);
         shovelMode = false;
         if (ImageManager.hasImage(ImageKeys.BACKGROUND_LAWN_DAY)) {
             background = ImageManager.getImage(ImageKeys.BACKGROUND_LAWN_DAY);
@@ -105,7 +105,7 @@ public class LevelScene extends BaseScene {
                 grid.getCellHeight()
         );
         levelProgressUI = new LevelProgressUI(
-                650,
+                1080,
                 540,
                 200,
                 20,
@@ -120,7 +120,7 @@ public class LevelScene extends BaseScene {
         );
 
         pauseMenuUI = new PauseMenuUI();
-        statusMessageUI = new StatusMessageUI(330, 560);
+        statusMessageUI = new StatusMessageUI(560, 560);
 
         paused = false;
         selectedPlantType = null;
