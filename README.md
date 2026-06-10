@@ -8,14 +8,11 @@
 
 ## 项目预览
 
-> 这里可以放项目运行截图。
-> 如果截图已经上传到仓库，可以把下面路径替换成你自己的截图路径。
+![主菜单](StartScene.png)
+![关卡场景](Day.png)
+![选择植物](selector.png)
+![游戏中](day_3.png)
 
-```markdown
-![主菜单](docs/screenshots/main_menu.png)
-![关卡场景](docs/screenshots/level_scene.png)
-![选择植物](docs/screenshots/plant_selection.png)
-```
 
 ---
 
