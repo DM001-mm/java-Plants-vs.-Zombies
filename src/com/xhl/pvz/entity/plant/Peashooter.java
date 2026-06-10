@@ -71,16 +71,30 @@ public class Peashooter extends Plant {
 
     @Override
     public void update(LevelContext context) {
+        updateAnimation();
+
+        if (!hasTarget(context)) {
+            shootTimer = 0;
+            return;
+        }
+
         shootTimer++;
 
-        boolean hasZombie = context.getEntityManager().hasZombieInRow(row, x);
-
-        if (hasZombie && shootTimer >= shootInterval) {
+        if (shootTimer >= shootInterval) {
             shootTimer = 0;
             shoot(context);
         }
+    }
 
-        updateAnimation();
+    private boolean hasTarget(LevelContext context) {
+        double startX = x + width / 2.0;
+        double range = 900;
+
+        return context.getEntityManager().hasZombieInRowAhead(
+                row,
+                startX,
+                range
+        );
     }
 
     private void shoot(LevelContext context) {

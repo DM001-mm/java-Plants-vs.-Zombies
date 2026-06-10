@@ -182,8 +182,28 @@ public class EntityManager {
         return null;
     }
     public boolean hasZombieInRow(int row, double plantX) {
+        return hasZombieInRowAhead(row, plantX, Double.MAX_VALUE);
+    }
+
+    public boolean hasZombieInRowAhead(int row, double startX, double range) {
+        double endX = startX + range;
+
         for (Zombie zombie : zombies) {
-            if (zombie.isAlive()&& zombie.getRow() == row&& zombie.getX() > plantX) {
+            if (zombie == null) {
+                continue;
+            }
+
+            if (!zombie.canBeTargeted()) {
+                continue;
+            }
+
+            if (zombie.getRow() != row) {
+                continue;
+            }
+
+            double zombieX = zombie.getX();
+
+            if (zombieX >= startX && zombieX <= endX) {
                 return true;
             }
         }

@@ -24,5 +24,9 @@ public abstract class Zombie extends LivingEntity {
         return damage;
     }
 
+    public boolean canBeTargeted() {
+        return isAlive() && getHp() > 0;
+    }
+
     public abstract void attack(Plant plant); // 这里主要是为了 和 植物进行交互
 }
