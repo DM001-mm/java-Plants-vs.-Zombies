@@ -47,6 +47,8 @@ import java.util.List;
 public class LevelScene extends BaseScene {
 
     private enum LevelPhase {
+        INTRO_LAWN_PAUSE,
+        CAMERA_MOVING_TO_ROAD,
         SELECTING_PLANTS,
         CAMERA_MOVING_TO_LAWN,
         READY_SET_PLANT,
@@ -67,6 +69,7 @@ public class LevelScene extends BaseScene {
     private LevelPhase levelPhase;
     private int cameraX;
     private int targetCameraX;
+    private int introPauseTick;
 
     private SunResource sunResource;
     private SunBankUI sunBankUI;
@@ -94,9 +97,10 @@ public class LevelScene extends BaseScene {
 
     @Override
     public void onEnter() {
-        cameraX = GameConfig.LEVEL_CAMERA_ROAD_X;
-        targetCameraX = GameConfig.LEVEL_CAMERA_ROAD_X;
-        levelPhase = LevelPhase.SELECTING_PLANTS;
+        cameraX = GameConfig.LEVEL_CAMERA_LAWN_X;
+        targetCameraX = GameConfig.LEVEL_CAMERA_LAWN_X;
+        introPauseTick = 0;
+        levelPhase = LevelPhase.INTRO_LAWN_PAUSE;
 
         grid = new Grid(
             GameConfig.LAWN_ROW_COUNT,
@@ -168,6 +172,27 @@ public class LevelScene extends BaseScene {
             return;
         }
 
+        if (levelPhase == LevelPhase.INTRO_LAWN_PAUSE) {
+            introPauseTick++;
+
+            if (introPauseTick >= GameConfig.INTRO_LAWN_PAUSE_TICKS) {
+                targetCameraX = GameConfig.LEVEL_CAMERA_ROAD_X;
+                levelPhase = LevelPhase.CAMERA_MOVING_TO_ROAD;
+            }
+
+            return;
+        }
+
+        if (levelPhase == LevelPhase.CAMERA_MOVING_TO_ROAD) {
+            updateCameraMove();
+
+            if (cameraX == targetCameraX) {
+                levelPhase = LevelPhase.SELECTING_PLANTS;
+            }
+
+            return;
+        }
+
         if (levelPhase == LevelPhase.SELECTING_PLANTS) {
             return;
         }
@@ -176,6 +201,10 @@ public class LevelScene extends BaseScene {
             updateCameraMove();
 
             if (cameraX == targetCameraX) {
+                if (readySetPlantUI != null) {
+                    readySetPlantUI.reset();
+                }
+
                 levelPhase = LevelPhase.READY_SET_PLANT;
             }
 
@@ -282,7 +311,9 @@ public class LevelScene extends BaseScene {
             return;
         }
 
-        if (levelPhase == LevelPhase.CAMERA_MOVING_TO_LAWN
+        if (levelPhase == LevelPhase.INTRO_LAWN_PAUSE
+                || levelPhase == LevelPhase.CAMERA_MOVING_TO_ROAD
+                || levelPhase == LevelPhase.CAMERA_MOVING_TO_LAWN
                 || levelPhase == LevelPhase.READY_SET_PLANT) {
             return;
         }
@@ -378,10 +409,6 @@ public class LevelScene extends BaseScene {
 
         targetCameraX = GameConfig.LEVEL_CAMERA_LAWN_X;
         levelPhase = LevelPhase.CAMERA_MOVING_TO_LAWN;
-
-        if (readySetPlantUI != null) {
-            readySetPlantUI.reset();
-        }
 
         AudioManager.playEffect("click");
     }
@@ -709,6 +736,7 @@ public class LevelScene extends BaseScene {
         levelPhase = LevelPhase.PLAYING;
         cameraX = GameConfig.LEVEL_CAMERA_LAWN_X;
         targetCameraX = GameConfig.LEVEL_CAMERA_LAWN_X;
+        introPauseTick = 0;
 
         if (readySetPlantUI != null) {
             readySetPlantUI.skip();
