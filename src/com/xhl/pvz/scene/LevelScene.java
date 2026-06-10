@@ -99,6 +99,10 @@ public class LevelScene extends BaseScene {
         cardBarUI = new CardBarUI();
         cardBarUI.addCard(PlantCardFactory.createPeashooterCard(160, 15));
         cardBarUI.addCard(PlantCardFactory.createSunflowerCard(240, 15));
+        cardBarUI.addCard(PlantCardFactory.createWalnutCard(320, 15));
+        cardBarUI.addCard(PlantCardFactory.createPotatoMineCard(400, 15));
+        cardBarUI.addCard(PlantCardFactory.createCherryBombCard(480, 15));
+        cardBarUI.addCard(PlantCardFactory.createIceShooterCard(560, 15));
 
         levelManager = new LevelManager(
                 grid.getStartY(),

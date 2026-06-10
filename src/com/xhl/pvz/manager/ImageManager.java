@@ -66,11 +66,16 @@ public class ImageManager {
     private static void loadCards() {
         loadImage(ImageKeys.CARD_PEASHOOTER, "resources/images/cards/peashooter_card.png");
         loadImage(ImageKeys.CARD_SUNFLOWER, "resources/images/cards/sunflower_card.png");
+        loadImage(ImageKeys.CARD_WALNUT, "resources/images/cards/wallnut_card.png");
+        loadImage(ImageKeys.CARD_POTATO_MINE, "resources/images/cards/potato_mine_card.png");
+        loadImage(ImageKeys.CARD_CHERRY_BOMB, "resources/images/cards/cherry_bomb_card.png");
+        loadImage(ImageKeys.CARD_ICE_SHOOTER, "resources/images/cards/snow_peashooter.png");
     }
 
     private static void loadBullets() {
         loadImage(ImageKeys.BULLET_PEA, "resources/images/bullets/pea.png");
         loadImage(ImageKeys.BULLET_PEA_HIT, "resources/images/bullets/pea_hit.png");
+        loadImage(ImageKeys.BULLET_ICE_PEA, "resources/images/bullets/ice_pea.png");
     }
 
     private static void loadItems() {
@@ -94,6 +99,51 @@ public class ImageManager {
                 "resources/images/plants/sunflower/idle/0.png"
         );
 
+        loadImage(
+            ImageKeys.PLANT_WALNUT_IDLE_0,
+            "resources/images/plants/walnet/idle/0.png"
+        );
+
+        loadImage(
+            ImageKeys.PLANT_WALNUT_CRACKED1_0,
+            "resources/images/plants/walnet/cracked1/0.png"
+        );
+
+        loadImage(
+            ImageKeys.PLANT_WALNUT_CRACKED2_0,
+            "resources/images/plants/walnet/cracked2/0.png"
+        );
+
+        loadImage(
+            ImageKeys.PLANT_POTATO_MINE_IDLE_0,
+            "resources/images/plants/potato_mine/idle/0.png"
+        );
+
+        loadImage(
+            ImageKeys.PLANT_POTATO_MINE_ARMED_0,
+            "resources/images/plants/potato_mine/armed/0.png"
+        );
+
+        loadImage(
+            ImageKeys.PLANT_POTATO_MINE_EXPLODE_0,
+            "resources/images/plants/potato_mine/explode/0.png"
+        );
+
+        loadImage(
+            ImageKeys.PLANT_CHERRY_BOMB_IDLE_0,
+            "resources/images/plants/cherry_bomb/idle/0.png"
+        );
+
+        loadImage(
+            ImageKeys.PLANT_CHERRY_BOMB_EXPLODE_0,
+            "resources/images/plants/cherry_bomb/explode/0.png"
+        );
+
+        loadImage(
+            ImageKeys.PLANT_ICE_SHOOTER_IDLE_0,
+            "resources/images/plants/snow_peashooter/idle/0.png"
+        );
+
         loadFrames(
                 ImageKeys.ANIM_PEASHOOTER_IDLE,
                 "resources/images/plants/peashooter/idle",
@@ -102,7 +152,7 @@ public class ImageManager {
 
         loadFrames(
                 ImageKeys.ANIM_PEASHOOTER_SHOOT,
-                "resources/images/plants/peashooter/shoot",
+            "resources/images/plants/peashooter/idle",
                 20
         );
 
@@ -116,6 +166,66 @@ public class ImageManager {
                 ImageKeys.ANIM_SUNFLOWER_PRODUCE,
                 "resources/images/plants/sunflower/produce",
                 20
+        );
+
+        loadFrames(
+            ImageKeys.ANIM_WALNUT_IDLE,
+            "resources/images/plants/walnet/idle",
+            10
+        );
+
+        loadFrames(
+            ImageKeys.ANIM_WALNUT_CRACKED1,
+            "resources/images/plants/walnet/cracked1",
+            10
+        );
+
+        loadFrames(
+            ImageKeys.ANIM_WALNUT_CRACKED2,
+            "resources/images/plants/walnet/cracked2",
+            10
+        );
+
+        loadFrames(
+            ImageKeys.ANIM_POTATO_MINE_IDLE,
+            "resources/images/plants/potato_mine/idle",
+            10
+        );
+
+        loadFrames(
+            ImageKeys.ANIM_POTATO_MINE_ARMED,
+            "resources/images/plants/potato_mine/armed",
+            10
+        );
+
+        loadFrames(
+            ImageKeys.ANIM_POTATO_MINE_EXPLODE,
+            "resources/images/plants/potato_mine/explode",
+            10
+        );
+
+        loadFrames(
+            ImageKeys.ANIM_CHERRY_BOMB_IDLE,
+            "resources/images/plants/cherry_bomb/idle",
+            10
+        );
+
+        loadFrames(
+            ImageKeys.ANIM_CHERRY_BOMB_EXPLODE,
+            "resources/images/plants/cherry_bomb/explode",
+            10
+        );
+
+        loadFrames(
+            ImageKeys.ANIM_ICE_SHOOTER_IDLE,
+            "resources/images/plants/snow_peashooter/idle",
+            20
+        );
+
+        loadFrames(
+            ImageKeys.ANIM_ICE_SHOOTER_SHOOT,
+            "resources/images/plants/snow_peashooter/idle",
+            20
         );
     }
 

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 public class LevelManager {
     private int tick =0;
+    private int levelDurationTick = 1;
 
     private final int gridStartY;
     private final int cellHeight;
@@ -40,6 +41,7 @@ public class LevelManager {
         spawnEvents.add(new SpawnEvent(660,0));
         spawnEvents.add(new SpawnEvent(840,4));
         spawnEvents.add(new SpawnEvent(1020,2));
+        levelDurationTick = spawnEvents.get(spawnEvents.size() - 1).timeTick;
         // spawnEvents.add(new SpawnEvent(120,2));
         
     }
@@ -77,6 +79,21 @@ public class LevelManager {
     public int getTick() {
             return tick;
         }
+
+    public double getProgressRatio() {
+        if (levelDurationTick <= 0) {
+            return 0.0;
+        }
+
+        double ratio = (double) tick / levelDurationTick;
+        if (ratio < 0.0) {
+            return 0.0;
+        }
+        if (ratio > 1.0) {
+            return 1.0;
+        }
+        return ratio;
+    }
 
     public void setTick(int tick) {
         this.tick = tick;

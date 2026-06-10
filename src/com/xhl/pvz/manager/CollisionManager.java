@@ -2,6 +2,7 @@ package com.xhl.pvz.manager;
 
 // import com.xhl.pvz.entity.Entity;
 import com.xhl.pvz.entity.bullet.Bullet;
+import com.xhl.pvz.entity.bullet.IcePeaBullet;
 import com.xhl.pvz.entity.zombie.Zombie;
 // import java.text.CollationElementIterator;
 
@@ -34,7 +35,12 @@ public class CollisionManager {
                     zombie.takeDamage(bullet.getDamage());
                     bullet.setAlive(false);
 
-                    AudioManager.playEffect("pea_hit");
+                    if (bullet instanceof IcePeaBullet) {
+                        zombie.applySlow(((IcePeaBullet) bullet).getSlowDuration(), ((IcePeaBullet) bullet).getSlowFactor());
+                        AudioManager.playEffect("ice_hit");
+                    } else {
+                        AudioManager.playEffect("pea_hit");
+                    }
 
                     System.out.println("豌豆击中僵尸，造成伤害: " + bullet.getDamage());
 

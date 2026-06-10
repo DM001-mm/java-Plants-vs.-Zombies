@@ -84,6 +84,8 @@ public class NormalZombie extends Zombie {
 
     @Override
     public void update(LevelContext context) { 
+        tickSlowEffect();
+
         if (state == STATE_DIE) {
             updateDieAnimation();
             return;
@@ -109,7 +111,7 @@ public class NormalZombie extends Zombie {
     }
 
     private void move() {
-        x -= speed;
+        x -= getEffectiveSpeed();
         attackTimer = 0;
     }
 

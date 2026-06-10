@@ -28,9 +28,14 @@ public class AudioManager {
         effectPaths.put("card_error", "resources/sounds/effect/card_error.wav");
         effectPaths.put("pea_shoot", "resources/sounds/effect/pea_shoot.wav");
         effectPaths.put("pea_hit", "resources/sounds/effect/pea_hit.wav");
+        effectPaths.put("ice_shoot", "resources/sounds/effect/ice_shoot.wav");
+        effectPaths.put("ice_hit", "resources/sounds/effect/ice_hit.wav");
         effectPaths.put("sun_collect", "resources/sounds/effect/sun_collect.wav");
         effectPaths.put("zombie_eat", "resources/sounds/effect/zombie_eat.wav");
         effectPaths.put("zombie_die", "resources/sounds/effect/zombie_die.wav");
+        effectPaths.put("potato_mine_arm", "resources/sounds/effect/potato_mine_arm.wav");
+        effectPaths.put("potato_mine_explode", "resources/sounds/effect/potato_mine_explode.wav");
+        effectPaths.put("cherry_bomb_explode", "resources/sounds/effect/cherry_bomb_explode.wav");
         bgmPaths.put("game_over", "resources/sounds/bgm/game_over.wav");
         bgmPaths.put("win", "resources/sounds/bgm/win.wav");
 
