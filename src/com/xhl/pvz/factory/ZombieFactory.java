@@ -1,5 +1,7 @@
 package com.xhl.pvz.factory;
 
+import com.xhl.pvz.entity.zombie.BucketheadZombie;
+import com.xhl.pvz.entity.zombie.ConeheadZombie;
 import com.xhl.pvz.entity.zombie.NormalZombie;
 import com.xhl.pvz.entity.zombie.Zombie;
 
@@ -23,20 +25,26 @@ public class ZombieFactory {
         }
 
         if (CONEHEAD_ZOMBIE.equals(zombieType)) {
-            System.out.println("ConeheadZombie 暂未实现，暂时使用 NormalZombie 代替");
-            return new NormalZombie(row, x, y);
+            return new ConeheadZombie(row, x, y);
         }
 
         if (BUCKETHEAD_ZOMBIE.equals(zombieType)) {
-            System.out.println("BucketheadZombie 暂未实现，暂时使用 NormalZombie 代替");
-            return new NormalZombie(row, x, y);
+            return new BucketheadZombie(row, x, y);
         }
 
-        System.out.println("未知僵尸类型: " + zombieType);
+        System.out.println("未知僵尸类型: " + zombieType + "，暂时使用 NormalZombie 代替");
         return new NormalZombie(row, x, y);
     }
 
     public static String getZombieType(Zombie zombie) {
+        if (zombie instanceof BucketheadZombie) {
+            return BUCKETHEAD_ZOMBIE;
+        }
+
+        if (zombie instanceof ConeheadZombie) {
+            return CONEHEAD_ZOMBIE;
+        }
+
         if (zombie instanceof NormalZombie) {
             return NORMAL_ZOMBIE;
         }

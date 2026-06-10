@@ -13,6 +13,8 @@ import com.xhl.pvz.factory.PlantCardFactory;
 import com.xhl.pvz.factory.PlantFactory;
 import com.xhl.pvz.factory.PlantRegistry;
 import com.xhl.pvz.factory.ZombieFactory;
+import com.xhl.pvz.level.LevelDefinition;
+import com.xhl.pvz.level.LevelDefinitions;
 import com.xhl.pvz.lawn.Grid;
 import com.xhl.pvz.manager.AudioManager;
 import com.xhl.pvz.manager.CollisionManager;
@@ -56,7 +58,8 @@ public class LevelScene extends BaseScene {
     }
 
     private final SceneManager sceneManager;
-    private boolean loadOnEnter = false;
+    private final LevelDefinition levelDefinition;
+    private final boolean loadOnEnter;
 
     private BufferedImage background;
 
@@ -94,11 +97,24 @@ public class LevelScene extends BaseScene {
     private LevelProgressUI levelProgressUI;
 
     public LevelScene(SceneManager sceneManager) {
-        this.sceneManager = sceneManager;
+        this(sceneManager, LevelDefinitions.createLevel1(), false);
     }
 
     public LevelScene(SceneManager sceneManager, boolean loadOnEnter) {
+        this(sceneManager, LevelDefinitions.createLevel1(), loadOnEnter);
+    }
+
+    public LevelScene(SceneManager sceneManager, LevelDefinition levelDefinition) {
+        this(sceneManager, levelDefinition, false);
+    }
+
+    public LevelScene(
+            SceneManager sceneManager,
+            LevelDefinition levelDefinition,
+            boolean loadOnEnter
+    ) {
         this.sceneManager = sceneManager;
+        this.levelDefinition = levelDefinition;
         this.loadOnEnter = loadOnEnter;
     }
 
@@ -127,7 +143,7 @@ public class LevelScene extends BaseScene {
         collisionManager = new CollisionManager(entityManager);
         initLawnMowers();
 
-        sunResource = new SunResource(150);
+        sunResource = new SunResource(levelDefinition.getInitialSun());
         levelContext = new LevelContext(entityManager, sunResource);
 
         sunBankUI = new SunBankUI(20, 15, 120, 60, sunResource);
@@ -142,13 +158,14 @@ public class LevelScene extends BaseScene {
 
         levelManager = new LevelManager(
                 grid.getStartY(),
-                grid.getCellHeight()
+                grid.getCellHeight(),
+                levelDefinition
         );
         levelProgressUI = new LevelProgressUI(
-                GameConfig.WINDOW_WIDTH - 240,
-                540,
-                200,
-                20,
+                630,
+                GameConfig.WINDOW_HEIGHT - 35,
+                220,
+                18,
                 levelManager
         );
         skySunSpawner = new SkySunSpawner(
@@ -599,7 +616,7 @@ public class LevelScene extends BaseScene {
     }
 
     private void initLawnMowers() {
-        int mowerX = grid.getStartX() - GameConfig.LAWN_MOWER_WIDTH - 15;
+        int mowerX = grid.getStartX() - GameConfig.LAWN_MOWER_WIDTH - 18;
 
         for (int row = 0; row < grid.getRowCount(); row++) {
             int mowerY = grid.getCellY(row)
@@ -616,7 +633,7 @@ public class LevelScene extends BaseScene {
             return;
         }
 
-        if (levelManager.isAllZombiesSpawned()
+        if (levelManager.isFinishedSpawning()
                 && entityManager.getZombies().isEmpty()) {
             sceneManager.changeScene(new WinScene(sceneManager));
         }

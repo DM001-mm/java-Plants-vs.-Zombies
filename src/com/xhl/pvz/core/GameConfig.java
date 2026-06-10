@@ -43,7 +43,20 @@ public class GameConfig {
     public static final int SUN_SIZE = 40;
 
     public static final int LAWN_MOWER_WIDTH = 70;
-    public static final int LAWN_MOWER_HEIGHT = 60;
+    public static final int LAWN_MOWER_HEIGHT = 55;
+    public static final double LAWN_MOWER_SPEED = 14.0;
+
+    public static final int NORMAL_ZOMBIE_HP = 270;
+    public static final int CONEHEAD_ZOMBIE_HP = 560;
+    public static final int BUCKETHEAD_ZOMBIE_HP = 1100;
+
+    public static final double NORMAL_ZOMBIE_SPEED = 0.45;
+    public static final double CONEHEAD_ZOMBIE_SPEED = 0.38;
+    public static final double BUCKETHEAD_ZOMBIE_SPEED = 0.32;
+
+    public static final int NORMAL_ZOMBIE_DAMAGE = 20;
+    public static final int CONEHEAD_ZOMBIE_DAMAGE = 20;
+    public static final int BUCKETHEAD_ZOMBIE_DAMAGE = 20;
 
     /**
      * 僵尸从草坪右侧外面一点进入，而不是从整张背景图最右边进来。

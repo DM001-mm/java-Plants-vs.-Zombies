@@ -2,6 +2,7 @@ package com.xhl.pvz.entity.zombie;
 
 import com.xhl.pvz.animation.Animation;
 import com.xhl.pvz.animation.AnimationPlayer;
+import com.xhl.pvz.core.GameConfig;
 import com.xhl.pvz.core.LevelContext;
 import com.xhl.pvz.entity.plant.Plant;
 import com.xhl.pvz.manager.AudioManager;
@@ -46,15 +47,33 @@ public class NormalZombie extends Zombie {
     private int deathFallbackTimer = 0;
 
     public NormalZombie(int row, double x, double y) { // 常规设置
+        this(
+                row,
+                x,
+                y,
+                GameConfig.NORMAL_ZOMBIE_HP,
+                GameConfig.NORMAL_ZOMBIE_SPEED,
+                GameConfig.NORMAL_ZOMBIE_DAMAGE
+        );
+    }
+
+    protected NormalZombie(
+            int row,
+            double x,
+            double y,
+            int maxHp,
+            double speed,
+            int damage
+    ) {
         super(
                 row,
                 x,
                 y - VISUAL_Y_OFFSET,
                 100,
                 120,
-                270,
-                0.5,
-                20
+                maxHp,
+                speed,
+                damage
         );
 
         loadImages();

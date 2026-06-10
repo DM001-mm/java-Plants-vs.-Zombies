@@ -10,6 +10,16 @@ public class LevelDefinitions {
     private LevelDefinitions() {
     }
 
+    public static List<LevelDefinition> getAllLevels() {
+        List<LevelDefinition> levels = new ArrayList<>();
+
+        levels.add(createLevel1());
+        levels.add(createLevel2());
+        levels.add(createLevel3());
+
+        return levels;
+    }
+
     public static LevelDefinition createLevel1() {
         List<SpawnEvent> events = new ArrayList<>();
 
@@ -37,6 +47,8 @@ public class LevelDefinitions {
                 100
         );
 
+        events.add(new SpawnEvent(2500, ZombieFactory.CONEHEAD_ZOMBIE, 2));
+
         events.add(new SpawnEvent(2750, ZombieFactory.NORMAL_ZOMBIE, 0));
         events.add(new SpawnEvent(2780, ZombieFactory.NORMAL_ZOMBIE, 1));
         events.add(new SpawnEvent(2810, ZombieFactory.NORMAL_ZOMBIE, 2));
@@ -46,7 +58,10 @@ public class LevelDefinitions {
         return new LevelDefinition(
                 1,
                 "Day 1",
+                "普通僵尸入侵，适合熟悉基础玩法。",
+                "简单",
                 3200,
+                150,
                 events
         );
     }
@@ -55,8 +70,8 @@ public class LevelDefinitions {
         List<SpawnEvent> events = new ArrayList<>();
 
         events.add(new SpawnEvent(500, ZombieFactory.NORMAL_ZOMBIE, 2));
-        events.add(new SpawnEvent(750, ZombieFactory.NORMAL_ZOMBIE, 1));
-        events.add(new SpawnEvent(1000, ZombieFactory.NORMAL_ZOMBIE, 3));
+        events.add(new SpawnEvent(760, ZombieFactory.NORMAL_ZOMBIE, 1));
+        events.add(new SpawnEvent(1020, ZombieFactory.NORMAL_ZOMBIE, 3));
 
         addWave(
                 events,
@@ -85,7 +100,58 @@ public class LevelDefinitions {
         return new LevelDefinition(
                 2,
                 "Day 2",
-                3000,
+                "路障僵尸开始出现，需要更稳定的防线。",
+                "普通",
+                3100,
+                125,
+                events
+        );
+    }
+
+    public static LevelDefinition createLevel3() {
+        List<SpawnEvent> events = new ArrayList<>();
+
+        events.add(new SpawnEvent(450, ZombieFactory.NORMAL_ZOMBIE, 2));
+        events.add(new SpawnEvent(700, ZombieFactory.NORMAL_ZOMBIE, 1));
+        events.add(new SpawnEvent(950, ZombieFactory.NORMAL_ZOMBIE, 3));
+
+        addWave(
+                events,
+                1250,
+                ZombieFactory.NORMAL_ZOMBIE,
+                new int[]{0, 2, 4},
+                100
+        );
+
+        addWave(
+                events,
+                1650,
+                ZombieFactory.CONEHEAD_ZOMBIE,
+                new int[]{1, 3},
+                160
+        );
+
+        events.add(new SpawnEvent(2050, ZombieFactory.BUCKETHEAD_ZOMBIE, 2));
+
+        addWave(
+                events,
+                2400,
+                ZombieFactory.NORMAL_ZOMBIE,
+                new int[]{0, 1, 3, 4},
+                90
+        );
+
+        events.add(new SpawnEvent(2700, ZombieFactory.CONEHEAD_ZOMBIE, 0));
+        events.add(new SpawnEvent(2750, ZombieFactory.CONEHEAD_ZOMBIE, 4));
+        events.add(new SpawnEvent(2900, ZombieFactory.BUCKETHEAD_ZOMBIE, 2));
+
+        return new LevelDefinition(
+                3,
+                "Day 3",
+                "铁桶僵尸来袭，血量更高，压力更大。",
+                "困难",
+                3400,
+                125,
                 events
         );
     }

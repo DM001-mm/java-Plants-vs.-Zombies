@@ -9,14 +9,15 @@ import com.xhl.pvz.manager.ImageManager;
 import com.xhl.pvz.resource.ImageKeys;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 public class LawnMower extends Entity {
     private final int row;
 
     private boolean activated = false;
-    private double speed = 12.0;
 
     private BufferedImage image;
 
@@ -39,14 +40,19 @@ public class LawnMower extends Entity {
     public void update(LevelContext context) {
         if (!activated) {
             checkTrigger(context);
-        } else {
-            moveAndKillZombies(context);
+            return;
         }
+
+        moveAndKillZombies(context);
     }
 
     private void checkTrigger(LevelContext context) {
         for (Zombie zombie : context.getEntityManager().getZombies()) {
-            if (!zombie.isAlive()) {
+            if (zombie == null) {
+                continue;
+            }
+
+            if (!zombie.canBeTargeted()) {
                 continue;
             }
 
@@ -62,6 +68,10 @@ public class LawnMower extends Entity {
     }
 
     private void activate() {
+        if (activated) {
+            return;
+        }
+
         activated = true;
 
         AudioManager.playEffect("plant_remove");
@@ -70,9 +80,13 @@ public class LawnMower extends Entity {
     }
 
     private void moveAndKillZombies(LevelContext context) {
-        x += speed;
+        x += GameConfig.LAWN_MOWER_SPEED;
 
         for (Zombie zombie : context.getEntityManager().getZombies()) {
+            if (zombie == null) {
+                continue;
+            }
+
             if (!zombie.isAlive()) {
                 continue;
             }
@@ -82,12 +96,16 @@ public class LawnMower extends Entity {
             }
 
             if (getCollisionBounds().intersects(zombie.getCollisionBounds())) {
-                zombie.setAlive(false);
+                zombie.takeDamage(9999);
                 System.out.println("小推车消灭僵尸");
             }
         }
 
-        if (x > GameConfig.LEVEL_CAMERA_X + GameConfig.WINDOW_WIDTH + 100) {
+        int rightLimit = GameConfig.LEVEL_CAMERA_LAWN_X
+                + GameConfig.WINDOW_WIDTH
+                + 200;
+
+        if (x > rightLimit) {
             alive = false;
         }
     }
@@ -110,20 +128,34 @@ public class LawnMower extends Entity {
 
     private void drawFallback(Graphics2D g) {
         Color oldColor = g.getColor();
+        Font oldFont = g.getFont();
 
         if (activated) {
-            g.setColor(Color.RED);
+            g.setColor(new Color(210, 55, 45));
         } else {
-            g.setColor(Color.LIGHT_GRAY);
+            g.setColor(new Color(170, 175, 170));
         }
 
-        g.fillRect((int) x, (int) y, width, height);
+        g.fillRoundRect((int) x, (int) y, width, height, 12, 12);
 
-        g.setColor(Color.BLACK);
-        g.drawRect((int) x, (int) y, width, height);
-        g.drawString("车", (int) x + 20, (int) y + 35);
+        g.setColor(new Color(40, 45, 45));
+        g.drawRoundRect((int) x, (int) y, width, height, 12, 12);
 
+        g.setFont(new Font("SansSerif", Font.BOLD, 22));
+        g.drawString("车", (int) x + 24, (int) y + 36);
+
+        g.setFont(oldFont);
         g.setColor(oldColor);
+    }
+
+    @Override
+    public Rectangle getCollisionBounds() {
+        return new Rectangle(
+                (int) x + 8,
+                (int) y + 8,
+                width - 16,
+                height - 12
+        );
     }
 
     public int getRow() {

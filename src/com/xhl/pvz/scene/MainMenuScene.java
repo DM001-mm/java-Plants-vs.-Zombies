@@ -69,7 +69,7 @@ public class MainMenuScene extends BaseScene {
     public void onMousePressed(int x,int y){
         if(startButton.contains(x,y)){
             AudioManager.playEffect("click");
-            sceneManager.changeScene(new LevelScene(sceneManager)); // 改进入 选择 游戏 关卡 界面了
+            sceneManager.changeScene(new LevelSelectScene(sceneManager));
             return;
         }
 
