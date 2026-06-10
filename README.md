@@ -306,10 +306,10 @@ java-Plants-vs.-Zombies
 3. 找到程序入口：
 
 ```text
-src/com/xhl/pvz/app/GameApp.java
+src/Main.java
 ```
 
-4. 运行 `GameApp`
+4. 运行 `Main`
 
 ---
 
@@ -322,7 +322,7 @@ src/com/xhl/pvz/app/GameApp.java
 ```powershell
 Get-ChildItem -Recurse src -Filter *.java | ForEach-Object { $_.FullName } > sources.txt
 javac -encoding UTF-8 -d bin @sources.txt
-java -cp bin com.xhl.pvz.app.GameApp
+java -cp bin src.Main
 ```
 
 #### macOS / Linux
@@ -330,7 +330,7 @@ java -cp bin com.xhl.pvz.app.GameApp
 ```bash
 find src -name "*.java" > sources.txt
 javac -encoding UTF-8 -d bin @sources.txt
-java -cp bin com.xhl.pvz.app.GameApp
+java -cp bin src.Main
 ```
 
 注意：运行时请保持在项目根目录下，因为程序会从 `resources` 目录读取图片和音频资源。
