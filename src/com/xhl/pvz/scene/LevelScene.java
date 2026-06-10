@@ -11,6 +11,7 @@ import com.xhl.pvz.entity.zombie.Zombie;
 import com.xhl.pvz.factory.BulletFactory;
 import com.xhl.pvz.factory.PlantCardFactory;
 import com.xhl.pvz.factory.PlantFactory;
+import com.xhl.pvz.factory.PlantRegistry;
 import com.xhl.pvz.factory.ZombieFactory;
 import com.xhl.pvz.lawn.Grid;
 import com.xhl.pvz.manager.AudioManager;
@@ -41,7 +42,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.util.Arrays;
 import java.util.List;
 
 public class LevelScene extends BaseScene {
@@ -124,10 +124,7 @@ public class LevelScene extends BaseScene {
         seedBankUI = new SeedBankUI(150, 5, 560, 110);
 
         plantSelectionUI = new PlantSelectionUI(
-                Arrays.asList(
-                        PlantFactory.PEASHOOTER,
-                        PlantFactory.SUNFLOWER
-                ),
+                PlantRegistry.getSelectablePlantTypes(),
                 6
         );
         cardBarUI = null;
@@ -696,10 +693,7 @@ public class LevelScene extends BaseScene {
         }
 
         if (cardBarUI == null) {
-            buildCardBarFromSelection(Arrays.asList(
-                    PlantFactory.PEASHOOTER,
-                    PlantFactory.SUNFLOWER
-            ));
+            buildCardBarFromSelection(PlantRegistry.getDefaultPlantTypes());
         }
 
         cardBarUI.clearSelection();

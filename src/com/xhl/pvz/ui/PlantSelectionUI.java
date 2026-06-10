@@ -2,6 +2,8 @@ package com.xhl.pvz.ui;
 
 import com.xhl.pvz.core.GameConfig;
 import com.xhl.pvz.factory.PlantCardFactory;
+import com.xhl.pvz.factory.PlantRegistry;
+import com.xhl.pvz.model.PlantDefinition;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -162,13 +164,14 @@ public class PlantSelectionUI {
 
             if (i < selectedPlantTypes.size()) {
                 String plantType = selectedPlantTypes.get(i);
+                String displayName = getDisplayName(plantType);
 
                 g.setColor(Color.WHITE);
                 g.setFont(new Font("Microsoft YaHei", Font.BOLD, 13));
 
-                int textWidth = g.getFontMetrics().stringWidth(plantType);
+                int textWidth = g.getFontMetrics().stringWidth(displayName);
                 g.drawString(
-                        plantType,
+                        displayName,
                         x + (slotWidth - textWidth) / 2,
                         slotY + 30
                 );
@@ -177,6 +180,16 @@ public class PlantSelectionUI {
 
         g.setColor(oldColor);
         g.setFont(oldFont);
+    }
+
+    private String getDisplayName(String plantType) {
+        PlantDefinition definition = PlantRegistry.getDefinition(plantType);
+
+        if (definition == null) {
+            return plantType;
+        }
+
+        return definition.getDisplayName();
     }
 
     private void drawPoolCards(Graphics2D g) {
