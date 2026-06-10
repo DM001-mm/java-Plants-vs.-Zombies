@@ -1,5 +1,6 @@
 package com.xhl.pvz.factory;
 
+<<<<<<< HEAD
 import com.xhl.pvz.entity.plant.CherryBomb;
 import com.xhl.pvz.entity.plant.IceShooter;
 import com.xhl.pvz.entity.plant.PotatoMine;
@@ -41,6 +42,25 @@ public class PlantFactory {
 
         System.out.println("未知植物类型："+plantType);
         return null;
+=======
+import com.xhl.pvz.entity.plant.Plant;
+
+public class PlantFactory {
+    public static final String PEASHOOTER = PlantRegistry.PEASHOOTER;
+    public static final String SUNFLOWER = PlantRegistry.SUNFLOWER;
+
+    private PlantFactory() {
+    }
+
+    public static Plant createPlant(
+            String plantType,
+            int row,
+            int col,
+            double x,
+            double y
+    ) {
+        return PlantRegistry.createPlant(plantType, row, col, x, y);
+>>>>>>> fee6e5a890ea8ba92ca17ddd7dd98027c19662ef
     }
 
     private static boolean matches(String actualType, String expectedType) {
@@ -48,6 +68,7 @@ public class PlantFactory {
     }
 
     public static String getPlantType(Plant plant) {
+<<<<<<< HEAD
         if (plant instanceof Peashooter) {
             return PEASHOOTER;
         }
@@ -73,6 +94,8 @@ public class PlantFactory {
         }
 
         return plant.getClass().getSimpleName();
+=======
+        return PlantRegistry.getPlantType(plant);
+>>>>>>> fee6e5a890ea8ba92ca17ddd7dd98027c19662ef
     }
-
 }

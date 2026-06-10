@@ -1,6 +1,7 @@
 package com.xhl.pvz.ui;
 
 import com.xhl.pvz.manager.ImageManager;
+import com.xhl.pvz.resource.ImageKeys;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -9,8 +10,8 @@ public class PauseMenuUI {
 
     private UIButton continueButton;
     private UIButton saveButton;
-    private UIButton loadButton;
     private UIButton menuButton;
+    private UIButton exitButton;
 
     public PauseMenuUI() {
         continueButton = new UIButton(
@@ -18,8 +19,8 @@ public class PauseMenuUI {
                 180,
                 220,
                 60,
-                ImageManager.hasImage("ui.continue_button")
-                        ? ImageManager.getImage("ui.continue_button")
+                ImageManager.hasImage(ImageKeys.UI_CONTINUE_BUTTON)
+                        ? ImageManager.getImage(ImageKeys.UI_CONTINUE_BUTTON)
                         : null
         );
 
@@ -28,28 +29,28 @@ public class PauseMenuUI {
                 260,
                 220,
                 60,
-                ImageManager.hasImage("ui.save_button")
-                        ? ImageManager.getImage("ui.save_button")
-                        : null
-        );
-
-        loadButton = new UIButton(
-                340,
-                340,
-                220,
-                60,
-                ImageManager.hasImage("ui.load_button")
-                        ? ImageManager.getImage("ui.load_button")
+                ImageManager.hasImage(ImageKeys.UI_SAVE_BUTTON)
+                        ? ImageManager.getImage(ImageKeys.UI_SAVE_BUTTON)
                         : null
         );
 
         menuButton = new UIButton(
                 340,
+                340,
+                220,
+                60,
+                ImageManager.hasImage(ImageKeys.UI_MENU_BUTTON)
+                        ? ImageManager.getImage(ImageKeys.UI_MENU_BUTTON)
+                        : null
+        );
+
+        exitButton = new UIButton(
+                340,
                 420,
                 220,
                 60,
-                ImageManager.hasImage("ui.menu_button")
-                        ? ImageManager.getImage("ui.menu_button")
+                ImageManager.hasImage(ImageKeys.UI_EXIT_BUTTON)
+                        ? ImageManager.getImage(ImageKeys.UI_EXIT_BUTTON)
                         : null
         );
     }
@@ -60,8 +61,8 @@ public class PauseMenuUI {
 
         continueButton.render(g);
         saveButton.render(g);
-        loadButton.render(g);
         menuButton.render(g);
+        exitButton.render(g);
 
         drawFallbackText(g);
     }
@@ -94,20 +95,20 @@ public class PauseMenuUI {
         g.setColor(Color.WHITE);
         g.setFont(new Font("微软雅黑", Font.BOLD, 24));
 
-        if (!ImageManager.hasImage("ui.continue_button")) {
+        if (!ImageManager.hasImage(ImageKeys.UI_CONTINUE_BUTTON)) {
             g.drawString("继续游戏", 400, 220);
         }
 
-        if (!ImageManager.hasImage("ui.save_button")) {
+        if (!ImageManager.hasImage(ImageKeys.UI_SAVE_BUTTON)) {
             g.drawString("保存游戏", 400, 300);
         }
 
-        if (!ImageManager.hasImage("ui.load_button")) {
-            g.drawString("读取存档", 400, 380);
+        if (!ImageManager.hasImage(ImageKeys.UI_MENU_BUTTON)) {
+            g.drawString("返回主菜单", 390, 380);
         }
 
-        if (!ImageManager.hasImage("ui.menu_button")) {
-            g.drawString("返回主菜单", 390, 460);
+        if (!ImageManager.hasImage(ImageKeys.UI_EXIT_BUTTON)) {
+            g.drawString("退出游戏", 400, 460);
         }
 
         g.setColor(oldColor);
@@ -122,11 +123,11 @@ public class PauseMenuUI {
         return saveButton.contains(x, y);
     }
 
-    public boolean isLoadButtonClicked(int x, int y) {
-        return loadButton.contains(x, y);
-    }
-
     public boolean isMenuButtonClicked(int x, int y) {
         return menuButton.contains(x, y);
+    }
+
+    public boolean isExitButtonClicked(int x, int y) {
+        return exitButton.contains(x, y);
     }
 }

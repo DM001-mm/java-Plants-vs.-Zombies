@@ -62,7 +62,7 @@ public class LevelManager {
         }
     }
     private void spawnZombie(LevelContext context, int row) {
-        double zombieX = GameConfig.WINDOW_WIDTH + 20;
+        double zombieX = GameConfig.ZOMBIE_SPAWN_X;
         double zombieY = gridStartY + row * cellHeight;
 
         NormalZombie zombie = new NormalZombie(row, zombieX, zombieY);
@@ -81,6 +81,7 @@ public class LevelManager {
         }
 
     public double getProgressRatio() {
+<<<<<<< HEAD
         if (levelDurationTick <= 0) {
             return 0.0;
         }
@@ -93,6 +94,20 @@ public class LevelManager {
             return 1.0;
         }
         return ratio;
+=======
+        if (spawnEvents.isEmpty()) {
+            return 1.0;
+        }
+
+        int lastSpawnTick = spawnEvents.get(spawnEvents.size() - 1).timeTick;
+
+        if (lastSpawnTick <= 0) {
+            return 1.0;
+        }
+
+        double ratio = (double) tick / lastSpawnTick;
+        return Math.max(0.0, Math.min(1.0, ratio));
+>>>>>>> fee6e5a890ea8ba92ca17ddd7dd98027c19662ef
     }
 
     public void setTick(int tick) {

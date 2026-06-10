@@ -2,6 +2,7 @@ package com.xhl.pvz.entity.item;
 
 import com.xhl.pvz.animation.Animation;
 import com.xhl.pvz.animation.AnimationPlayer;
+import com.xhl.pvz.core.GameConfig;
 import com.xhl.pvz.core.LevelContext;
 import com.xhl.pvz.manager.ImageManager;
 import com.xhl.pvz.resource.ImageKeys;
@@ -27,7 +28,7 @@ public class Sun extends CollectableItem {
      * 比如向日葵生产的阳光。
      */
     public Sun(double x, double y) {
-        super(x, y, 50, 50, 25);
+        super(x, y, GameConfig.SUN_SIZE, GameConfig.SUN_SIZE, 25);
 
         this.falling = false;
         this.targetY = y;
@@ -41,7 +42,7 @@ public class Sun extends CollectableItem {
      * 比如天空自然掉落阳光。
      */
     public Sun(double x, double y, double targetY) {
-        super(x, y, 50, 50, 25);
+        super(x, y, GameConfig.SUN_SIZE, GameConfig.SUN_SIZE, 25);
 
         this.falling = true;
         this.targetY = targetY;

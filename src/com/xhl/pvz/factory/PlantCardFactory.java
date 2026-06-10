@@ -2,6 +2,8 @@ package com.xhl.pvz.factory;
 
 import com.xhl.pvz.resource.ImageKeys;
 import com.xhl.pvz.manager.ImageManager;
+import com.xhl.pvz.model.PlantDefinition;
+import com.xhl.pvz.resource.ImageKeys;
 import com.xhl.pvz.ui.PlantCard;
 
 public class PlantCardFactory {
@@ -9,42 +11,36 @@ public class PlantCardFactory {
     private PlantCardFactory() {
     }
 
+    public static PlantCard createCard(String plantType, int x, int y) {
+        PlantDefinition definition = PlantRegistry.getDefinition(plantType);
+
+        if (definition == null) {
+            System.out.println("未知植物卡片类型: " + plantType);
+            return null;
+        }
+
+        return new PlantCard(
+                definition.getType(),
+                x,
+                y,
+                70,
+                90,
+                definition.getCost(),
+                definition.getCooldownTicks(),
+                ImageManager.hasImage(definition.getCardImageKey())
+                        ? ImageManager.getImage(definition.getCardImageKey())
+                        : null,
+                ImageManager.hasImage(ImageKeys.UI_COOLDOWN_MASK)
+                        ? ImageManager.getImage(ImageKeys.UI_COOLDOWN_MASK)
+                        : null
+        );
+    }
+
     public static PlantCard createPeashooterCard(int x, int y) {
-        return new PlantCard(
-                PlantFactory.PEASHOOTER,
-                x,
-                y,
-                70,
-                90,
-                100,
-                150,
-                ImageManager.hasImage("card.peashooter")
-                        ? ImageManager.getImage("card.peashooter")
-                        : null,
-                ImageManager.hasImage("ui.cooldown_mask")
-                        ? ImageManager.getImage("ui.cooldown_mask")
-                        : null
-        );
+        return createCard(PlantRegistry.PEASHOOTER, x, y);
     }
 
-    public static PlantCard createSunflowerCard(int x, int y) {
-        return new PlantCard(
-                PlantFactory.SUNFLOWER,
-                x,
-                y,
-                70,
-                90,
-                50,
-                150,
-                ImageManager.hasImage("card.sunflower")
-                        ? ImageManager.getImage("card.sunflower")
-                        : null,
-                ImageManager.hasImage("ui.cooldown_mask")
-                        ? ImageManager.getImage("ui.cooldown_mask")
-                        : null
-        );
-    }
-
+<<<<<<< HEAD
     public static PlantCard createWalnutCard(int x, int y) {
         return new PlantCard(
                 PlantFactory.WALNUT,
@@ -117,3 +113,9 @@ public class PlantCardFactory {
         );
     }
 }
+=======
+    public static PlantCard createSunflowerCard(int x, int y) {
+        return createCard(PlantRegistry.SUNFLOWER, x, y);
+    }
+}
+>>>>>>> fee6e5a890ea8ba92ca17ddd7dd98027c19662ef

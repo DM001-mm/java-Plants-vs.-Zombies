@@ -4,12 +4,14 @@ import com.xhl.pvz.core.GameConfig;
 import com.xhl.pvz.core.LevelContext;
 import com.xhl.pvz.core.SceneManager;
 import com.xhl.pvz.entity.bullet.Bullet;
+import com.xhl.pvz.entity.item.LawnMower;
 import com.xhl.pvz.entity.item.Sun;
 import com.xhl.pvz.entity.plant.Plant;
 import com.xhl.pvz.entity.zombie.Zombie;
 import com.xhl.pvz.factory.BulletFactory;
 import com.xhl.pvz.factory.PlantCardFactory;
 import com.xhl.pvz.factory.PlantFactory;
+import com.xhl.pvz.factory.PlantRegistry;
 import com.xhl.pvz.factory.ZombieFactory;
 import com.xhl.pvz.lawn.Grid;
 import com.xhl.pvz.manager.AudioManager;
@@ -30,6 +32,9 @@ import com.xhl.pvz.ui.CardBarUI;
 import com.xhl.pvz.ui.LevelProgressUI;
 import com.xhl.pvz.ui.PauseMenuUI;
 import com.xhl.pvz.ui.PlantCard;
+import com.xhl.pvz.ui.PlantSelectionUI;
+import com.xhl.pvz.ui.ReadySetPlantUI;
+import com.xhl.pvz.ui.SeedBankUI;
 import com.xhl.pvz.ui.ShovelUI;
 import com.xhl.pvz.ui.StatusMessageUI;
 import com.xhl.pvz.ui.SunBankUI;
@@ -37,10 +42,21 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 public class LevelScene extends BaseScene {
 
+    private enum LevelPhase {
+        INTRO_LAWN_PAUSE,
+        CAMERA_MOVING_TO_ROAD,
+        SELECTING_PLANTS,
+        CAMERA_MOVING_TO_LAWN,
+        READY_SET_PLANT,
+        PLAYING
+    }
+
     private final SceneManager sceneManager;
+    private boolean loadOnEnter = false;
 
     private BufferedImage background;
 
@@ -51,11 +67,18 @@ public class LevelScene extends BaseScene {
     private CollisionManager collisionManager;
     private LevelContext levelContext;
 
+    private LevelPhase levelPhase;
+    private int cameraX;
+    private int targetCameraX;
+    private int introPauseTick;
+
     private SunResource sunResource;
     private SunBankUI sunBankUI;
+    private SeedBankUI seedBankUI;
     private SkySunSpawner skySunSpawner;
 
     private CardBarUI cardBarUI;
+    private PlantSelectionUI plantSelectionUI;
 
     private String selectedPlantType = null;
     private PlantCard selectedCard = null;
@@ -64,25 +87,37 @@ public class LevelScene extends BaseScene {
     private PauseMenuUI pauseMenuUI;
 
     private StatusMessageUI statusMessageUI;
+    private ReadySetPlantUI readySetPlantUI;
 
     private ShovelUI shovelUI;
     private boolean shovelMode = false;
     private LevelProgressUI levelProgressUI;
+
     public LevelScene(SceneManager sceneManager) {
         this.sceneManager = sceneManager;
     }
 
+    public LevelScene(SceneManager sceneManager, boolean loadOnEnter) {
+        this.sceneManager = sceneManager;
+        this.loadOnEnter = loadOnEnter;
+    }
+
     @Override
     public void onEnter() {
+        cameraX = GameConfig.LEVEL_CAMERA_LAWN_X;
+        targetCameraX = GameConfig.LEVEL_CAMERA_LAWN_X;
+        introPauseTick = 0;
+        levelPhase = LevelPhase.INTRO_LAWN_PAUSE;
+
         grid = new Grid(
-                5,
-                9,
-                170,
-                120,
-                80,
-                90
+            GameConfig.LAWN_ROW_COUNT,
+            GameConfig.LAWN_COL_COUNT,
+            GameConfig.LAWN_START_X,
+            GameConfig.LAWN_START_Y,
+            GameConfig.LAWN_CELL_WIDTH,
+            GameConfig.LAWN_CELL_HEIGHT
         );
-        shovelUI = new ShovelUI(760, 15, 70, 70);
+        shovelUI = new ShovelUI(GameConfig.WINDOW_WIDTH - 90, 15, 70, 70);
         shovelMode = false;
         if (ImageManager.hasImage(ImageKeys.BACKGROUND_LAWN_DAY)) {
             background = ImageManager.getImage(ImageKeys.BACKGROUND_LAWN_DAY);
@@ -90,12 +125,14 @@ public class LevelScene extends BaseScene {
 
         entityManager = new EntityManager();
         collisionManager = new CollisionManager(entityManager);
+        initLawnMowers();
 
         sunResource = new SunResource(150);
         levelContext = new LevelContext(entityManager, sunResource);
 
         sunBankUI = new SunBankUI(20, 15, 120, 60, sunResource);
 
+<<<<<<< HEAD
         cardBarUI = new CardBarUI();
         cardBarUI.addCard(PlantCardFactory.createPeashooterCard(160, 15));
         cardBarUI.addCard(PlantCardFactory.createSunflowerCard(240, 15));
@@ -103,13 +140,22 @@ public class LevelScene extends BaseScene {
         cardBarUI.addCard(PlantCardFactory.createPotatoMineCard(400, 15));
         cardBarUI.addCard(PlantCardFactory.createCherryBombCard(480, 15));
         cardBarUI.addCard(PlantCardFactory.createIceShooterCard(560, 15));
+=======
+        seedBankUI = new SeedBankUI(150, 5, 560, 110);
+
+        plantSelectionUI = new PlantSelectionUI(
+                PlantRegistry.getSelectablePlantTypes(),
+                6
+        );
+        cardBarUI = null;
+>>>>>>> fee6e5a890ea8ba92ca17ddd7dd98027c19662ef
 
         levelManager = new LevelManager(
                 grid.getStartY(),
                 grid.getCellHeight()
         );
         levelProgressUI = new LevelProgressUI(
-                650,
+                GameConfig.WINDOW_WIDTH - 240,
                 540,
                 200,
                 20,
@@ -117,20 +163,26 @@ public class LevelScene extends BaseScene {
         );
         skySunSpawner = new SkySunSpawner(
                 300,
-                grid.getStartX(),
-                grid.getRightX() - 50,
-                grid.getStartY(),
-                grid.getBottomY() - 80
+                grid.getStartX() + grid.getCellWidth(),
+                grid.getRightX() - grid.getCellWidth(),
+                grid.getStartY() + 30,
+                grid.getBottomY() - 100
         );
 
         pauseMenuUI = new PauseMenuUI();
-        statusMessageUI = new StatusMessageUI(330, 560);
+        statusMessageUI = new StatusMessageUI(560, 560);
+        readySetPlantUI = new ReadySetPlantUI();
+        readySetPlantUI.skip();
 
         paused = false;
         selectedPlantType = null;
         selectedCard = null;
 
         AudioManager.playBGM("level_day");
+
+        if (loadOnEnter) {
+            loadGame();
+        }
     }
 
     @Override
@@ -141,8 +193,57 @@ public class LevelScene extends BaseScene {
             return;
         }
 
-        cardBarUI.update();
+        if (levelPhase == LevelPhase.INTRO_LAWN_PAUSE) {
+            introPauseTick++;
 
+            if (introPauseTick >= GameConfig.INTRO_LAWN_PAUSE_TICKS) {
+                targetCameraX = GameConfig.LEVEL_CAMERA_ROAD_X;
+                levelPhase = LevelPhase.CAMERA_MOVING_TO_ROAD;
+            }
+
+            return;
+        }
+
+        if (levelPhase == LevelPhase.CAMERA_MOVING_TO_ROAD) {
+            updateCameraMove();
+
+            if (cameraX == targetCameraX) {
+                levelPhase = LevelPhase.SELECTING_PLANTS;
+            }
+
+            return;
+        }
+
+        if (levelPhase == LevelPhase.SELECTING_PLANTS) {
+            return;
+        }
+
+        if (levelPhase == LevelPhase.CAMERA_MOVING_TO_LAWN) {
+            updateCameraMove();
+
+            if (cameraX == targetCameraX) {
+                if (readySetPlantUI != null) {
+                    readySetPlantUI.reset();
+                }
+
+                levelPhase = LevelPhase.READY_SET_PLANT;
+            }
+
+            return;
+        }
+
+        if (levelPhase == LevelPhase.READY_SET_PLANT) {
+            if (readySetPlantUI != null && !readySetPlantUI.isFinished()) {
+                readySetPlantUI.update();
+                return;
+            }
+
+            levelPhase = LevelPhase.PLAYING;
+        }
+
+        if (cardBarUI != null) {
+            cardBarUI.update();
+        }
 
         levelManager.update(levelContext);
         skySunSpawner.update(levelContext);
@@ -160,16 +261,47 @@ public class LevelScene extends BaseScene {
     public void render(Graphics2D g) {
         drawBackground(g);
 
+        Graphics2D worldG = (Graphics2D) g.create();
+        worldG.translate(-cameraX, 0);
+
+        entityManager.renderAll(worldG);
+
+        if (GameConfig.DEBUG_GRID) {
+            grid.renderDebugGrid(worldG);
+        }
+
+        worldG.dispose();
+
+        if (levelPhase == LevelPhase.SELECTING_PLANTS && plantSelectionUI != null) {
+            plantSelectionUI.render(g);
+            statusMessageUI.render(g);
+            return;
+        }
+
         sunBankUI.render(g);
 
-        cardBarUI.render(g);
-        shovelUI.render(g);
+        if (seedBankUI != null) {
+            seedBankUI.render(g);
+        }
 
-        entityManager.renderAll(g);
+        if (cardBarUI != null) {
+            cardBarUI.render(g);
+        }
 
-        drawDebugGrid(g);
-        levelProgressUI.render(g);
-        
+        if (shovelUI != null) {
+            shovelUI.render(g);
+        }
+
+        if (levelProgressUI != null) {
+            levelProgressUI.render(g);
+        }
+
+        if (levelPhase == LevelPhase.READY_SET_PLANT
+                && readySetPlantUI != null
+                && !readySetPlantUI.isFinished()) {
+            readySetPlantUI.render(g);
+        }
+
         if (paused && pauseMenuUI != null) {
             pauseMenuUI.render(g);
         }
@@ -184,22 +316,55 @@ public class LevelScene extends BaseScene {
             return;
         }
 
-        if (handleSunClick(x, y)) {
+        if (levelPhase == LevelPhase.SELECTING_PLANTS) {
+            if (plantSelectionUI != null) {
+                if (plantSelectionUI.isStartButtonClicked(x, y)) {
+                    startSelectedPlantsGame();
+                    return;
+                }
+
+                if (plantSelectionUI.handleMousePressed(x, y)) {
+                    AudioManager.playEffect("card_select");
+                    return;
+                }
+            }
+
             return;
         }
-        if (shovelUI.contains(x, y)) {
+
+        if (levelPhase == LevelPhase.INTRO_LAWN_PAUSE
+                || levelPhase == LevelPhase.CAMERA_MOVING_TO_ROAD
+                || levelPhase == LevelPhase.CAMERA_MOVING_TO_LAWN
+                || levelPhase == LevelPhase.READY_SET_PLANT) {
+            return;
+        }
+
+        if (levelPhase != LevelPhase.PLAYING) {
+            return;
+        }
+
+        int worldX = x + cameraX;
+
+        if (handleSunClick(worldX, y)) {
+            return;
+        }
+
+        if (shovelUI != null && shovelUI.contains(x, y)) {
             toggleShovelMode();
             return;
         }
-        PlantCard clickedCard = cardBarUI.getClickedCard(x, y);
 
-        if (clickedCard != null) {
-            handleCardClick(clickedCard);
-            return;
+        if (cardBarUI != null) {
+            PlantCard clickedCard = cardBarUI.getClickedCard(x, y);
+
+            if (clickedCard != null) {
+                handleCardClick(clickedCard);
+                return;
+            }
         }
 
         int row = grid.getRowByY(y);
-        int col = grid.getColByX(x);
+        int col = grid.getColByX(worldX);
 
         if (row != -1 && col != -1) {
             handleLawnClick(row, col);
@@ -209,25 +374,85 @@ public class LevelScene extends BaseScene {
     @Override
     public void onKeyPressed(int keyCode) {
         if (keyCode == KeyEvent.VK_ESCAPE) {
-            paused = !paused;
+            if (levelPhase == LevelPhase.PLAYING
+                    || levelPhase == LevelPhase.READY_SET_PLANT) {
+                paused = !paused;
+            }
+            return;
+        }
+
+        if (levelPhase != LevelPhase.PLAYING) {
             return;
         }
 
         if (keyCode == KeyEvent.VK_S) {
             saveGame();
+        }
+    }
+
+    private void buildCardBarFromSelection(List<String> selectedPlantTypes) {
+        cardBarUI = new CardBarUI();
+
+        int startX = 170;
+        int startY = 15;
+        int gap = 80;
+
+        for (int i = 0; i < selectedPlantTypes.size(); i++) {
+            String plantType = selectedPlantTypes.get(i);
+
+            PlantCard card = PlantCardFactory.createCard(
+                    plantType,
+                    startX + i * gap,
+                    startY
+            );
+
+            if (card != null) {
+                cardBarUI.addCard(card);
+            }
+        }
+    }
+
+    private void startSelectedPlantsGame() {
+        if (plantSelectionUI == null || !plantSelectionUI.hasSelectedPlant()) {
+            statusMessageUI.showMessage("请至少选择一种植物");
+            AudioManager.playEffect("card_error");
             return;
         }
 
-        if (keyCode == KeyEvent.VK_L) {
-            loadGame();
+        buildCardBarFromSelection(plantSelectionUI.getSelectedPlantTypes());
+
+        plantSelectionUI = null;
+
+        targetCameraX = GameConfig.LEVEL_CAMERA_LAWN_X;
+        levelPhase = LevelPhase.CAMERA_MOVING_TO_LAWN;
+
+        AudioManager.playEffect("click");
+    }
+
+    private void updateCameraMove() {
+        if (cameraX < targetCameraX) {
+            cameraX += GameConfig.LEVEL_CAMERA_SPEED;
+
+            if (cameraX > targetCameraX) {
+                cameraX = targetCameraX;
+            }
+        } else if (cameraX > targetCameraX) {
+            cameraX -= GameConfig.LEVEL_CAMERA_SPEED;
+
+            if (cameraX < targetCameraX) {
+                cameraX = targetCameraX;
+            }
         }
     }
+
     private void toggleShovelMode() {
         shovelMode = !shovelMode;
         shovelUI.setSelected(shovelMode);
 
         if (shovelMode) {
-            cardBarUI.clearSelection();
+            if (cardBarUI != null) {
+                cardBarUI.clearSelection();
+            }
 
             selectedCard = null;
             selectedPlantType = null;
@@ -253,16 +478,15 @@ public class LevelScene extends BaseScene {
             return;
         }
 
-        if (pauseMenuUI.isLoadButtonClicked(x, y)) {
-            loadGame();
-            AudioManager.playEffect("click");
-            paused = false;
-            return;
-        }
-
         if (pauseMenuUI.isMenuButtonClicked(x, y)) {
             AudioManager.playEffect("click");
             sceneManager.changeScene(new MainMenuScene(sceneManager));
+            return;
+        }
+
+        if (pauseMenuUI.isExitButtonClicked(x, y)) {
+            AudioManager.playEffect("click");
+            System.exit(0);
         }
     }
 
@@ -370,10 +594,8 @@ public class LevelScene extends BaseScene {
         if (background != null) {
             g.drawImage(
                     background,
+                    -cameraX,
                     0,
-                    0,
-                    GameConfig.WINDOW_WIDTH,
-                    GameConfig.WINDOW_HEIGHT,
                     null
             );
         } else {
@@ -386,8 +608,16 @@ public class LevelScene extends BaseScene {
         }
     }
 
-    private void drawDebugGrid(Graphics2D g) {
-        grid.renderDebugGrid(g);
+    private void initLawnMowers() {
+        int mowerX = grid.getStartX() - GameConfig.LAWN_MOWER_WIDTH - 15;
+
+        for (int row = 0; row < grid.getRowCount(); row++) {
+            int mowerY = grid.getCellY(row)
+                    + (grid.getCellHeight() - GameConfig.LAWN_MOWER_HEIGHT) / 2;
+
+            LawnMower lawnMower = new LawnMower(row, mowerX, mowerY);
+            entityManager.addLawnMower(lawnMower);
+        }
     }
 
     private void checkLevelResult() {
@@ -464,6 +694,7 @@ public class LevelScene extends BaseScene {
         }
 
         entityManager.clearAll();
+        initLawnMowers();
 
         sunResource.setAmount(saveData.getSunAmount());
         levelManager.setTick(saveData.getLevelTick());
@@ -503,9 +734,28 @@ public class LevelScene extends BaseScene {
             entityManager.addSun(sun);
         }
 
+        if (cardBarUI == null) {
+            buildCardBarFromSelection(PlantRegistry.getDefaultPlantTypes());
+        }
+
         cardBarUI.clearSelection();
         selectedCard = null;
         selectedPlantType = null;
+        shovelMode = false;
+
+        if (shovelUI != null) {
+            shovelUI.setSelected(false);
+        }
+
+        plantSelectionUI = null;
+        levelPhase = LevelPhase.PLAYING;
+        cameraX = GameConfig.LEVEL_CAMERA_LAWN_X;
+        targetCameraX = GameConfig.LEVEL_CAMERA_LAWN_X;
+        introPauseTick = 0;
+
+        if (readySetPlantUI != null) {
+            readySetPlantUI.skip();
+        }
 
         statusMessageUI.showMessage("读档完成");
     }

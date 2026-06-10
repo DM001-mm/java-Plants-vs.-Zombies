@@ -9,9 +9,12 @@ import com.xhl.pvz.manager.ImageManager;
 import com.xhl.pvz.resource.ImageKeys;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 public class NormalZombie extends Zombie {
+
+    private static final int VISUAL_Y_OFFSET = 15;
 
     private static final int STATE_WALK = 0;
     private static final int STATE_ATTACK = 1;
@@ -30,13 +33,16 @@ public class NormalZombie extends Zombie {
     private final int attackInterval = 30;
     private int attackTimer = 0;
 
+    private static final int DEATH_FALLBACK_DURATION = 30;
+    private int deathFallbackTimer = 0;
+
     public NormalZombie(int row, double x, double y) { // 常规设置
         super(
                 row,
                 x,
-                y,
-                80,
+                y - VISUAL_Y_OFFSET,
                 100,
+                120,
                 270,
                 0.5,
                 20
@@ -44,6 +50,11 @@ public class NormalZombie extends Zombie {
 
         loadImages();
         loadAnimations();
+    }
+
+    @Override
+    public double getY() {
+        return y + VISUAL_Y_OFFSET;
     }
 
     private void loadImages() {
@@ -84,7 +95,11 @@ public class NormalZombie extends Zombie {
 
     @Override
     public void update(LevelContext context) { 
+<<<<<<< HEAD
         tickSlowEffect();
+=======
+        updateHurtFlash();
+>>>>>>> fee6e5a890ea8ba92ca17ddd7dd98027c19662ef
 
         if (state == STATE_DIE) {
             updateDieAnimation();
@@ -161,6 +176,16 @@ public class NormalZombie extends Zombie {
     }
 
     private void updateDieAnimation() {
+        if (dieAnimation == null) {
+            deathFallbackTimer++;
+
+            if (deathFallbackTimer >= DEATH_FALLBACK_DURATION) {
+                alive = false;
+            }
+
+            return;
+        }
+
         if (animationPlayer == null) {
             alive = false;
             return;
@@ -178,6 +203,9 @@ public class NormalZombie extends Zombie {
         if (state == STATE_DIE) {
             return;
         }
+
+        deathFallbackTimer = 0;
+        hurtFlashTimer = 0;
 
         changeState(STATE_DIE);
 
@@ -210,6 +238,26 @@ public class NormalZombie extends Zombie {
         } else {
             drawFallback(g);
         }
+
+        renderDeathFallbackOverlay(g);
+        renderHurtFlash(g);
+    }
+
+    private void renderDeathFallbackOverlay(Graphics2D g) {
+        if (state != STATE_DIE) {
+            return;
+        }
+
+        if (dieAnimation != null) {
+            return;
+        }
+
+        Color oldColor = g.getColor();
+
+        g.setColor(new Color(120, 0, 0, 120));
+        g.fillRect((int) x, (int) y, width, height);
+
+        g.setColor(oldColor);
     }
 
     private void drawFallback(Graphics2D g) {
@@ -229,5 +277,19 @@ public class NormalZombie extends Zombie {
         g.drawRect((int) x, (int) y, width, height);
 
         g.setColor(oldColor);
+    }
+
+    @Override
+    public Rectangle getCollisionBounds() {
+        if (state == STATE_DIE || hp <= 0) {
+            return new Rectangle(0, 0, 0, 0);
+        }
+
+        return new Rectangle(
+                (int) x + 38,
+                (int) y + 20,
+                width - 55,
+                height - 30
+        );
     }
 }
