@@ -2,8 +2,6 @@ package com.xhl.pvz.entity.zombie;
 
 import com.xhl.pvz.entity.LivingEntity;
 import com.xhl.pvz.entity.plant.Plant;
-import java.awt.Color;
-import java.awt.Graphics2D;
 
 public abstract class Zombie extends LivingEntity {
 
@@ -12,9 +10,6 @@ public abstract class Zombie extends LivingEntity {
     protected int damage;
     private int slowTicksRemaining = 0;
     private double slowFactor = 1.0;
-
-    protected static final int HURT_FLASH_DURATION = 6;
-    protected int hurtFlashTimer = 0;
 
     public Zombie(int row,double x,double y,int width,int height,int maxHp,double speed,int damage){
         super(x, y, width, height, maxHp);
@@ -31,6 +26,7 @@ public abstract class Zombie extends LivingEntity {
         return damage;
     }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     public void applySlow(int duration, double factor) {
         if (duration <= 0 || factor <= 0) {
@@ -98,5 +94,7 @@ public abstract class Zombie extends LivingEntity {
     }
 
 >>>>>>> fee6e5a890ea8ba92ca17ddd7dd98027c19662ef
+=======
+>>>>>>> e35a3cd6726bfb96e02eafe352739d739bf02be5
     public abstract void attack(Plant plant); // 这里主要是为了 和 植物进行交互
 }

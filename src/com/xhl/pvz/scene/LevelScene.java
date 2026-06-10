@@ -117,7 +117,7 @@ public class LevelScene extends BaseScene {
             GameConfig.LAWN_CELL_WIDTH,
             GameConfig.LAWN_CELL_HEIGHT
         );
-        shovelUI = new ShovelUI(GameConfig.WINDOW_WIDTH - 90, 15, 70, 70);
+        shovelUI = new ShovelUI(575, 14, 46, 46);
         shovelMode = false;
         if (ImageManager.hasImage(ImageKeys.BACKGROUND_LAWN_DAY)) {
             background = ImageManager.getImage(ImageKeys.BACKGROUND_LAWN_DAY);
@@ -133,6 +133,7 @@ public class LevelScene extends BaseScene {
         sunBankUI = new SunBankUI(20, 15, 120, 60, sunResource);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         cardBarUI = new CardBarUI();
         cardBarUI.addCard(PlantCardFactory.createPeashooterCard(160, 15));
         cardBarUI.addCard(PlantCardFactory.createSunflowerCard(240, 15));
@@ -142,6 +143,9 @@ public class LevelScene extends BaseScene {
         cardBarUI.addCard(PlantCardFactory.createIceShooterCard(560, 15));
 =======
         seedBankUI = new SeedBankUI(150, 5, 560, 110);
+=======
+        seedBankUI = new SeedBankUI(150, 4, 410, 80);
+>>>>>>> e35a3cd6726bfb96e02eafe352739d739bf02be5
 
         plantSelectionUI = new PlantSelectionUI(
                 PlantRegistry.getSelectablePlantTypes(),
@@ -393,14 +397,14 @@ public class LevelScene extends BaseScene {
     private void buildCardBarFromSelection(List<String> selectedPlantTypes) {
         cardBarUI = new CardBarUI();
 
-        int startX = 170;
-        int startY = 15;
-        int gap = 80;
+        int startX = 165;
+        int startY = 10;
+        int gap = 62;
 
         for (int i = 0; i < selectedPlantTypes.size(); i++) {
             String plantType = selectedPlantTypes.get(i);
 
-            PlantCard card = PlantCardFactory.createCard(
+            PlantCard card = PlantCardFactory.createBattleCard(
                     plantType,
                     startX + i * gap,
                     startY

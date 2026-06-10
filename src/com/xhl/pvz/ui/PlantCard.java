@@ -73,7 +73,7 @@ public class PlantCard {
         Color oldColor = g.getColor();
         Font oldFont = g.getFont();
 
-        int costBoxHeight = 22;
+        int costBoxHeight = Math.max(15, height / 5);
         int costBoxY = y + height - costBoxHeight;
 
         g.setColor(new Color(245, 220, 120, 220));
@@ -84,11 +84,11 @@ public class PlantCard {
 
         String costText = String.valueOf(cost);
 
-        g.setFont(new Font("Microsoft YaHei", Font.BOLD, 16));
+        g.setFont(new Font("Microsoft YaHei", Font.BOLD, 12));
         int textWidth = g.getFontMetrics().stringWidth(costText);
 
         int textX = x + (width - textWidth) / 2;
-        int textY = costBoxY + 16;
+        int textY = costBoxY + costBoxHeight - 3;
 
         g.setColor(Color.BLACK);
         g.drawString(costText, textX, textY);
