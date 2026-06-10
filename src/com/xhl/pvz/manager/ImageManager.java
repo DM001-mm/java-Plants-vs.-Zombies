@@ -238,6 +238,18 @@ public class ImageManager {
         );
 
         loadFrames(
+                ImageKeys.ANIM_NORMAL_ZOMBIE_WALK_DAMAGED,
+                "resources/images/zombie/normal_zombie/walk_damaged",
+                22
+        );
+
+        loadFrames(
+                ImageKeys.ANIM_NORMAL_ZOMBIE_ATTACK_DAMAGED,
+                "resources/images/zombie/normal_zombie/attack_damaged",
+                21
+        );
+
+        loadFrames(
                 ImageKeys.ANIM_NORMAL_ZOMBIE_DIE,
                 "resources/images/zombie/normal_zombie/die",
                 10

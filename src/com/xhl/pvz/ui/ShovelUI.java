@@ -4,6 +4,7 @@ import com.xhl.pvz.manager.ImageManager;
 import com.xhl.pvz.resource.ImageKeys;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -43,15 +44,25 @@ public class ShovelUI {
 
     private void drawFallback(Graphics2D g) {
         Color oldColor = g.getColor();
+        Font oldFont = g.getFont();
 
-        g.setColor(Color.LIGHT_GRAY);
-        g.fillRect(x, y, width, height);
+        g.setColor(new Color(210, 190, 150));
+        g.fillRoundRect(x, y, width, height, 10, 10);
 
         g.setColor(Color.BLACK);
-        g.drawRect(x, y, width, height);
-        g.drawString("铲子", x + 10, y + height / 2);
+        g.drawRoundRect(x, y, width, height, 10, 10);
+
+        g.setFont(new Font("Microsoft YaHei", Font.BOLD, 13));
+
+        String text = "铲";
+        int textWidth = g.getFontMetrics().stringWidth(text);
+        int textX = x + (width - textWidth) / 2;
+        int textY = y + height / 2 + 5;
+
+        g.drawString(text, textX, textY);
 
         g.setColor(oldColor);
+        g.setFont(oldFont);
     }
 
     private void drawSelectedBorder(Graphics2D g) {

@@ -20,13 +20,22 @@ public class NormalZombie extends Zombie {
     private static final int STATE_ATTACK = 1;
     private static final int STATE_DIE = 2;
 
+    private enum DamageStage {
+        NORMAL,
+        DAMAGED
+    }
+
     private int state = STATE_WALK;
+    private DamageStage damageStage = DamageStage.NORMAL;
 
     private BufferedImage fallbackImage;
 
     private Animation walkAnimation; // 有三种动作就会有三种动画帧组
     private Animation attackAnimation;
     private Animation dieAnimation;
+
+    private Animation damagedWalkAnimation;
+    private Animation damagedAttackAnimation;
 
     private AnimationPlayer animationPlayer; // 类似于 插槽机制
 
@@ -80,6 +89,22 @@ public class NormalZombie extends Zombie {
             );
         }
 
+        if (ImageManager.hasFrames(ImageKeys.ANIM_NORMAL_ZOMBIE_WALK_DAMAGED)) {
+            damagedWalkAnimation = new Animation(
+                    ImageManager.getFrames(ImageKeys.ANIM_NORMAL_ZOMBIE_WALK_DAMAGED),
+                    5,
+                    true
+            );
+        }
+
+        if (ImageManager.hasFrames(ImageKeys.ANIM_NORMAL_ZOMBIE_ATTACK_DAMAGED)) {
+            damagedAttackAnimation = new Animation(
+                    ImageManager.getFrames(ImageKeys.ANIM_NORMAL_ZOMBIE_ATTACK_DAMAGED),
+                    5,
+                    true
+            );
+        }
+
         if (ImageManager.hasFrames(ImageKeys.ANIM_NORMAL_ZOMBIE_DIE)) {
             dieAnimation = new Animation(
                     ImageManager.getFrames(ImageKeys.ANIM_NORMAL_ZOMBIE_DIE),
@@ -95,12 +120,12 @@ public class NormalZombie extends Zombie {
 
     @Override
     public void update(LevelContext context) { 
-        updateHurtFlash();
-
         if (state == STATE_DIE) {
             updateDieAnimation();
             return;
         }
+
+        updateDamageStage();
 
         Plant collidingPlant = context.getEntityManager().getCollidingPlant(this);
 
@@ -152,17 +177,61 @@ public class NormalZombie extends Zombie {
 
         state = newState;
 
+        refreshAnimationByState();
+    }
+
+    private void updateDamageStage() {
+        if (state == STATE_DIE) {
+            return;
+        }
+
+        DamageStage oldStage = damageStage;
+
+        if (hp <= maxHp / 2) {
+            damageStage = DamageStage.DAMAGED;
+        } else {
+            damageStage = DamageStage.NORMAL;
+        }
+
+        if (oldStage != damageStage) {
+            refreshAnimationByState();
+        }
+    }
+
+    private void refreshAnimationByState() {
         if (animationPlayer == null) {
             return;
         }
 
-        if (state == STATE_WALK && walkAnimation != null) {
-            animationPlayer.setAnimation(walkAnimation);
-        } else if (state == STATE_ATTACK && attackAnimation != null) {
-            animationPlayer.setAnimation(attackAnimation);
-        } else if (state == STATE_DIE && dieAnimation != null) {
-            animationPlayer.setAnimation(dieAnimation);
+        Animation targetAnimation = getAnimationForCurrentState();
+
+        if (targetAnimation != null) {
+            animationPlayer.setAnimation(targetAnimation);
         }
+    }
+
+    private Animation getAnimationForCurrentState() {
+        if (state == STATE_DIE) {
+            return dieAnimation;
+        }
+
+        if (state == STATE_WALK) {
+            if (damageStage == DamageStage.DAMAGED && damagedWalkAnimation != null) {
+                return damagedWalkAnimation;
+            }
+
+            return walkAnimation;
+        }
+
+        if (state == STATE_ATTACK) {
+            if (damageStage == DamageStage.DAMAGED && damagedAttackAnimation != null) {
+                return damagedAttackAnimation;
+            }
+
+            return attackAnimation;
+        }
+
+        return null;
     }
 
     private void updateAnimation() {
@@ -201,7 +270,6 @@ public class NormalZombie extends Zombie {
         }
 
         deathFallbackTimer = 0;
-        hurtFlashTimer = 0;
 
         changeState(STATE_DIE);
 
@@ -236,7 +304,6 @@ public class NormalZombie extends Zombie {
         }
 
         renderDeathFallbackOverlay(g);
-        renderHurtFlash(g);
     }
 
     private void renderDeathFallbackOverlay(Graphics2D g) {
@@ -250,7 +317,7 @@ public class NormalZombie extends Zombie {
 
         Color oldColor = g.getColor();
 
-        g.setColor(new Color(120, 0, 0, 120));
+        g.setColor(new Color(60, 60, 60, 130));
         g.fillRect((int) x, (int) y, width, height);
 
         g.setColor(oldColor);

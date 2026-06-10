@@ -117,7 +117,7 @@ public class LevelScene extends BaseScene {
             GameConfig.LAWN_CELL_WIDTH,
             GameConfig.LAWN_CELL_HEIGHT
         );
-        shovelUI = new ShovelUI(GameConfig.WINDOW_WIDTH - 90, 15, 70, 70);
+        shovelUI = new ShovelUI(575, 14, 46, 46);
         shovelMode = false;
         if (ImageManager.hasImage(ImageKeys.BACKGROUND_LAWN_DAY)) {
             background = ImageManager.getImage(ImageKeys.BACKGROUND_LAWN_DAY);
@@ -132,7 +132,7 @@ public class LevelScene extends BaseScene {
 
         sunBankUI = new SunBankUI(20, 15, 120, 60, sunResource);
 
-        seedBankUI = new SeedBankUI(150, 5, 560, 110);
+        seedBankUI = new SeedBankUI(150, 4, 410, 80);
 
         plantSelectionUI = new PlantSelectionUI(
                 PlantRegistry.getSelectablePlantTypes(),
@@ -383,14 +383,14 @@ public class LevelScene extends BaseScene {
     private void buildCardBarFromSelection(List<String> selectedPlantTypes) {
         cardBarUI = new CardBarUI();
 
-        int startX = 170;
-        int startY = 15;
-        int gap = 80;
+        int startX = 165;
+        int startY = 10;
+        int gap = 62;
 
         for (int i = 0; i < selectedPlantTypes.size(); i++) {
             String plantType = selectedPlantTypes.get(i);
 
-            PlantCard card = PlantCardFactory.createCard(
+            PlantCard card = PlantCardFactory.createBattleCard(
                     plantType,
                     startX + i * gap,
                     startY
