@@ -9,6 +9,19 @@ public class PlantCardFactory {
     private PlantCardFactory() {
     }
 
+    public static PlantCard createCard(String plantType, int x, int y) {
+        if (PlantFactory.PEASHOOTER.equals(plantType)) {
+            return createPeashooterCard(x, y);
+        }
+
+        if (PlantFactory.SUNFLOWER.equals(plantType)) {
+            return createSunflowerCard(x, y);
+        }
+
+        System.out.println("未知植物卡片类型: " + plantType);
+        return null;
+    }
+
     public static PlantCard createPeashooterCard(int x, int y) {
         return new PlantCard(
                 PlantFactory.PEASHOOTER,

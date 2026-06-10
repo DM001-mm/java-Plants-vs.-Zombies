@@ -20,6 +20,9 @@ public class GameConfig {
      * LEVEL_CAMERA_X 表示镜头从背景图的哪个 x 坐标开始看。
      */
     public static final int LEVEL_CAMERA_X = 120;
+    public static final int LEVEL_CAMERA_LAWN_X = LEVEL_CAMERA_X;
+    public static final int LEVEL_CAMERA_ROAD_X = 420;
+    public static final int LEVEL_CAMERA_SPEED = 16;
 
     /**
      * 这些是背景图原始坐标，也就是世界坐标。
