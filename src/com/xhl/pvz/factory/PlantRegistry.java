@@ -1,8 +1,12 @@
 package com.xhl.pvz.factory;
 
+import com.xhl.pvz.entity.plant.CherryBomb;
+import com.xhl.pvz.entity.plant.IceShooter;
 import com.xhl.pvz.entity.plant.Peashooter;
 import com.xhl.pvz.entity.plant.Plant;
+import com.xhl.pvz.entity.plant.PotatoMine;
 import com.xhl.pvz.entity.plant.Sunflower;
+import com.xhl.pvz.entity.plant.Walnut;
 import com.xhl.pvz.model.PlantDefinition;
 import com.xhl.pvz.resource.ImageKeys;
 
@@ -16,6 +20,10 @@ public class PlantRegistry {
 
     public static final String PEASHOOTER = "peashooter";
     public static final String SUNFLOWER = "Sunflower";
+    public static final String ICE_SHOOTER = "IceShooter";
+    public static final String CHERRY_BOMB = "CherryBomb";
+    public static final String WALNUT = "Walnut";
+    public static final String POTATO_MINE = "PotatoMine";
 
     private static final Map<String, PlantDefinition> DEFINITIONS =
             new LinkedHashMap<>();
@@ -41,6 +49,46 @@ public class PlantRegistry {
                 ImageKeys.CARD_SUNFLOWER,
                 true,
                 Sunflower::new
+        ));
+
+        register(IceShooter.class, new PlantDefinition(
+                ICE_SHOOTER,
+                "寒冰射手",
+                175,
+                150,
+                ImageKeys.CARD_SNOW_PEASHOOTER,
+                true,
+                IceShooter::new
+        ));
+
+        register(CherryBomb.class, new PlantDefinition(
+                CHERRY_BOMB,
+                "樱桃炸弹",
+                150,
+                600,
+                ImageKeys.CARD_CHERRY_BOMB,
+                true,
+                CherryBomb::new
+        ));
+
+        register(Walnut.class, new PlantDefinition(
+                WALNUT,
+                "坚果墙",
+                50,
+                300,
+                ImageKeys.CARD_WALLNUT,
+                true,
+                Walnut::new
+        ));
+
+        register(PotatoMine.class, new PlantDefinition(
+                POTATO_MINE,
+                "土豆雷",
+                25,
+                300,
+                ImageKeys.CARD_POTATO_MINE,
+                true,
+                PotatoMine::new
         ));
     }
 

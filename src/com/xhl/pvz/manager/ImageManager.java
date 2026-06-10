@@ -77,6 +77,7 @@ public class ImageManager {
         loadImage(ImageKeys.CARD_CHERRY_BOMB, "resources/images/card/cherry_bomb_card.png");
         loadImage(ImageKeys.CARD_WALLNUT, "resources/images/card/wallnut_card.png");
         loadImage(ImageKeys.CARD_SNOW_PEASHOOTER, "resources/images/card/snow_peashooter.png");
+        loadImage(ImageKeys.CARD_POTATO_MINE, "resources/images/card/potato_mine_card.png");
     }
 
     private static void loadBullets() {
