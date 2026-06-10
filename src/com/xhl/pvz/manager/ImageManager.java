@@ -84,6 +84,12 @@ public class ImageManager {
         loadImage(ImageKeys.BULLET_PEA_HIT, "resources/images/bullets/pea_hit.png");
         loadImage(ImageKeys.BULLET_SNOW_PEA, "resources/images/bullets/snow_pea.png");
         loadImage(ImageKeys.BULLET_SNOW_PEA_HIT, "resources/images/bullets/snow_pea_hit.png");
+
+        loadFrames(
+                ImageKeys.ANIM_PEA_HIT,
+                "resources/images/bullets/pea_hit",
+                10
+        );
     }
 
     private static void loadItems() {

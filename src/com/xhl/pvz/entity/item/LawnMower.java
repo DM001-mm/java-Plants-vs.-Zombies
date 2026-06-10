@@ -54,7 +54,7 @@ public class LawnMower extends Entity {
                 continue;
             }
 
-            if (getBounds().intersects(zombie.getBounds())) {
+            if (getCollisionBounds().intersects(zombie.getCollisionBounds())) {
                 activate();
                 return;
             }
@@ -81,7 +81,7 @@ public class LawnMower extends Entity {
                 continue;
             }
 
-            if (getBounds().intersects(zombie.getBounds())) {
+            if (getCollisionBounds().intersects(zombie.getCollisionBounds())) {
                 zombie.setAlive(false);
                 System.out.println("小推车消灭僵尸");
             }

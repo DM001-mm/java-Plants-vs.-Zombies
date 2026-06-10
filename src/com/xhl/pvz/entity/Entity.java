@@ -28,6 +28,10 @@ public abstract class Entity {
         return new Rectangle((int)x,(int)y,width,height);
     }
 
+    public Rectangle getCollisionBounds(){
+        return getBounds();
+    }
+
     // public boolean isAlive(){
     //     return alive;
     // }
@@ -50,4 +54,3 @@ public abstract class Entity {
         return height;
     }
 }
-

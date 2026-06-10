@@ -31,4 +31,12 @@ public abstract class Bullet extends Entity {
     public int getDamage() {
         return damage;
     }
+
+    public boolean canHit() {
+        return isAlive();
+    }
+
+    public void onHit() {
+        setAlive(false);
+    }
 }

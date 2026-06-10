@@ -70,7 +70,7 @@ public class EntityManager {
                 continue;
             }
 
-            if (zombie.getBounds().intersects(plant.getBounds())) { // Entity 中方法中的Rectangle 中的函数成员
+            if (zombie.getCollisionBounds().intersects(plant.getCollisionBounds())) { // Entity 中方法中的Rectangle 中的函数成员
                 // 这个方法 是为了判断两个Rectangle类会不会重叠
                 return plant;
             }

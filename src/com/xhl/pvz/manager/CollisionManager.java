@@ -21,6 +21,10 @@ public class CollisionManager {
                 continue ;
             }
 
+            if(!bullet.canHit()){
+                continue ;
+            }
+
             for(Zombie zombie:entityManager.getZombies()){
                 if(!zombie.isAlive()){
                     continue ;
@@ -30,9 +34,9 @@ public class CollisionManager {
                     continue ;
                 }
                 
-                if (bullet.getBounds().intersects(zombie.getBounds())) {
+                if (bullet.getCollisionBounds().intersects(zombie.getCollisionBounds())) {
                     zombie.takeDamage(bullet.getDamage());
-                    bullet.setAlive(false);
+                    bullet.onHit();
 
                     AudioManager.playEffect("pea_hit");
 

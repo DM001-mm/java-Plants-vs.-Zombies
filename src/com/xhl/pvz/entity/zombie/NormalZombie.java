@@ -9,9 +9,12 @@ import com.xhl.pvz.manager.ImageManager;
 import com.xhl.pvz.resource.ImageKeys;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 public class NormalZombie extends Zombie {
+
+    private static final int VISUAL_Y_OFFSET = 15;
 
     private static final int STATE_WALK = 0;
     private static final int STATE_ATTACK = 1;
@@ -34,9 +37,9 @@ public class NormalZombie extends Zombie {
         super(
                 row,
                 x,
-                y,
-                80,
+                y - VISUAL_Y_OFFSET,
                 100,
+                120,
                 270,
                 0.5,
                 20
@@ -44,6 +47,11 @@ public class NormalZombie extends Zombie {
 
         loadImages();
         loadAnimations();
+    }
+
+    @Override
+    public double getY() {
+        return y + VISUAL_Y_OFFSET;
     }
 
     private void loadImages() {
@@ -227,5 +235,15 @@ public class NormalZombie extends Zombie {
         g.drawRect((int) x, (int) y, width, height);
 
         g.setColor(oldColor);
+    }
+
+    @Override
+    public Rectangle getCollisionBounds() {
+        return new Rectangle(
+                (int) x + 38,
+                (int) y + 20,
+                width - 55,
+                height - 30
+        );
     }
 }
