@@ -56,6 +56,7 @@ public class LevelScene extends BaseScene {
     }
 
     private final SceneManager sceneManager;
+    private boolean loadOnEnter = false;
 
     private BufferedImage background;
 
@@ -91,8 +92,14 @@ public class LevelScene extends BaseScene {
     private ShovelUI shovelUI;
     private boolean shovelMode = false;
     private LevelProgressUI levelProgressUI;
+
     public LevelScene(SceneManager sceneManager) {
         this.sceneManager = sceneManager;
+    }
+
+    public LevelScene(SceneManager sceneManager, boolean loadOnEnter) {
+        this.sceneManager = sceneManager;
+        this.loadOnEnter = loadOnEnter;
     }
 
     @Override
@@ -162,6 +169,10 @@ public class LevelScene extends BaseScene {
         selectedCard = null;
 
         AudioManager.playBGM("level_day");
+
+        if (loadOnEnter) {
+            loadGame();
+        }
     }
 
     @Override
@@ -366,11 +377,6 @@ public class LevelScene extends BaseScene {
 
         if (keyCode == KeyEvent.VK_S) {
             saveGame();
-            return;
-        }
-
-        if (keyCode == KeyEvent.VK_L) {
-            loadGame();
         }
     }
 
@@ -462,16 +468,15 @@ public class LevelScene extends BaseScene {
             return;
         }
 
-        if (pauseMenuUI.isLoadButtonClicked(x, y)) {
-            loadGame();
-            AudioManager.playEffect("click");
-            paused = false;
-            return;
-        }
-
         if (pauseMenuUI.isMenuButtonClicked(x, y)) {
             AudioManager.playEffect("click");
             sceneManager.changeScene(new MainMenuScene(sceneManager));
+            return;
+        }
+
+        if (pauseMenuUI.isExitButtonClicked(x, y)) {
+            AudioManager.playEffect("click");
+            System.exit(0);
         }
     }
 

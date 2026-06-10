@@ -1,6 +1,7 @@
 package com.xhl.pvz.ui;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -47,6 +48,7 @@ public class PlantCard {
         }
         
         drawCooldownMask(g);
+        drawCost(g);
         drawSelectedBorder(g);
     }
 
@@ -65,6 +67,34 @@ public class PlantCard {
             g.fillRect(x,y,width,maskHeight);
             g.setColor(oldColor);
         }
+    }
+
+    private void drawCost(Graphics2D g) {
+        Color oldColor = g.getColor();
+        Font oldFont = g.getFont();
+
+        int costBoxHeight = 22;
+        int costBoxY = y + height - costBoxHeight;
+
+        g.setColor(new Color(245, 220, 120, 220));
+        g.fillRect(x, costBoxY, width, costBoxHeight);
+
+        g.setColor(Color.BLACK);
+        g.drawRect(x, costBoxY, width, costBoxHeight);
+
+        String costText = String.valueOf(cost);
+
+        g.setFont(new Font("Microsoft YaHei", Font.BOLD, 16));
+        int textWidth = g.getFontMetrics().stringWidth(costText);
+
+        int textX = x + (width - textWidth) / 2;
+        int textY = costBoxY + 16;
+
+        g.setColor(Color.BLACK);
+        g.drawString(costText, textX, textY);
+
+        g.setColor(oldColor);
+        g.setFont(oldFont);
     }
 
     private void drawSelectedBorder(Graphics2D g){

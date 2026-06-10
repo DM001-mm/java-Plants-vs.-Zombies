@@ -10,8 +10,8 @@ public class PauseMenuUI {
 
     private UIButton continueButton;
     private UIButton saveButton;
-    private UIButton loadButton;
     private UIButton menuButton;
+    private UIButton exitButton;
 
     public PauseMenuUI() {
         continueButton = new UIButton(
@@ -34,23 +34,23 @@ public class PauseMenuUI {
                         : null
         );
 
-        loadButton = new UIButton(
-                340,
-                340,
-                220,
-                60,
-                ImageManager.hasImage(ImageKeys.UI_LOAD_BUTTON)
-                        ? ImageManager.getImage(ImageKeys.UI_LOAD_BUTTON)
-                        : null
-        );
-
         menuButton = new UIButton(
                 340,
-                420,
+                340,
                 220,
                 60,
                 ImageManager.hasImage(ImageKeys.UI_MENU_BUTTON)
                         ? ImageManager.getImage(ImageKeys.UI_MENU_BUTTON)
+                        : null
+        );
+
+        exitButton = new UIButton(
+                340,
+                420,
+                220,
+                60,
+                ImageManager.hasImage(ImageKeys.UI_EXIT_BUTTON)
+                        ? ImageManager.getImage(ImageKeys.UI_EXIT_BUTTON)
                         : null
         );
     }
@@ -61,8 +61,8 @@ public class PauseMenuUI {
 
         continueButton.render(g);
         saveButton.render(g);
-        loadButton.render(g);
         menuButton.render(g);
+        exitButton.render(g);
 
         drawFallbackText(g);
     }
@@ -103,12 +103,12 @@ public class PauseMenuUI {
             g.drawString("保存游戏", 400, 300);
         }
 
-        if (!ImageManager.hasImage(ImageKeys.UI_LOAD_BUTTON)) {
-            g.drawString("读取存档", 400, 380);
+        if (!ImageManager.hasImage(ImageKeys.UI_MENU_BUTTON)) {
+            g.drawString("返回主菜单", 390, 380);
         }
 
-        if (!ImageManager.hasImage(ImageKeys.UI_MENU_BUTTON)) {
-            g.drawString("返回主菜单", 390, 460);
+        if (!ImageManager.hasImage(ImageKeys.UI_EXIT_BUTTON)) {
+            g.drawString("退出游戏", 400, 460);
         }
 
         g.setColor(oldColor);
@@ -123,11 +123,11 @@ public class PauseMenuUI {
         return saveButton.contains(x, y);
     }
 
-    public boolean isLoadButtonClicked(int x, int y) {
-        return loadButton.contains(x, y);
-    }
-
     public boolean isMenuButtonClicked(int x, int y) {
         return menuButton.contains(x, y);
+    }
+
+    public boolean isExitButtonClicked(int x, int y) {
+        return exitButton.contains(x, y);
     }
 }
