@@ -2,6 +2,7 @@ package com.xhl.pvz.manager;
 
 import com.xhl.pvz.core.LevelContext;
 import com.xhl.pvz.entity.bullet.Bullet;
+import com.xhl.pvz.entity.item.LawnMower;
 import com.xhl.pvz.entity.item.Sun;
 import com.xhl.pvz.entity.plant.Plant;
 import com.xhl.pvz.entity.zombie.Zombie;
@@ -18,6 +19,7 @@ public class EntityManager {
     private final List<Sun> suns = new ArrayList<>();
     private final List<Zombie> zombies = new ArrayList<>();
     private final List<Bullet> bullets = new ArrayList<>();
+    private final List<LawnMower> lawnMowers = new ArrayList<>();
 
     public void addPlant(Plant plant){
         if(plant !=null){
@@ -27,6 +29,11 @@ public class EntityManager {
     public void addZombie(Zombie zombie) {
         if (zombie != null) {
             zombies.add(zombie);
+        }
+    }
+    public void addLawnMower(LawnMower lawnMower) {
+        if (lawnMower != null) {
+            lawnMowers.add(lawnMower);
         }
     }
     public void updateAll(LevelContext context){
@@ -41,6 +48,9 @@ public class EntityManager {
         }
         for (Bullet bullet : bullets) {
             bullet.update(context);
+        }
+        for (LawnMower lawnMower : lawnMowers) {
+            lawnMower.update(context);
         }
         // removeDeadEntities();
     }
@@ -69,6 +79,9 @@ public class EntityManager {
         return null;
     }
     public void renderAll(Graphics2D g){
+        for (LawnMower lawnMower : lawnMowers) {
+            lawnMower.render(g);
+        }
         for(Plant plant:plants){
             plant.render(g);
         }
@@ -129,6 +142,15 @@ public class EntityManager {
                 sunIterator.remove();
             }
         }
+        Iterator<LawnMower> lawnMowerIterator = lawnMowers.iterator();
+
+        while (lawnMowerIterator.hasNext()) {
+            LawnMower lawnMower = lawnMowerIterator.next();
+
+            if (!lawnMower.isAlive()) {
+                lawnMowerIterator.remove();
+            }
+        }
     }
     public boolean hasPlantAt(int row,int col){ // 这个函数的 功能是什么 ? 这个函数 应该是检测点击的 这个 位置有没有 植物
 
@@ -180,11 +202,15 @@ public class EntityManager {
     public List<Sun> getSuns() {
         return suns;
     }
+    public List<LawnMower> getLawnMowers() {
+        return lawnMowers;
+    }
     public void clearAll() {
         plants.clear();
         zombies.clear();
         bullets.clear();
         suns.clear();
+        lawnMowers.clear();
     }
     public void removePlantAt(int row, int col) {
         Plant plant = getPlantAt(row, col);

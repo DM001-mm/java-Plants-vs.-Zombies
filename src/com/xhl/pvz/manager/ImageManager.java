@@ -87,6 +87,7 @@ public class ImageManager {
 
     private static void loadItems() {
         loadImage(ImageKeys.ITEM_SUN_STATIC, "resources/images/items/sun_static.png");
+        loadImage(ImageKeys.ITEM_LAWN_MOWER, "resources/images/items/lawn_mower.png");
 
         loadFrames(
                 ImageKeys.ANIM_SUN,

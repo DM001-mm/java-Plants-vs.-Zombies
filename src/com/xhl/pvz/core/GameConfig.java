@@ -38,6 +38,9 @@ public class GameConfig {
 
     public static final int SUN_SIZE = 40;
 
+    public static final int LAWN_MOWER_WIDTH = 70;
+    public static final int LAWN_MOWER_HEIGHT = 60;
+
     /**
      * 僵尸从草坪右侧外面一点进入，而不是从整张背景图最右边进来。
      */

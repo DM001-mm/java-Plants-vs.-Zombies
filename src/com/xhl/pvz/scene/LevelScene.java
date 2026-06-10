@@ -4,6 +4,7 @@ import com.xhl.pvz.core.GameConfig;
 import com.xhl.pvz.core.LevelContext;
 import com.xhl.pvz.core.SceneManager;
 import com.xhl.pvz.entity.bullet.Bullet;
+import com.xhl.pvz.entity.item.LawnMower;
 import com.xhl.pvz.entity.item.Sun;
 import com.xhl.pvz.entity.plant.Plant;
 import com.xhl.pvz.entity.zombie.Zombie;
@@ -90,6 +91,7 @@ public class LevelScene extends BaseScene {
 
         entityManager = new EntityManager();
         collisionManager = new CollisionManager(entityManager);
+        initLawnMowers();
 
         sunResource = new SunResource(150);
         levelContext = new LevelContext(entityManager, sunResource);
@@ -396,6 +398,18 @@ public class LevelScene extends BaseScene {
         }
     }
 
+    private void initLawnMowers() {
+        int mowerX = grid.getStartX() - GameConfig.LAWN_MOWER_WIDTH - 15;
+
+        for (int row = 0; row < grid.getRowCount(); row++) {
+            int mowerY = grid.getCellY(row)
+                    + (grid.getCellHeight() - GameConfig.LAWN_MOWER_HEIGHT) / 2;
+
+            LawnMower lawnMower = new LawnMower(row, mowerX, mowerY);
+            entityManager.addLawnMower(lawnMower);
+        }
+    }
+
     private void checkLevelResult() {
         if (levelContext.isGameOverRequested()) {
             sceneManager.changeScene(new GameOverScene(sceneManager));
@@ -470,6 +484,7 @@ public class LevelScene extends BaseScene {
         }
 
         entityManager.clearAll();
+        initLawnMowers();
 
         sunResource.setAmount(saveData.getSunAmount());
         levelManager.setTick(saveData.getLevelTick());
