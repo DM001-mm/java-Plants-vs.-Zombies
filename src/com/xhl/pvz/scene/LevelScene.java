@@ -31,6 +31,7 @@ import com.xhl.pvz.ui.CardBarUI;
 import com.xhl.pvz.ui.LevelProgressUI;
 import com.xhl.pvz.ui.PauseMenuUI;
 import com.xhl.pvz.ui.PlantCard;
+import com.xhl.pvz.ui.SeedBankUI;
 import com.xhl.pvz.ui.ShovelUI;
 import com.xhl.pvz.ui.StatusMessageUI;
 import com.xhl.pvz.ui.SunBankUI;
@@ -54,6 +55,7 @@ public class LevelScene extends BaseScene {
 
     private SunResource sunResource;
     private SunBankUI sunBankUI;
+    private SeedBankUI seedBankUI;
     private SkySunSpawner skySunSpawner;
 
     private CardBarUI cardBarUI;
@@ -98,9 +100,11 @@ public class LevelScene extends BaseScene {
 
         sunBankUI = new SunBankUI(20, 15, 120, 60, sunResource);
 
+        seedBankUI = new SeedBankUI(150, 5, 560, 110);
+
         cardBarUI = new CardBarUI();
-        cardBarUI.addCard(PlantCardFactory.createPeashooterCard(160, 15));
-        cardBarUI.addCard(PlantCardFactory.createSunflowerCard(240, 15));
+        cardBarUI.addCard(PlantCardFactory.createPeashooterCard(170, 15));
+        cardBarUI.addCard(PlantCardFactory.createSunflowerCard(250, 15));
 
         levelManager = new LevelManager(
                 grid.getStartY(),
@@ -170,6 +174,11 @@ public class LevelScene extends BaseScene {
         worldG.dispose();
 
         sunBankUI.render(g);
+
+        if (seedBankUI != null) {
+            seedBankUI.render(g);
+        }
+
         cardBarUI.render(g);
 
         if (shovelUI != null) {

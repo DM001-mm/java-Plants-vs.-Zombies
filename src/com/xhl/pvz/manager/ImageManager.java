@@ -61,6 +61,7 @@ public class ImageManager {
         loadImage(ImageKeys.UI_MENU_BUTTON, "resources/images/ui/menu_button.png");
         loadImage(ImageKeys.UI_RESTART_BUTTON, "resources/images/ui/restart_button.png");
         loadImage(ImageKeys.UI_SUN_BANK, "resources/images/ui/sun_bank.png");
+        loadImage(ImageKeys.UI_SEED_BANK, "resources/images/ui/seed_bank.png");
         loadImage(ImageKeys.UI_COOLDOWN_MASK, "resources/images/ui/cooldown_mask.png");
         loadImage(ImageKeys.UI_SHOVEL, "resources/images/ui/shovel.png");
         loadImage(ImageKeys.UI_SHOVEL_SLOT, "resources/images/ui/shovel_slot.png");
