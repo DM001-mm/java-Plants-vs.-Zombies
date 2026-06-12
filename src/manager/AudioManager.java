@@ -62,6 +62,7 @@ public class AudioManager {
         stopBGM();
 
         String path = bgmPaths.get(key);
+        System.out.println("Play BGM key = " + key + ", path = " + path);
 
         if (path == null) {
             System.out.println("BGM key not found: " + key);
@@ -109,6 +110,7 @@ public class AudioManager {
         }
 
         String path = effectPaths.get(key);
+        System.out.println("Play effect key = " + key + ", path = " + path);
 
         if (path == null) {
             System.out.println("Effect key not found: " + key);

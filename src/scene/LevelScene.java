@@ -292,7 +292,7 @@ public class LevelScene extends BaseScene {
         }
 
         if (cardBarUI != null) {
-            cardBarUI.render(g);
+            cardBarUI.render(g, sunResource.getAmount());
         }
 
         if (shovelUI != null) {
@@ -645,6 +645,12 @@ public class LevelScene extends BaseScene {
         saveData.setSunAmount(sunResource.getAmount());
         saveData.setLevelTick(levelManager.getTick());
 
+        if (cardBarUI != null) {
+            for (PlantCard card : cardBarUI.getCards()) {
+                saveData.addSelectedPlantType(card.getPlantType());
+            }
+        }
+
         for (Plant plant : entityManager.getPlants()) {
             PlantSaveData plantSaveData = new PlantSaveData(
                     PlantFactory.getPlantType(plant),
@@ -741,7 +747,11 @@ public class LevelScene extends BaseScene {
             entityManager.addSun(sun);
         }
 
-        if (cardBarUI == null) {
+        List<String> savedPlantTypes = saveData.getSelectedPlantTypes();
+
+        if (savedPlantTypes != null && !savedPlantTypes.isEmpty()) {
+            buildCardBarFromSelection(savedPlantTypes);
+        } else {
             buildCardBarFromSelection(PlantRegistry.getDefaultPlantTypes());
         }
 

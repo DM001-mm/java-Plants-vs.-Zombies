@@ -18,8 +18,12 @@ public class CardBarUI {
         }
     }
     public void render(Graphics2D g) {
+        render(g, Integer.MAX_VALUE);
+    }
+
+    public void render(Graphics2D g, int currentSun) {
         for (PlantCard card : cards) {
-            card.render(g);
+            card.render(g, currentSun);
         }
     }
     public PlantCard getClickedCard(int x, int y) {

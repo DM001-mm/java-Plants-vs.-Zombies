@@ -81,6 +81,13 @@ public class ImageManager {
         loadImage(ImageKeys.CARD_WALLNUT, "resources/images/card/wallnut_card.png");
         loadImage(ImageKeys.CARD_SNOW_PEASHOOTER, "resources/images/card/snow_peashooter.png");
         loadImage(ImageKeys.CARD_POTATO_MINE, "resources/images/card/potato_mine_card.png");
+
+        loadImage(ImageKeys.CARD_PEASHOOTER_DISABLED, "resources/images/card/gray/peashooter_card_gray.png");
+        loadImage(ImageKeys.CARD_SUNFLOWER_DISABLED, "resources/images/card/gray/sunflower_card_gray.png");
+        loadImage(ImageKeys.CARD_CHERRY_BOMB_DISABLED, "resources/images/card/gray/cherry_bomb_card_gray.png");
+        loadImage(ImageKeys.CARD_WALLNUT_DISABLED, "resources/images/card/gray/wallnut_card_gray.png");
+        loadImage(ImageKeys.CARD_SNOW_PEASHOOTER_DISABLED, "resources/images/card/gray/snow_peashooter_gray.png");
+        loadImage(ImageKeys.CARD_POTATO_MINE_DISABLED, "resources/images/card/gray/potato_mine_card_gray.png");
     }
 
     private static void loadBullets() {

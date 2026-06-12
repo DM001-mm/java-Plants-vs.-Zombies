@@ -37,6 +37,7 @@ public class PlantRegistry {
                 100,
                 150,
                 ImageKeys.CARD_PEASHOOTER,
+                ImageKeys.CARD_PEASHOOTER_DISABLED,
                 true,
                 Peashooter::new
         ));
@@ -47,6 +48,7 @@ public class PlantRegistry {
                 50,
                 150,
                 ImageKeys.CARD_SUNFLOWER,
+                ImageKeys.CARD_SUNFLOWER_DISABLED,
                 true,
                 Sunflower::new
         ));
@@ -57,6 +59,7 @@ public class PlantRegistry {
                 175,
                 150,
                 ImageKeys.CARD_SNOW_PEASHOOTER,
+                ImageKeys.CARD_SNOW_PEASHOOTER_DISABLED,
                 true,
                 IceShooter::new
         ));
@@ -67,6 +70,7 @@ public class PlantRegistry {
                 150,
                 600,
                 ImageKeys.CARD_CHERRY_BOMB,
+                ImageKeys.CARD_CHERRY_BOMB_DISABLED,
                 true,
                 CherryBomb::new
         ));
@@ -77,6 +81,7 @@ public class PlantRegistry {
                 50,
                 300,
                 ImageKeys.CARD_WALLNUT,
+                ImageKeys.CARD_WALLNUT_DISABLED,
                 true,
                 Walnut::new
         ));
@@ -87,6 +92,7 @@ public class PlantRegistry {
                 25,
                 300,
                 ImageKeys.CARD_POTATO_MINE,
+                ImageKeys.CARD_POTATO_MINE_DISABLED,
                 true,
                 PotatoMine::new
         ));

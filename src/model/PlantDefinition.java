@@ -13,6 +13,7 @@ public class PlantDefinition {
     private final int cost;
     private final int cooldownTicks;
     private final String cardImageKey;
+    private final String disabledCardImageKey;
     private final boolean selectable;
     private final PlantCreator creator;
 
@@ -22,6 +23,7 @@ public class PlantDefinition {
             int cost,
             int cooldownTicks,
             String cardImageKey,
+            String disabledCardImageKey,
             boolean selectable,
             PlantCreator creator
     ) {
@@ -30,6 +32,7 @@ public class PlantDefinition {
         this.cost = cost;
         this.cooldownTicks = cooldownTicks;
         this.cardImageKey = cardImageKey;
+        this.disabledCardImageKey = disabledCardImageKey;
         this.selectable = selectable;
         this.creator = creator;
     }
@@ -52,6 +55,10 @@ public class PlantDefinition {
 
     public String getCardImageKey() {
         return cardImageKey;
+    }
+
+    public String getDisabledCardImageKey() {
+        return disabledCardImageKey;
     }
 
     public boolean isSelectable() {
