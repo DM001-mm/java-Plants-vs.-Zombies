@@ -29,19 +29,19 @@ public class MainMenuScene extends BaseScene {
         }
         startButton = new UIButton(425,80,390,120,ImageManager.getImage(ImageKeys.UI_START_BUTTON));
         loadButton = new UIButton(
-                510,
-                225,
-                220,
-                60,
+                435,
+                200,
+                370,
+                78,
                 ImageManager.hasImage(ImageKeys.UI_LOAD_BUTTON)
                         ? ImageManager.getImage(ImageKeys.UI_LOAD_BUTTON)
                         : null
         );
         exitButton = new UIButton(
-                510,
-                305,
-                220,
-                60,
+                435,
+                272,
+                370,
+                78,
                 ImageManager.hasImage(ImageKeys.UI_EXIT_BUTTON)
                         ? ImageManager.getImage(ImageKeys.UI_EXIT_BUTTON)
                         : null
