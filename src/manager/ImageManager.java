@@ -282,6 +282,20 @@ public class ImageManager {
                 10
         );
 
+        loadFrames(
+                ImageKeys.ANIM_NORMAL_ZOMBIE_DIE_NORMAL,
+                "resources/images/zombie/normal_zombie/die",
+                10
+        );
+
+        loadPrefixedFrames(
+                ImageKeys.ANIM_NORMAL_ZOMBIE_DIE_EXPLODE,
+                "resources/images/zombie/normal_zombie/die",
+                "died",
+                1,
+                20
+        );
+
         loadPrefixedFrames(
                 ImageKeys.ANIM_CONEHEAD_ZOMBIE_WALK,
                 "resources/images/zombie/conehead_zombie/walk",
@@ -307,6 +321,22 @@ public class ImageManager {
         );
 
         loadPrefixedFrames(
+                ImageKeys.ANIM_CONEHEAD_ZOMBIE_DIE_NORMAL,
+                "resources/images/zombie/conehead_zombie/die",
+                "dieh",
+                1,
+                10
+        );
+
+        loadPrefixedFrames(
+                ImageKeys.ANIM_CONEHEAD_ZOMBIE_DIE_EXPLODE,
+                "resources/images/zombie/conehead_zombie/die",
+                "died",
+                1,
+                20
+        );
+
+        loadPrefixedFrames(
                 ImageKeys.ANIM_BUCKETHEAD_ZOMBIE_WALK,
                 "resources/images/zombie/buckethead_zombie/move",
                 "move",
@@ -324,6 +354,22 @@ public class ImageManager {
 
         loadPrefixedFrames(
                 ImageKeys.ANIM_BUCKETHEAD_ZOMBIE_DIE,
+                "resources/images/zombie/buckethead_zombie/die",
+                "died",
+                1,
+                20
+        );
+
+        loadPrefixedFrames(
+                ImageKeys.ANIM_BUCKETHEAD_ZOMBIE_DIE_NORMAL,
+                "resources/images/zombie/buckethead_zombie/die",
+                "dieh",
+                1,
+                10
+        );
+
+        loadPrefixedFrames(
+                ImageKeys.ANIM_BUCKETHEAD_ZOMBIE_DIE_EXPLODE,
                 "resources/images/zombie/buckethead_zombie/die",
                 "died",
                 1,

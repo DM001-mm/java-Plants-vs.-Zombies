@@ -18,7 +18,8 @@ public class BucketheadZombie extends NormalZombie {
                 ImageKeys.ZOMBIE_BUCKETHEAD_WALK_0,
                 ImageKeys.ANIM_BUCKETHEAD_ZOMBIE_WALK,
                 ImageKeys.ANIM_BUCKETHEAD_ZOMBIE_ATTACK,
-                ImageKeys.ANIM_BUCKETHEAD_ZOMBIE_DIE
+                ImageKeys.ANIM_BUCKETHEAD_ZOMBIE_DIE_NORMAL,
+                ImageKeys.ANIM_BUCKETHEAD_ZOMBIE_DIE_EXPLODE
         );
     }
 }

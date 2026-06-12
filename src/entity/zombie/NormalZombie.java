@@ -33,6 +33,8 @@ public class NormalZombie extends Zombie {
 
     private Animation walkAnimation; // 有三种动作就会有三种动画帧组
     private Animation attackAnimation;
+    private Animation normalDieAnimation;
+    private Animation explosionDieAnimation;
     private Animation dieAnimation;
 
     private Animation damagedWalkAnimation;
@@ -43,7 +45,8 @@ public class NormalZombie extends Zombie {
     private final String fallbackWalkImageKey;
     private final String walkAnimationKey;
     private final String attackAnimationKey;
-    private final String dieAnimationKey;
+    private final String normalDieAnimationKey;
+    private final String explosionDieAnimationKey;
     private final String damagedWalkAnimationKey;
     private final String damagedAttackAnimationKey;
 
@@ -66,7 +69,8 @@ public class NormalZombie extends Zombie {
                 ImageKeys.ZOMBIE_NORMAL_WALK_0,
                 ImageKeys.ANIM_NORMAL_ZOMBIE_WALK,
                 ImageKeys.ANIM_NORMAL_ZOMBIE_ATTACK,
-                ImageKeys.ANIM_NORMAL_ZOMBIE_DIE,
+                ImageKeys.ANIM_NORMAL_ZOMBIE_DIE_NORMAL,
+                ImageKeys.ANIM_NORMAL_ZOMBIE_DIE_EXPLODE,
                 ImageKeys.ANIM_NORMAL_ZOMBIE_WALK_DAMAGED,
                 ImageKeys.ANIM_NORMAL_ZOMBIE_ATTACK_DAMAGED
         );
@@ -84,7 +88,8 @@ public class NormalZombie extends Zombie {
             String fallbackWalkImageKey,
             String walkAnimationKey,
             String attackAnimationKey,
-            String dieAnimationKey
+            String normalDieAnimationKey,
+            String explosionDieAnimationKey
     ) {
         this(
                 row,
@@ -98,7 +103,8 @@ public class NormalZombie extends Zombie {
                 fallbackWalkImageKey,
                 walkAnimationKey,
                 attackAnimationKey,
-                dieAnimationKey,
+                normalDieAnimationKey,
+                explosionDieAnimationKey,
                 null,
                 null
         );
@@ -116,7 +122,8 @@ public class NormalZombie extends Zombie {
             String fallbackWalkImageKey,
             String walkAnimationKey,
             String attackAnimationKey,
-            String dieAnimationKey,
+            String normalDieAnimationKey,
+            String explosionDieAnimationKey,
             String damagedWalkAnimationKey,
             String damagedAttackAnimationKey
     ) {
@@ -134,7 +141,8 @@ public class NormalZombie extends Zombie {
         this.fallbackWalkImageKey = fallbackWalkImageKey;
         this.walkAnimationKey = walkAnimationKey;
         this.attackAnimationKey = attackAnimationKey;
-        this.dieAnimationKey = dieAnimationKey;
+        this.normalDieAnimationKey = normalDieAnimationKey;
+        this.explosionDieAnimationKey = explosionDieAnimationKey;
         this.damagedWalkAnimationKey = damagedWalkAnimationKey;
         this.damagedAttackAnimationKey = damagedAttackAnimationKey;
 
@@ -186,13 +194,23 @@ public class NormalZombie extends Zombie {
             );
         }
 
-        if (ImageManager.hasFrames(dieAnimationKey)) {
-            dieAnimation = new Animation(
-                    ImageManager.getFrames(dieAnimationKey),
+        if (ImageManager.hasFrames(normalDieAnimationKey)) {
+            normalDieAnimation = new Animation(
+                    ImageManager.getFrames(normalDieAnimationKey),
                     5,
                     false
             );
         }
+
+        if (ImageManager.hasFrames(explosionDieAnimationKey)) {
+            explosionDieAnimation = new Animation(
+                    ImageManager.getFrames(explosionDieAnimationKey),
+                    4,
+                    false
+            );
+        }
+
+        dieAnimation = normalDieAnimation;
 
         if (walkAnimation != null) {
             animationPlayer = new AnimationPlayer(walkAnimation);
@@ -352,11 +370,19 @@ public class NormalZombie extends Zombie {
 
         deathFallbackTimer = 0;
 
+        if (getDeathType() == DeathType.EXPLOSION && explosionDieAnimation != null) {
+            dieAnimation = explosionDieAnimation;
+        } else if (normalDieAnimation != null) {
+            dieAnimation = normalDieAnimation;
+        } else {
+            dieAnimation = explosionDieAnimation;
+        }
+
         changeState(STATE_DIE);
 
         AudioManager.playEffect("zombie_die");
 
-        System.out.println("普通僵尸死亡");
+        System.out.println("僵尸死亡，死亡类型: " + getDeathType());
     }
 
     @Override

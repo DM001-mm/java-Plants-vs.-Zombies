@@ -15,6 +15,7 @@ public class CherryBomb extends Plant {
     private static final int STATE_IDLE = 0;
     private static final int STATE_EXPLODING = 1;
     private static final int STATE_DONE = 2;
+    private static final double EXPLOSION_SCALE = 2.4;
 
     private final int fuseTime = 30;
     private final int blastRadius = 160;
@@ -71,7 +72,7 @@ public class CherryBomb extends Plant {
             }
 
             if (blastArea.intersects(zombie.getBounds())) {
-                zombie.takeDamage(9999);
+                zombie.killByExplosion();
             }
         }
     }
@@ -88,7 +89,11 @@ public class CherryBomb extends Plant {
         BufferedImage image = getCurrentImage();
 
         if (image != null) {
-            g.drawImage(image, (int) x, (int) y, width, height, null);
+            if (state == STATE_EXPLODING) {
+                drawExplosion(g, image);
+            } else {
+                g.drawImage(image, (int) x, (int) y, width, height, null);
+            }
             return;
         }
 
@@ -112,5 +117,18 @@ public class CherryBomb extends Plant {
         }
 
         return idleImage;
+    }
+
+    private void drawExplosion(Graphics2D g, BufferedImage image) {
+        int drawW = (int) (width * EXPLOSION_SCALE);
+        int drawH = (int) (height * EXPLOSION_SCALE);
+
+        int centerX = (int) x + width / 2;
+        int centerY = (int) y + height / 2;
+
+        int drawX = centerX - drawW / 2;
+        int drawY = centerY - drawH / 2;
+
+        g.drawImage(image, drawX, drawY, drawW, drawH, null);
     }
 }

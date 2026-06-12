@@ -18,7 +18,8 @@ public class ConeheadZombie extends NormalZombie {
                 ImageKeys.ZOMBIE_CONEHEAD_WALK_0,
                 ImageKeys.ANIM_CONEHEAD_ZOMBIE_WALK,
                 ImageKeys.ANIM_CONEHEAD_ZOMBIE_ATTACK,
-                ImageKeys.ANIM_CONEHEAD_ZOMBIE_DIE
+                ImageKeys.ANIM_CONEHEAD_ZOMBIE_DIE_NORMAL,
+                ImageKeys.ANIM_CONEHEAD_ZOMBIE_DIE_EXPLODE
         );
     }
 }

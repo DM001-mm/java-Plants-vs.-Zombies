@@ -96,7 +96,7 @@ public class LawnMower extends Entity {
             }
 
             if (getCollisionBounds().intersects(zombie.getCollisionBounds())) {
-                zombie.takeDamage(9999);
+                zombie.killNormally();
                 System.out.println("小推车消灭僵尸");
             }
         }

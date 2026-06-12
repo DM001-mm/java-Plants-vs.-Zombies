@@ -58,15 +58,11 @@ public class PlantCard {
         }
         double ratio =(double) currentCooldown/cooldown;
         int maskHeight = (int)(height*ratio);
-        
-        if(cooldownMask!=null){
-            g.drawImage(cooldownMask,x,y,width,maskHeight,null);
-        }else {
-            Color oldColor =g.getColor();
-            g.setColor(new Color(0,0,0,120));
-            g.fillRect(x,y,width,maskHeight);
-            g.setColor(oldColor);
-        }
+
+        Color oldColor =g.getColor();
+        g.setColor(new Color(0,0,0,145));
+        g.fillRect(x,y,width,maskHeight);
+        g.setColor(oldColor);
     }
 
     private void drawCost(Graphics2D g) {
