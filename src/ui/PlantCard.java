@@ -20,11 +20,12 @@ public class PlantCard {
     private int currentCooldown =0;
 
     private BufferedImage image;
+    private BufferedImage disabledImage;
     private BufferedImage cooldownMask;
 
     private boolean selected = false;
 
-    public PlantCard(String plantType,int x,int y,int width,int height,int cost,int cooldown,BufferedImage image,BufferedImage cooldownMask){
+    public PlantCard(String plantType,int x,int y,int width,int height,int cost,int cooldown,BufferedImage image,BufferedImage disabledImage,BufferedImage cooldownMask){
         this.plantType = plantType;
         this.x=x;
         this.y=y;
@@ -33,6 +34,7 @@ public class PlantCard {
         this.cost =cost;
         this.cooldown = cooldown;
         this.image= image;
+        this.disabledImage = disabledImage;
         this.cooldownMask=cooldownMask;
     }
 
@@ -43,8 +45,23 @@ public class PlantCard {
     }
 
     public void render(Graphics2D g){
-        if(image !=null){
-            g.drawImage(image,x,y,width,height,null);
+        render(g, Integer.MAX_VALUE);
+    }
+
+    public void render(Graphics2D g, int currentSun){
+        boolean affordable = currentSun >= cost;
+        BufferedImage cardImage = image;
+
+        if (!affordable && disabledImage != null) {
+            cardImage = disabledImage;
+        }
+
+        if(cardImage !=null){
+            g.drawImage(cardImage,x,y,width,height,null);
+        }
+
+        if (!affordable && disabledImage == null) {
+            drawDisabledOverlay(g);
         }
         
         drawCooldownMask(g);
@@ -58,15 +75,20 @@ public class PlantCard {
         }
         double ratio =(double) currentCooldown/cooldown;
         int maskHeight = (int)(height*ratio);
-        
-        if(cooldownMask!=null){
-            g.drawImage(cooldownMask,x,y,width,maskHeight,null);
-        }else {
-            Color oldColor =g.getColor();
-            g.setColor(new Color(0,0,0,120));
-            g.fillRect(x,y,width,maskHeight);
-            g.setColor(oldColor);
-        }
+
+        Color oldColor =g.getColor();
+        g.setColor(new Color(0,0,0,145));
+        g.fillRect(x,y,width,maskHeight);
+        g.setColor(oldColor);
+    }
+
+    private void drawDisabledOverlay(Graphics2D g) {
+        Color oldColor = g.getColor();
+
+        g.setColor(new Color(120, 120, 120, 150));
+        g.fillRect(x, y, width, height);
+
+        g.setColor(oldColor);
     }
 
     private void drawCost(Graphics2D g) {

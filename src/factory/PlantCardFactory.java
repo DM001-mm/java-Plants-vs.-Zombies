@@ -4,6 +4,7 @@ import src.manager.ImageManager;
 import src.model.PlantDefinition;
 import src.resource.ImageKeys;
 import src.ui.PlantCard;
+import java.awt.image.BufferedImage;
 
 public class PlantCardFactory {
 
@@ -31,12 +32,9 @@ public class PlantCardFactory {
                 DEFAULT_CARD_HEIGHT,
                 definition.getCost(),
                 definition.getCooldownTicks(),
-                ImageManager.hasImage(definition.getCardImageKey())
-                        ? ImageManager.getImage(definition.getCardImageKey())
-                        : null,
-                ImageManager.hasImage(ImageKeys.UI_COOLDOWN_MASK)
-                        ? ImageManager.getImage(ImageKeys.UI_COOLDOWN_MASK)
-                        : null
+                getImageOrNull(definition.getCardImageKey()),
+                getImageOrNull(definition.getDisabledCardImageKey()),
+                getImageOrNull(ImageKeys.UI_COOLDOWN_MASK)
         );
     }
 
@@ -56,13 +54,20 @@ public class PlantCardFactory {
                 BATTLE_CARD_HEIGHT,
                 definition.getCost(),
                 definition.getCooldownTicks(),
-                ImageManager.hasImage(definition.getCardImageKey())
-                        ? ImageManager.getImage(definition.getCardImageKey())
-                        : null,
-                ImageManager.hasImage(ImageKeys.UI_COOLDOWN_MASK)
-                        ? ImageManager.getImage(ImageKeys.UI_COOLDOWN_MASK)
-                        : null
+                getImageOrNull(definition.getCardImageKey()),
+                getImageOrNull(definition.getDisabledCardImageKey()),
+                getImageOrNull(ImageKeys.UI_COOLDOWN_MASK)
         );
+    }
+
+    private static BufferedImage getImageOrNull(String key) {
+        if (key == null) {
+            return null;
+        }
+
+        return ImageManager.hasImage(key)
+                ? ImageManager.getImage(key)
+                : null;
     }
 
     public static PlantCard createPeashooterCard(int x, int y) {

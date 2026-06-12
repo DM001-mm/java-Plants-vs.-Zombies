@@ -14,6 +14,8 @@ public class PotatoMine extends Plant {
     private static final int STATE_HIDDEN = 0;
     private static final int STATE_ARMED = 1;
     private static final int STATE_EXPLODED = 2;
+    private static final double HIDDEN_SCALE = 0.55;
+    private static final double EXPLODE_SCALE = 1.25;
 
     private final int armTime = 300;
     private final int blastRadius = 70;
@@ -95,7 +97,7 @@ public class PotatoMine extends Plant {
             }
 
             if (zombie.getBounds().intersects(getBlastBounds())) {
-                zombie.takeDamage(9999);
+                zombie.killByExplosion();
             }
         }
 
@@ -115,7 +117,7 @@ public class PotatoMine extends Plant {
         BufferedImage image = getCurrentImage();
 
         if (image != null) {
-            g.drawImage(image, (int) x, (int) y, width, height, null);
+            drawCurrentImage(g, image);
             return;
         }
 
@@ -127,10 +129,43 @@ public class PotatoMine extends Plant {
             g.setColor(new Color(110, 70, 20));
         }
 
-        g.fillOval((int) x, (int) y, width, height);
+        int drawX = (int) x;
+        int drawY = (int) y;
+        int drawW = width;
+        int drawH = height;
+
+        if (state == STATE_HIDDEN) {
+            drawW = (int) (width * HIDDEN_SCALE);
+            drawH = (int) (height * HIDDEN_SCALE);
+            drawX = (int) x + (width - drawW) / 2;
+            drawY = (int) y + height - drawH;
+        }
+
+        g.fillOval(drawX, drawY, drawW, drawH);
         g.setColor(Color.BLACK);
-        g.drawOval((int) x, (int) y, width, height);
+        g.drawOval(drawX, drawY, drawW, drawH);
         g.setColor(oldColor);
+    }
+
+    private void drawCurrentImage(Graphics2D g, BufferedImage image) {
+        int drawX = (int) x;
+        int drawY = (int) y;
+        int drawW = width;
+        int drawH = height;
+
+        if (state == STATE_HIDDEN) {
+            drawW = (int) (width * HIDDEN_SCALE);
+            drawH = (int) (height * HIDDEN_SCALE);
+            drawX = (int) x + (width - drawW) / 2;
+            drawY = (int) y + height - drawH;
+        } else if (state == STATE_EXPLODED) {
+            drawW = (int) (width * EXPLODE_SCALE);
+            drawH = (int) (height * EXPLODE_SCALE);
+            drawX = (int) x + width / 2 - drawW / 2;
+            drawY = (int) y + height / 2 - drawH / 2;
+        }
+
+        g.drawImage(image, drawX, drawY, drawW, drawH, null);
     }
 
     private BufferedImage getCurrentImage() {

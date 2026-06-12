@@ -37,9 +37,15 @@ public class AudioManager {
         effectPaths.put("card_error", "resources/sounds/effect/card_error.wav");
         effectPaths.put("pea_shoot", "resources/sounds/effect/pea_shoot.wav");
         effectPaths.put("pea_hit", "resources/sounds/effect/pea_hit.wav");
+        effectPaths.put("ice_shoot", "resources/sounds/effect/ice_hit.wav");
+        effectPaths.put("ice_hit", "resources/sounds/effect/ice_hit.wav");
         effectPaths.put("sun_collect", "resources/sounds/effect/sun_collect.wav");
         effectPaths.put("zombie_eat", "resources/sounds/effect/zombie_eat.wav");
         effectPaths.put("zombie_die", "resources/sounds/effect/zombie_die.wav");
+        effectPaths.put("lawn_mower_run", "resources/sounds/effect/lawn_mower_run.wav");
+        effectPaths.put("cherry_bomb_explode", "resources/sounds/effect/explosion.wav");
+        effectPaths.put("potato_mine_arm", "resources/sounds/effect/plant_place.wav");
+        effectPaths.put("potato_mine_explode", "resources/sounds/effect/explosion.wav");
 
         System.out.println("AudioManager initialized.");
     }
@@ -56,6 +62,7 @@ public class AudioManager {
         stopBGM();
 
         String path = bgmPaths.get(key);
+        System.out.println("Play BGM key = " + key + ", path = " + path);
 
         if (path == null) {
             System.out.println("BGM key not found: " + key);
@@ -103,6 +110,7 @@ public class AudioManager {
         }
 
         String path = effectPaths.get(key);
+        System.out.println("Play effect key = " + key + ", path = " + path);
 
         if (path == null) {
             System.out.println("Effect key not found: " + key);

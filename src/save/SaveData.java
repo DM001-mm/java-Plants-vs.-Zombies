@@ -15,6 +15,7 @@ public class SaveData implements Serializable {
     private final List<ZombieSaveData> zombies = new ArrayList<>();
     private final List<BulletSaveData> bullets = new ArrayList<>();
     private final List<SunSaveData> suns = new ArrayList<>();
+    private List<String> selectedPlantTypes = new ArrayList<>();
 
     public int getSunAmount() {
         return sunAmount;
@@ -48,6 +49,14 @@ public class SaveData implements Serializable {
         return suns;
     }
 
+    public List<String> getSelectedPlantTypes() {
+        if (selectedPlantTypes == null) {
+            selectedPlantTypes = new ArrayList<>();
+        }
+
+        return selectedPlantTypes;
+    }
+
     public void addPlant(PlantSaveData data) {
         if (data != null) {
             plants.add(data);
@@ -69,6 +78,12 @@ public class SaveData implements Serializable {
     public void addSun(SunSaveData data) {
         if (data != null) {
             suns.add(data);
+        }
+    }
+
+    public void addSelectedPlantType(String plantType) {
+        if (plantType != null) {
+            getSelectedPlantTypes().add(plantType);
         }
     }
 }
