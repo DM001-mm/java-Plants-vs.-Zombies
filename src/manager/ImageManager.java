@@ -35,10 +35,12 @@ public class ImageManager {
         loadBackgrounds();
         loadUI();
         loadCards();
-        loadBullets();
-        loadItems();
         loadPlants();
         loadZombies();
+        loadBullets();
+        loadItems();
+
+        System.out.println("ImageManager initialized.");
     }
 
     private static void loadBackgrounds() {
@@ -47,7 +49,7 @@ public class ImageManager {
         loadImage(ImageKeys.BACKGROUND_LAWN_NIGHT, "resources/images/background/lawn_night.png");
         loadImage(ImageKeys.BACKGROUND_PAUSE, "resources/images/background/pause_background.png");
         loadImage(ImageKeys.BACKGROUND_GAME_OVER, "resources/images/background/game_over.png");
-        loadImage(ImageKeys.BACKGROUND_WIN, "resources/images/background/GameVictory.png");
+        loadImage(ImageKeys.BACKGROUND_WIN, "resources/images/background/win.png");
         loadImage(ImageKeys.BACKGROUND_TROPHY, "resources/images/background/trophy.png");
     }
 
@@ -55,20 +57,21 @@ public class ImageManager {
         loadImage(ImageKeys.UI_START_BUTTON, "resources/images/ui/start_button.png");
         loadImage(ImageKeys.UI_LOAD_BUTTON, "resources/images/ui/load_button.png");
         loadImage(ImageKeys.UI_EXIT_BUTTON, "resources/images/ui/exit_button.png");
-        loadImage(ImageKeys.UI_PAUSE_BUTTON, "resources/images/ui/pause_button.png");
-        loadImage(ImageKeys.UI_CONTINUE_BUTTON, "resources/images/ui/continue_button .png");
+        loadImage(ImageKeys.UI_CONTINUE_BUTTON, "resources/images/ui/continue_button.png");
         loadImage(ImageKeys.UI_SAVE_BUTTON, "resources/images/ui/save_button.png");
         loadImage(ImageKeys.UI_MENU_BUTTON, "resources/images/ui/menu_button.png");
         loadImage(ImageKeys.UI_RESTART_BUTTON, "resources/images/ui/restart_button.png");
         loadImage(ImageKeys.UI_SUN_BANK, "resources/images/ui/sun_bank.png");
         loadImage(ImageKeys.UI_SEED_BANK, "resources/images/ui/seed_bank.png");
+        loadImage(ImageKeys.UI_CARD_PANEL, "resources/images/ui/seed_bank.png");
+        loadImage(ImageKeys.UI_CARD_SLOT, "resources/images/ui/card_slot.png");
         loadImage(ImageKeys.UI_COOLDOWN_MASK, "resources/images/ui/cooldown_mask.png");
         loadImage(ImageKeys.UI_SHOVEL, "resources/images/ui/shovel.png");
         loadImage(ImageKeys.UI_SHOVEL_SLOT, "resources/images/ui/shovel_slot.png");
-        loadImage(ImageKeys.UI_CARD_PANEL, "resources/images/ui/card_panel.png");
-        loadImage(ImageKeys.UI_CARD_SLOT, "resources/images/ui/card_slot.png");
         loadImage(ImageKeys.UI_PROGRESS_BAR, "resources/images/ui/progress_bar.png");
         loadImage(ImageKeys.UI_PROGRESS_HEAD, "resources/images/ui/progress_head.png");
+        loadImage(ImageKeys.UI_SELECT_PANEL, "resources/images/ui/select_panel.png");
+        loadImage(ImageKeys.UI_SELECT_START_BUTTON, "resources/images/ui/select_start.png");
     }
 
     private static void loadCards() {
@@ -83,14 +86,14 @@ public class ImageManager {
     private static void loadBullets() {
         loadImage(ImageKeys.BULLET_PEA, "resources/images/bullets/pea.png");
         loadImage(ImageKeys.BULLET_PEA_HIT, "resources/images/bullets/pea_hit.png");
-        loadImage(ImageKeys.BULLET_SNOW_PEA, "resources/images/bullets/snow_pea.png");
-        loadImage(ImageKeys.BULLET_SNOW_PEA_HIT, "resources/images/bullets/snow_pea_hit.png");
-
         loadFrames(
                 ImageKeys.ANIM_PEA_HIT,
                 "resources/images/bullets/pea_hit",
-                10
+                20
         );
+
+        loadImage(ImageKeys.BULLET_SNOW_PEA, "resources/images/bullets/snow_pea.png");
+        loadImage(ImageKeys.BULLET_SNOW_PEA_HIT, "resources/images/bullets/snow_pea_hit.png");
     }
 
     private static void loadItems() {
@@ -120,20 +123,44 @@ public class ImageManager {
                 "resources/images/plants/snow_peashooter/idle/0.png"
         );
 
-        // 资源目录里当前拼成 walnet，这里先按实际文件夹加载。
         loadImage(
                 ImageKeys.PLANT_WALLNUT_IDLE_0,
-                "resources/images/plants/walnet/idle/0.png"
+                "resources/images/plants/wall_nut/idle/0.png"
         );
 
         loadImage(
                 ImageKeys.PLANT_WALLNUT_CRACKED1_0,
-                "resources/images/plants/walnet/cracked1/0.png"
+                "resources/images/plants/wall_nut/cracked1/0.png"
         );
 
         loadImage(
                 ImageKeys.PLANT_WALLNUT_CRACKED2_0,
-                "resources/images/plants/walnet/cracked2/0.png"
+                "resources/images/plants/wall_nut/cracked2/0.png"
+        );
+
+        loadImage(
+                ImageKeys.PLANT_CHERRY_BOMB_IDLE_0,
+                "resources/images/plants/cherry_bomb/idle/CherryBomb1.png"
+        );
+
+        loadImage(
+                ImageKeys.PLANT_CHERRY_BOMB_EXPLODE_0,
+                "resources/images/plants/cherry_bomb/explode/CherryBomb1.png"
+        );
+
+        loadImage(
+                ImageKeys.PLANT_POTATO_MINE_IDLE_0,
+                "resources/images/plants/potato_mine/unarmed/0.gif"
+        );
+
+        loadImage(
+                ImageKeys.PLANT_POTATO_MINE_ARMED_0,
+                "resources/images/plants/potato_mine/armed/PotatoMine1.png"
+        );
+
+        loadImage(
+                ImageKeys.PLANT_POTATO_MINE_EXPLODE_0,
+                "resources/images/plants/potato_mine/explode/PotatoMine1.png"
         );
 
         loadFrames(
@@ -167,20 +194,26 @@ public class ImageManager {
         );
 
         loadFrames(
+                ImageKeys.ANIM_SNOW_PEASHOOTER_SHOOT,
+                "resources/images/plants/snow_peashooter/shoot",
+                20
+        );
+
+        loadFrames(
                 ImageKeys.ANIM_WALLNUT_IDLE,
-                "resources/images/plants/walnet/idle",
+                "resources/images/plants/wall_nut/idle",
                 16
         );
 
         loadFrames(
                 ImageKeys.ANIM_WALLNUT_CRACKED1,
-                "resources/images/plants/walnet/cracked1",
+                "resources/images/plants/wall_nut/cracked1",
                 11
         );
 
         loadFrames(
                 ImageKeys.ANIM_WALLNUT_CRACKED2,
-                "resources/images/plants/walnet/cracked2",
+                "resources/images/plants/wall_nut/cracked2",
                 15
         );
     }
@@ -202,28 +235,33 @@ public class ImageManager {
         );
 
         loadImage(
-                ImageKeys.ZOMBIE_NORMAL_HEAD_0,
-                "resources/images/zombie/normal_zombie/head/0.png"
-        );
-
-        loadImage(
                 ImageKeys.ZOMBIE_CONEHEAD_WALK_0,
-                "resources/images/zombie/conehead_zombie/walk/0.png"
+                "resources/images/zombie/conehead_zombie/walk/move1.png"
         );
 
         loadImage(
                 ImageKeys.ZOMBIE_CONEHEAD_ATTACK_0,
-                "resources/images/zombie/conehead_zombie/attack/0.png"
+                "resources/images/zombie/conehead_zombie/attack/attack1.png"
+        );
+
+        loadImage(
+                ImageKeys.ZOMBIE_CONEHEAD_DIE_0,
+                "resources/images/zombie/conehead_zombie/die/died1.png"
         );
 
         loadImage(
                 ImageKeys.ZOMBIE_BUCKETHEAD_WALK_0,
-                "resources/images/zombie/buckethead_zombie/walk/0.png"
+                "resources/images/zombie/buckethead_zombie/move/move1.png"
         );
 
         loadImage(
                 ImageKeys.ZOMBIE_BUCKETHEAD_ATTACK_0,
-                "resources/images/zombie/buckethead_zombie/attack/0.png"
+                "resources/images/zombie/buckethead_zombie/attack/attack1.png"
+        );
+
+        loadImage(
+                ImageKeys.ZOMBIE_BUCKETHEAD_DIE_0,
+                "resources/images/zombie/buckethead_zombie/die/died1.png"
         );
 
         loadFrames(
@@ -239,51 +277,57 @@ public class ImageManager {
         );
 
         loadFrames(
-                ImageKeys.ANIM_NORMAL_ZOMBIE_WALK_DAMAGED,
-                "resources/images/zombie/normal_zombie/walk_damaged",
-                22
-        );
-
-        loadFrames(
-                ImageKeys.ANIM_NORMAL_ZOMBIE_ATTACK_DAMAGED,
-                "resources/images/zombie/normal_zombie/attack_damaged",
-                21
-        );
-
-        loadFrames(
                 ImageKeys.ANIM_NORMAL_ZOMBIE_DIE,
                 "resources/images/zombie/normal_zombie/die",
                 10
         );
 
-        loadFrames(
-                ImageKeys.ANIM_NORMAL_ZOMBIE_HEAD,
-                "resources/images/zombie/normal_zombie/head",
-                12
-        );
-
-        loadFrames(
+        loadPrefixedFrames(
                 ImageKeys.ANIM_CONEHEAD_ZOMBIE_WALK,
                 "resources/images/zombie/conehead_zombie/walk",
+                "move",
+                1,
                 21
         );
 
-        loadFrames(
+        loadPrefixedFrames(
                 ImageKeys.ANIM_CONEHEAD_ZOMBIE_ATTACK,
                 "resources/images/zombie/conehead_zombie/attack",
+                "attack",
+                1,
                 11
         );
 
-        loadFrames(
+        loadPrefixedFrames(
+                ImageKeys.ANIM_CONEHEAD_ZOMBIE_DIE,
+                "resources/images/zombie/conehead_zombie/die",
+                "died",
+                1,
+                20
+        );
+
+        loadPrefixedFrames(
                 ImageKeys.ANIM_BUCKETHEAD_ZOMBIE_WALK,
-                "resources/images/zombie/buckethead_zombie/walk",
+                "resources/images/zombie/buckethead_zombie/move",
+                "move",
+                1,
                 15
         );
 
-        loadFrames(
+        loadPrefixedFrames(
                 ImageKeys.ANIM_BUCKETHEAD_ZOMBIE_ATTACK,
                 "resources/images/zombie/buckethead_zombie/attack",
+                "attack",
+                1,
                 11
+        );
+
+        loadPrefixedFrames(
+                ImageKeys.ANIM_BUCKETHEAD_ZOMBIE_DIE,
+                "resources/images/zombie/buckethead_zombie/die",
+                "died",
+                1,
+                20
         );
     }
 
@@ -329,7 +373,50 @@ public class ImageManager {
             File file = new File(folderPath + "/" + i + ".png");
 
             if (!file.exists()) {
-                break;
+                continue;
+            }
+
+            try {
+                BufferedImage image = ImageIO.read(file);
+
+                if (image != null) {
+                    frames.add(image);
+                } else {
+                    System.out.println("动画帧格式无法识别: " + file.getPath());
+                }
+            } catch (Exception e) {
+                System.out.println("动画帧加载失败: " + file.getPath());
+                e.printStackTrace();
+            }
+        }
+
+        if (frames.isEmpty()) {
+            System.out.println("动画帧不存在，暂时跳过: " + folderPath);
+            return;
+        }
+
+        animations.put(key, frames);
+        System.out.println("动画加载成功: " + key + ", 帧数: " + frames.size());
+    }
+
+    /**
+     * 加载按 move1.png、attack1.png 这类前缀命名的动画帧。
+     */
+    private static void loadPrefixedFrames(
+            String key,
+            String folderPath,
+            String filePrefix,
+            int startIndex,
+            int frameCount
+    ) {
+        List<BufferedImage> frames = new ArrayList<>();
+        int endExclusive = startIndex + frameCount;
+
+        for (int i = startIndex; i < endExclusive; i++) {
+            File file = new File(folderPath + "/" + filePrefix + i + ".png");
+
+            if (!file.exists()) {
+                continue;
             }
 
             try {

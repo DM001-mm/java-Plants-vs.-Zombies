@@ -40,6 +40,13 @@ public class NormalZombie extends Zombie {
 
     private AnimationPlayer animationPlayer; // 类似于 插槽机制
 
+    private final String fallbackWalkImageKey;
+    private final String walkAnimationKey;
+    private final String attackAnimationKey;
+    private final String dieAnimationKey;
+    private final String damagedWalkAnimationKey;
+    private final String damagedAttackAnimationKey;
+
     private final int attackInterval = 30;
     private int attackTimer = 0;
 
@@ -51,9 +58,17 @@ public class NormalZombie extends Zombie {
                 row,
                 x,
                 y,
+                100,
+                120,
                 GameConfig.NORMAL_ZOMBIE_HP,
                 GameConfig.NORMAL_ZOMBIE_SPEED,
-                GameConfig.NORMAL_ZOMBIE_DAMAGE
+                GameConfig.NORMAL_ZOMBIE_DAMAGE,
+                ImageKeys.ZOMBIE_NORMAL_WALK_0,
+                ImageKeys.ANIM_NORMAL_ZOMBIE_WALK,
+                ImageKeys.ANIM_NORMAL_ZOMBIE_ATTACK,
+                ImageKeys.ANIM_NORMAL_ZOMBIE_DIE,
+                ImageKeys.ANIM_NORMAL_ZOMBIE_WALK_DAMAGED,
+                ImageKeys.ANIM_NORMAL_ZOMBIE_ATTACK_DAMAGED
         );
     }
 
@@ -61,20 +76,67 @@ public class NormalZombie extends Zombie {
             int row,
             double x,
             double y,
+            int width,
+            int height,
             int maxHp,
             double speed,
-            int damage
+            int damage,
+            String fallbackWalkImageKey,
+            String walkAnimationKey,
+            String attackAnimationKey,
+            String dieAnimationKey
+    ) {
+        this(
+                row,
+                x,
+                y,
+                width,
+                height,
+                maxHp,
+                speed,
+                damage,
+                fallbackWalkImageKey,
+                walkAnimationKey,
+                attackAnimationKey,
+                dieAnimationKey,
+                null,
+                null
+        );
+    }
+
+    private NormalZombie(
+            int row,
+            double x,
+            double y,
+            int width,
+            int height,
+            int maxHp,
+            double speed,
+            int damage,
+            String fallbackWalkImageKey,
+            String walkAnimationKey,
+            String attackAnimationKey,
+            String dieAnimationKey,
+            String damagedWalkAnimationKey,
+            String damagedAttackAnimationKey
     ) {
         super(
                 row,
                 x,
                 y - VISUAL_Y_OFFSET,
-                100,
-                120,
+                width,
+                height,
                 maxHp,
                 speed,
                 damage
         );
+
+        this.fallbackWalkImageKey = fallbackWalkImageKey;
+        this.walkAnimationKey = walkAnimationKey;
+        this.attackAnimationKey = attackAnimationKey;
+        this.dieAnimationKey = dieAnimationKey;
+        this.damagedWalkAnimationKey = damagedWalkAnimationKey;
+        this.damagedAttackAnimationKey = damagedAttackAnimationKey;
 
         loadImages();
         loadAnimations();
@@ -86,47 +148,47 @@ public class NormalZombie extends Zombie {
     }
 
     private void loadImages() {
-        if (ImageManager.hasImage(ImageKeys.ZOMBIE_NORMAL_WALK_0)) {
-            fallbackImage = ImageManager.getImage(ImageKeys.ZOMBIE_NORMAL_WALK_0);
+        if (ImageManager.hasImage(fallbackWalkImageKey)) {
+            fallbackImage = ImageManager.getImage(fallbackWalkImageKey);
         }
     }
 
     private void loadAnimations() {
-        if (ImageManager.hasFrames(ImageKeys.ANIM_NORMAL_ZOMBIE_WALK)) {
+        if (ImageManager.hasFrames(walkAnimationKey)) {
             walkAnimation = new Animation(
-                    ImageManager.getFrames(ImageKeys.ANIM_NORMAL_ZOMBIE_WALK),
+                    ImageManager.getFrames(walkAnimationKey),
                     5,
                     true
             );
         }
 
-        if (ImageManager.hasFrames(ImageKeys.ANIM_NORMAL_ZOMBIE_ATTACK)) {
+        if (ImageManager.hasFrames(attackAnimationKey)) {
             attackAnimation = new Animation(
-                    ImageManager.getFrames(ImageKeys.ANIM_NORMAL_ZOMBIE_ATTACK),
+                    ImageManager.getFrames(attackAnimationKey),
                     5,
                     true
             );
         }
 
-        if (ImageManager.hasFrames(ImageKeys.ANIM_NORMAL_ZOMBIE_WALK_DAMAGED)) {
+        if (damagedWalkAnimationKey != null && ImageManager.hasFrames(damagedWalkAnimationKey)) {
             damagedWalkAnimation = new Animation(
-                    ImageManager.getFrames(ImageKeys.ANIM_NORMAL_ZOMBIE_WALK_DAMAGED),
+                    ImageManager.getFrames(damagedWalkAnimationKey),
                     5,
                     true
             );
         }
 
-        if (ImageManager.hasFrames(ImageKeys.ANIM_NORMAL_ZOMBIE_ATTACK_DAMAGED)) {
+        if (damagedAttackAnimationKey != null && ImageManager.hasFrames(damagedAttackAnimationKey)) {
             damagedAttackAnimation = new Animation(
-                    ImageManager.getFrames(ImageKeys.ANIM_NORMAL_ZOMBIE_ATTACK_DAMAGED),
+                    ImageManager.getFrames(damagedAttackAnimationKey),
                     5,
                     true
             );
         }
 
-        if (ImageManager.hasFrames(ImageKeys.ANIM_NORMAL_ZOMBIE_DIE)) {
+        if (ImageManager.hasFrames(dieAnimationKey)) {
             dieAnimation = new Animation(
-                    ImageManager.getFrames(ImageKeys.ANIM_NORMAL_ZOMBIE_DIE),
+                    ImageManager.getFrames(dieAnimationKey),
                     5,
                     false
             );

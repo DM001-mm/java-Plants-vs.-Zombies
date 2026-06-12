@@ -74,7 +74,7 @@ public class LawnMower extends Entity {
 
         activated = true;
 
-        AudioManager.playEffect("plant_remove");
+        AudioManager.playEffect("lawn_mower_run");
 
         System.out.println("第 " + row + " 行小推车启动");
     }
