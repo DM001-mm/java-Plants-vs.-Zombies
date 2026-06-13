@@ -224,6 +224,7 @@ public class NormalZombie extends Zombie {
             return;
         }
 
+        updateSlowEffect();
         updateDamageStage();
 
         Plant collidingPlant = context.getEntityManager().getCollidingPlant(this);

@@ -9,6 +9,9 @@ public abstract class Zombie extends LivingEntity {
     protected double speed;
     protected int damage;
     protected DeathType deathType = DeathType.NORMAL;
+    protected double baseSpeed;
+    protected int slowTimer = 0;
+    protected double slowFactor = 1.0;
 
     public enum DeathType {
         NORMAL,
@@ -20,6 +23,7 @@ public abstract class Zombie extends LivingEntity {
 
         this.row = row;
         this.speed = speed;
+        this.baseSpeed = speed;
         this.damage = damage;
     }
     public int getRow() {
@@ -46,6 +50,45 @@ public abstract class Zombie extends LivingEntity {
 
     public DeathType getDeathType() {
         return deathType;
+    }
+
+    public void applySlow(int duration, double factor) {
+        if (!isAlive() || hp <= 0) {
+            return;
+        }
+
+        if (duration <= 0) {
+            return;
+        }
+
+        if (factor <= 0 || factor >= 1) {
+            return;
+        }
+
+        slowFactor = Math.min(slowFactor, factor);
+        slowTimer = Math.max(slowTimer, duration);
+        speed = baseSpeed * slowFactor;
+    }
+
+    protected void updateSlowEffect() {
+        if (slowTimer <= 0) {
+            speed = baseSpeed;
+            slowFactor = 1.0;
+            return;
+        }
+
+        slowTimer--;
+
+        if (slowTimer <= 0) {
+            speed = baseSpeed;
+            slowFactor = 1.0;
+        } else {
+            speed = baseSpeed * slowFactor;
+        }
+    }
+
+    public boolean isSlowed() {
+        return slowTimer > 0;
     }
 
     public abstract void attack(Plant plant); // 这里主要是为了 和 植物进行交互
