@@ -10,8 +10,8 @@ import java.awt.image.BufferedImage;
 
 public class IcePeaBullet extends Bullet {
 
-    private final int slowDuration = 120;
-    private final double slowFactor = 0.5;
+    private final int slowDuration = 240;
+    private final double slowFactor = 0.35;
 
     private BufferedImage image;
 
